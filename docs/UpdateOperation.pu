@@ -1,0 +1,27 @@
+@startuml
+!theme bluegray
+
+participant "Dapr Pub & Sub" as DaprPS
+participant "Dapr Service Invocation" as DaprSI
+participant Controller as Ctrl
+participant "MediatR Sender" as Send
+participant "Update Handler" as Hndlr
+participant "EFCore DbContext" as DB
+participant Mapper as Map
+participant "MediatR Publisher" as Pub
+participant "Event Handler" as EHndlr
+
+DaprSI -> Ctrl : Send Updated Dto
+Ctrl -> Ctrl : Validate Dto
+Ctrl -> Send : Send Command with Updated Dto
+Send -> Hndlr : Send Command to Handler
+Hndlr -> DB : Query Current Entity with Id from Command
+Hndlr <- DB : Return Current Entity
+Hndlr -> Map : Update Entity with Dto from Command
+Hndlr <- Map : Return Updated Entity
+Hndlr -> DB : Save Changes to Persistance Layer
+Hndlr -> Pub : Publish Update Event
+Pub -> EHndlr : Send Event to Handler(s)
+DaprPS <- EHndlr : Send Update Event to Message Broker
+
+@enduml
