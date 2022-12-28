@@ -1,0 +1,19 @@
+@startuml Operation Error Handling
+!theme bluegray
+
+participant "Dapr Service Invocation" as DaprSI
+participant Controller as Ctrl
+participant "MediatR Sender" as Send
+participant "Operation Handler" as Hndlr
+participant "Error Handler" as EHndlr
+participant Logger
+
+DaprSI -> Ctrl : Send Operation Parameters
+Ctrl -> Send : Send Operation with Parameters
+Send -> Hndlr : Send Operation
+Send <- Hndlr : Throw Exception
+Send -> EHndlr : Catch and Send Operation and Exception
+EHndlr -> Logger : Log Exception
+Ctrl <- Send : Throw Exception
+DaprSI <- Ctrl : Catch Exception and Return Code 
+@enduml
