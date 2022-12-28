@@ -1,0 +1,20 @@
+@startuml Query Operation
+!theme bluegray
+
+participant "Dapr Service Invocation" as DaprSI
+participant Controller as Ctrl
+participant "MediatR Sender" as Send
+participant "Query Handler" as Hndlr
+participant "EFCore DbContext" as DB
+
+DaprSI -> Ctrl : Send Query Parameters
+Ctrl -> Ctrl : Validate Parameters if Needed
+Ctrl -> Send : Send Query with Query Parameters
+Send -> Hndlr : Send Query to Handler
+Hndlr -> DB : Form Linq Query from Parameters in Query Object
+Hndlr <- DB : Return Resulting Entites
+Send <- Hndlr : Return Results
+Ctrl <- Send : Return Results
+DaprSI <- Ctrl : Return Results
+
+@enduml

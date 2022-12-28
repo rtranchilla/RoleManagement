@@ -1,4 +1,4 @@
-@startuml
+@startuml Architecture Overview
 !theme bluegray
 skinparam componentStyle rectangle
 left to right direction

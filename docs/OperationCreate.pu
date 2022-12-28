@@ -1,0 +1,26 @@
+@startuml Create Operation
+!theme bluegray
+
+participant "Dapr Pub & Sub" as DaprPS
+participant "Dapr Service Invocation" as DaprSI
+participant Controller as Ctrl
+participant "MediatR Sender" as Send
+participant "Create Handler" as Hndlr
+participant AutoMapper as Map
+participant "EFCore DbContext" as DB
+participant "MediatR Publisher" as Pub
+participant "Event Handler" as EHndlr
+
+DaprSI -> Ctrl : Send New Dto
+Ctrl -> Ctrl : Validate Dto
+Ctrl -> Send : Send Command with New Dto
+Send -> Hndlr : Send Command to Handler
+Hndlr -> Map : Supply Dto from Command
+Hndlr <- Map : Return New Entity
+Hndlr -> DB : Add New Entity
+Hndlr -> DB : Save Changes
+Hndlr -> Pub : Publish Create Event
+Pub -> EHndlr : Send Event to Handler(s)
+DaprPS <- EHndlr : Send Create Event for Transmition to Message Broker
+
+@enduml

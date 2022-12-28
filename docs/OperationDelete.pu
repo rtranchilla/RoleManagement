@@ -1,0 +1,24 @@
+@startuml Delete Operation
+!theme bluegray
+
+participant "Dapr Pub & Sub" as DaprPS
+participant "Dapr Service Invocation" as DaprSI
+participant Controller as Ctrl
+participant "MediatR Sender" as Send
+participant "Delete Handler" as Hndlr
+participant "EFCore DbContext" as DB
+participant "MediatR Publisher" as Pub
+participant "Event Handler" as EHndlr
+
+DaprSI -> Ctrl : Send Entity Id
+Ctrl -> Send : Send Command with Id
+Send -> Hndlr : Send Command to Handler
+Hndlr -> DB : Query with Id from Command
+Hndlr <- DB : Return Current Entity
+Hndlr -> DB : Remove Entity
+Hndlr -> DB : Save Changes
+Hndlr -> Pub : Publish Delete Event
+Pub -> EHndlr : Send Event to Handler(s)
+DaprPS <- EHndlr : Send Delete Event for Transmition to Message Broker
+
+@enduml
