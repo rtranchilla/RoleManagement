@@ -1,0 +1,47 @@
+@startuml
+!theme bluegray
+skinparam componentStyle rectangle
+left to right direction
+
+[Powershell Module] as PSM
+[Message Broker] as MB
+[Management Api Gateway] as MGW
+
+package "Role Manager" {      
+  database "Data Persistence" as RMDB
+  node "Management Service" as RM
+  RM ---> RMDB
+}
+
+frame "Optional Management Services" {
+  package "Active Directory" {      
+    database "Data Persistence" as ADDB
+    node "Management Service" as AD
+    interface "Remote Service" as ADI
+    AD --> ADDB
+    AD --> ADI
+  }
+  package "Configuration Manager Collections" {      
+    database "Data Persistence" as CMDB
+    node "Management Service" as CM
+    interface "Remote Service" as CMI
+    CM --> CMDB
+    CM --> CMI
+  }
+  package "Powershell Host" {      
+    database "Data Persistence" as PSDB
+    node "Management Service" as PS
+    PS --> PSDB
+  }
+}
+
+PSM -> MGW
+RM --> MB
+RM <-- MGW
+CM <-- MB
+CM <- MGW
+AD <-- MB
+AD <- MGW
+PS <-- MB
+PS <- MGW
+@enduml
