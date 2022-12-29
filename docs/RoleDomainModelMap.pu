@@ -1,0 +1,33 @@
+@startuml Role Domain Model Map
+!theme bluegray
+class Member {
+  Guid Id
+  string Name
+}
+
+class Node {
+  Guid Id
+  string Name
+  bool BaseNode
+}
+
+class Role {
+  Guid Id
+  string Name
+  bool Reversable
+}
+
+class Tree {
+  Guid Id
+  string Name
+}
+
+Node *- Node : Has Non-Base Node Children\nCannot be a Child of Itself
+Role *- Node : Is Ordered List Of <
+Role --- Tree : Has One\rTree <
+Node --- Tree : Has One\rTree <
+Member - Role : Has One Per Tree >
+Tree *-- Node : Has Zero or\rMore Required <
+Role *-- Node : Has Zero or More Required <
+
+@enduml
