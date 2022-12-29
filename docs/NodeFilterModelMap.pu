@@ -1,0 +1,18 @@
+@startuml Node Filter Model Map
+!theme bluegray
+class Node {
+  Guid Id
+}
+
+class NodeGroup {
+  Guid Id
+  bool And
+}
+
+abstract class Member {
+  Guid Id
+}
+
+Member *== Node
+NodeGroup *== Node
+@enduml

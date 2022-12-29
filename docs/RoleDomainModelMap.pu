@@ -2,14 +2,28 @@
 !theme bluegray
 class Member {
   Guid Id
-  string Name
+  string DisplayName
+  string UniqueName
 }
+
+note left of Member::DisplayName
+  Only to be used as human readable
+  identifier. Uniqueness not enforced.
+end note
+note left of Member::UniqueName
+  Identifies member to other systems.
+  Human readability not required, but 
+  is uniqueness enforced. 
+end note
 
 class Node {
   Guid Id
   string Name
   bool BaseNode
 }
+note right of Node::Name
+  Must be unique to nodes in the tree.
+end note
 
 class Role {
   Guid Id
@@ -17,16 +31,34 @@ class Role {
   bool Reversable
 }
 
+note top of Role
+  Roles can be associated to members if three things are true.
+  1) The member meets all of the node requirements for the role 
+      and the associated tree.
+  2) The member is either not a member of a role, or is not 
+      impacted by a nonreversable role in the node chain. 
+end note
+note left of Role::Name
+  Must be unique to roles in the tree.
+end note
+note left of Role::Reversable
+  Defines if a role with fewer nodes in
+  the tree can be selected.
+end note
+
 class Tree {
   Guid Id
   string Name
 }
+note right of Tree::Name
+  Must be unique.
+end note
 
-Node *- Node : Has Non-Base Node Children\nCannot be a Child of Itself
+Node *- Node : Has Non-Base Node Children\nCannot be a Child of Itself\n\n\n
 Role *- Node : Is Ordered List Of <
 Role --- Tree : Has One\rTree <
 Node --- Tree : Has One\rTree <
-Member - Role : Has One Per Tree >
+Member == Role : Has One\rPer Tree >
 Tree *-- Node : Has Zero or\rMore Required <
 Role *-- Node : Has Zero or More Required <
 
