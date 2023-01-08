@@ -33,7 +33,7 @@ public abstract class AggregateRootUpdateHandler<TRequest, TAggregateRoot, TDto>
         if (entity == null)
             throw new NullReferenceException($"Failed to find an entity with the supplied id: {dto.Id}.");
 
-        await dbContext.AddAsync(entity, cancellationToken);
+        entity = mapper.Map(dto, entity);
         await dbContext.SaveChangesAsync(cancellationToken);
         return Unit.Value;
     }
