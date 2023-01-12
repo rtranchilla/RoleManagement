@@ -2,18 +2,21 @@
 
 public sealed class Role : EntityWithId
 {
-    public Role(Guid treeId, params Node[] nodes) : this(Guid.NewGuid(), treeId, nodes) { }
-    public Role(Guid id, Guid treeId, params Node[] nodes) : base(id)
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+    // parameterless constructor for Entity Framework
+    private Role() { }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+    public Role(Guid treeId, params Guid[] nodeIds) : this(Guid.NewGuid(), treeId, nodeIds) { }
+    public Role(Guid id, Guid treeId, params Guid[] nodeIds) : base(id)
     {
-
-        if (nodes.Length < 1)
-            throw new ArgumentException($"'{nameof(nodes)}' cannot contain less than 1 members", nameof(nodes));
-        Nodes = nodes.ToList();
+        if (nodeIds.Length < 1)
+            throw new ArgumentException($"'{nameof(nodeIds)}' cannot contain less than 1 member(s)", nameof(nodeIds));
+        Nodes = nodeIds.Select(n => new RoleNode(id, n)).ToList();
         TreeId = treeId;
     }
 
     public bool Reversible { get; set; }
-    public IList<Node> Nodes { get; set; }
+    public IReadOnlyList<RoleNode> Nodes { get; private set; }
     public Tree? Tree { get; private set; }
     public Guid TreeId { get; private set; }
 
