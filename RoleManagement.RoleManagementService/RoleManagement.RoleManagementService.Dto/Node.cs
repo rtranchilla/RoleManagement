@@ -1,11 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 namespace RoleManagement.RoleManagementService.Dto;
-public class Member : IEntity
+
+public class Node : IEntity
 {
     public Guid Id { get; set; }
-    public string DisplayName { get; set; }
-
+    public string Name { get; set; }
+    public bool BaseNode { get; set; }
     [Required]
-    public string UniqueName { get; set; }
+    public Guid TreeId { get; set; }
 }

@@ -2,15 +2,14 @@
 using RoleManagement.RoleManagementService;
 using AutoMapper.EquivalencyExpression;
 
-namespace RoleManagement.RoleManagementService.MapperConfig
+namespace RoleManagement.RoleManagementService.MapperConfig;
+
+public sealed class MemberProfile : Profile
 {
-    public class MemberProfile : Profile
+    public MemberProfile()
     {
-        public MemberProfile()
-        {
-            CreateMap<Member, Dto.Member>().EqualityComparison((s, d) => s.Id == d.Id)
-                                           .ReverseMap()
-                                           .EqualityComparison((s, d) => s.Id == d.Id);
-        }
+        CreateMap<Member, Dto.Member>().EqualityComparison((s, d) => s.Id == d.Id)
+                                       .ReverseMap()
+                                       .EqualityComparison((s, d) => s.Id == d.Id);
     }
 }

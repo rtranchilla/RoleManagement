@@ -5,6 +5,7 @@ using Castle.Windsor;
 using MediatR;
 using MediatR.Pipeline;
 using RoleManagement.RoleManagementService.Commands;
+using RoleManagement.RoleManagementService.Queries;
 using System.Diagnostics;
 
 namespace RoleManagement.RoleManagementService.Web.Configuration
@@ -17,16 +18,26 @@ namespace RoleManagement.RoleManagementService.Web.Configuration
             container.Kernel.AddHandlersFilter(new ContravariantFilter());
 
             var fromAssemblyContainingCmd = Classes.FromAssemblyContaining<MemberCreate>();
+            var fromAssemblyContainingQuery = Classes.FromAssemblyContaining<MemberQuery>();
             container.Register(fromAssemblyContainingCmd.BasedOn(typeof(IRequestHandler<,>)).LifestyleTransient().WithServiceAllInterfaces().AllowMultipleMatches());
             container.Register(fromAssemblyContainingCmd.BasedOn(typeof(INotificationHandler<>)).WithServiceAllInterfaces().AllowMultipleMatches());
-            container.Register(Component.For(typeof(IPipelineBehavior<,>)).ImplementedBy(typeof(RequestExceptionProcessorBehavior<,>)));
-            container.Register(Component.For(typeof(IPipelineBehavior<,>)).ImplementedBy(typeof(RequestExceptionActionProcessorBehavior<,>)));
             container.Register(fromAssemblyContainingCmd.BasedOn(typeof(IRequestExceptionAction<,>)).WithServiceAllInterfaces().AllowMultipleMatches());
             container.Register(fromAssemblyContainingCmd.BasedOn(typeof(IRequestExceptionHandler<,,>)).WithServiceAllInterfaces().AllowMultipleMatches());
             container.Register(fromAssemblyContainingCmd.BasedOn(typeof(IStreamRequestHandler<,>)).WithServiceAllInterfaces().AllowMultipleMatches());
             container.Register(fromAssemblyContainingCmd.BasedOn(typeof(IRequestPreProcessor<>)).WithServiceAllInterfaces().AllowMultipleMatches());
             container.Register(fromAssemblyContainingCmd.BasedOn(typeof(IRequestPostProcessor<,>)).WithServiceAllInterfaces().AllowMultipleMatches());
+            container.Register(fromAssemblyContainingQuery.BasedOn(typeof(IRequestHandler<,>)).LifestyleTransient().WithServiceAllInterfaces().AllowMultipleMatches());
+            container.Register(fromAssemblyContainingQuery.BasedOn(typeof(INotificationHandler<>)).WithServiceAllInterfaces().AllowMultipleMatches());
+            container.Register(fromAssemblyContainingQuery.BasedOn(typeof(IRequestExceptionAction<,>)).WithServiceAllInterfaces().AllowMultipleMatches());
+            container.Register(fromAssemblyContainingQuery.BasedOn(typeof(IRequestExceptionHandler<,,>)).WithServiceAllInterfaces().AllowMultipleMatches());
+            container.Register(fromAssemblyContainingQuery.BasedOn(typeof(IStreamRequestHandler<,>)).WithServiceAllInterfaces().AllowMultipleMatches());
+            container.Register(fromAssemblyContainingQuery.BasedOn(typeof(IRequestPreProcessor<>)).WithServiceAllInterfaces().AllowMultipleMatches());
+            container.Register(fromAssemblyContainingQuery.BasedOn(typeof(IRequestPostProcessor<,>)).WithServiceAllInterfaces().AllowMultipleMatches());
             container.Register(Component.For<IMediator>().ImplementedBy<Mediator>());
+
+            container.Register(Component.For(typeof(IPipelineBehavior<,>)).ImplementedBy(typeof(RequestExceptionProcessorBehavior<,>)));
+            container.Register(Component.For(typeof(IPipelineBehavior<,>)).ImplementedBy(typeof(RequestExceptionActionProcessorBehavior<,>)));
+
             container.Register(Component.For<ServiceFactory>().UsingFactoryMethod<ServiceFactory>(k => (type =>
             {
                 var enumerableType = type
