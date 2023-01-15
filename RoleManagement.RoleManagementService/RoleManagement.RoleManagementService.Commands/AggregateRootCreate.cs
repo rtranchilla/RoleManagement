@@ -21,10 +21,13 @@ public abstract class AggregateRootCreateHandler<TRequest, TAggregateRoot, TDto>
     }
 
     protected abstract TDto GetDto(TRequest request);
+    protected virtual TAggregateRoot Map(TDto dto, IMapper mapper) => mapper.Map<TDto, TAggregateRoot>(dto);
+    protected virtual Task PreCreate(TRequest request, RoleDbContext dbContext) => Task.CompletedTask;
 
     public async Task<Unit> Handle(TRequest request, CancellationToken cancellationToken)
     {
-        var newEntity = await Task.Run(() => mapper.Map<TDto, TAggregateRoot>(GetDto(request)), cancellationToken);
+        await PreCreate(request, dbContext);
+        var newEntity = await Task.Run(() => Map(GetDto(request), mapper), cancellationToken);
         if (newEntity == null)
             throw new NullReferenceException($"Failed to generate new object for supplied dto of type: {GetDto(request)?.GetType().Name ?? "Unknown"}.");
 

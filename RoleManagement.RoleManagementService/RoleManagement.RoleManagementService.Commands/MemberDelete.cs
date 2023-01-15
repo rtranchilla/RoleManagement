@@ -13,8 +13,6 @@ public sealed class MemberDeleteHandler : AggregateRootDeleteHandler<MemberDelet
 {
     public MemberDeleteHandler(RoleDbContext dbContext) : base(dbContext) { }
 
-    protected override Member? GetEntity(MemberDelete request, RoleDbContext dbContext)
-    {
-        return dbContext.Members!.FirstOrDefault(e => e.Id == request.Id);
-    }
+    protected override Member? GetEntity(MemberDelete request, RoleDbContext dbContext) => 
+        dbContext.Members!.FirstOrDefault(e => e.Id == request.Id);
 }

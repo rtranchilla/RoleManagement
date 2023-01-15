@@ -13,8 +13,5 @@ public sealed class MemberCreateHandler : AggregateRootCreateHandler<MemberCreat
 {
     public MemberCreateHandler(RoleDbContext dbContext, IMapper mapper) : base(dbContext, mapper) { }
 
-    protected override Dto.Member GetDto(MemberCreate request)
-    {
-        return request.Member;
-    }
+    protected override Dto.Member GetDto(MemberCreate request) => request.Member;
 }

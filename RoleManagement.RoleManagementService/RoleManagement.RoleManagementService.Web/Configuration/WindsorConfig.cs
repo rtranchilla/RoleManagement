@@ -17,22 +17,23 @@ namespace RoleManagement.RoleManagementService.Web.Configuration
             container.Kernel.Resolver.AddSubResolver(new CollectionResolver(container.Kernel));
             container.Kernel.AddHandlersFilter(new ContravariantFilter());
 
-            var fromAssemblyContainingCmd = Classes.FromAssemblyContaining<MemberCreate>();
-            var fromAssemblyContainingQuery = Classes.FromAssemblyContaining<MemberQuery>();
-            container.Register(fromAssemblyContainingCmd.BasedOn(typeof(IRequestHandler<,>)).LifestyleTransient().WithServiceAllInterfaces().AllowMultipleMatches());
-            container.Register(fromAssemblyContainingCmd.BasedOn(typeof(INotificationHandler<>)).WithServiceAllInterfaces().AllowMultipleMatches());
-            container.Register(fromAssemblyContainingCmd.BasedOn(typeof(IRequestExceptionAction<,>)).WithServiceAllInterfaces().AllowMultipleMatches());
-            container.Register(fromAssemblyContainingCmd.BasedOn(typeof(IRequestExceptionHandler<,,>)).WithServiceAllInterfaces().AllowMultipleMatches());
-            container.Register(fromAssemblyContainingCmd.BasedOn(typeof(IStreamRequestHandler<,>)).WithServiceAllInterfaces().AllowMultipleMatches());
-            container.Register(fromAssemblyContainingCmd.BasedOn(typeof(IRequestPreProcessor<>)).WithServiceAllInterfaces().AllowMultipleMatches());
-            container.Register(fromAssemblyContainingCmd.BasedOn(typeof(IRequestPostProcessor<,>)).WithServiceAllInterfaces().AllowMultipleMatches());
-            container.Register(fromAssemblyContainingQuery.BasedOn(typeof(IRequestHandler<,>)).LifestyleTransient().WithServiceAllInterfaces().AllowMultipleMatches());
-            container.Register(fromAssemblyContainingQuery.BasedOn(typeof(INotificationHandler<>)).WithServiceAllInterfaces().AllowMultipleMatches());
-            container.Register(fromAssemblyContainingQuery.BasedOn(typeof(IRequestExceptionAction<,>)).WithServiceAllInterfaces().AllowMultipleMatches());
-            container.Register(fromAssemblyContainingQuery.BasedOn(typeof(IRequestExceptionHandler<,,>)).WithServiceAllInterfaces().AllowMultipleMatches());
-            container.Register(fromAssemblyContainingQuery.BasedOn(typeof(IStreamRequestHandler<,>)).WithServiceAllInterfaces().AllowMultipleMatches());
-            container.Register(fromAssemblyContainingQuery.BasedOn(typeof(IRequestPreProcessor<>)).WithServiceAllInterfaces().AllowMultipleMatches());
-            container.Register(fromAssemblyContainingQuery.BasedOn(typeof(IRequestPostProcessor<,>)).WithServiceAllInterfaces().AllowMultipleMatches());
+            container.RegisterMediatRServices(Classes.FromAssemblyContaining<MemberCreate>()); // Register Commands
+            container.RegisterMediatRServices(Classes.FromAssemblyContaining<MemberQuery>()); // Register Queries
+
+            //container.Register(fromAssemblyContainingCmd.BasedOn(typeof(IRequestHandler<,>)).LifestyleTransient().WithServiceAllInterfaces().AllowMultipleMatches());
+            //container.Register(fromAssemblyContainingCmd.BasedOn(typeof(INotificationHandler<>)).WithServiceAllInterfaces().AllowMultipleMatches());
+            //container.Register(fromAssemblyContainingCmd.BasedOn(typeof(IRequestExceptionAction<,>)).WithServiceAllInterfaces().AllowMultipleMatches());
+            //container.Register(fromAssemblyContainingCmd.BasedOn(typeof(IRequestExceptionHandler<,,>)).WithServiceAllInterfaces().AllowMultipleMatches());
+            //container.Register(fromAssemblyContainingCmd.BasedOn(typeof(IStreamRequestHandler<,>)).WithServiceAllInterfaces().AllowMultipleMatches());
+            //container.Register(fromAssemblyContainingCmd.BasedOn(typeof(IRequestPreProcessor<>)).WithServiceAllInterfaces().AllowMultipleMatches());
+            //container.Register(fromAssemblyContainingCmd.BasedOn(typeof(IRequestPostProcessor<,>)).WithServiceAllInterfaces().AllowMultipleMatches());
+            //container.Register(fromAssemblyContainingQuery.BasedOn(typeof(IRequestHandler<,>)).LifestyleTransient().WithServiceAllInterfaces().AllowMultipleMatches());
+            //container.Register(fromAssemblyContainingQuery.BasedOn(typeof(INotificationHandler<>)).WithServiceAllInterfaces().AllowMultipleMatches());
+            //container.Register(fromAssemblyContainingQuery.BasedOn(typeof(IRequestExceptionAction<,>)).WithServiceAllInterfaces().AllowMultipleMatches());
+            //container.Register(fromAssemblyContainingQuery.BasedOn(typeof(IRequestExceptionHandler<,,>)).WithServiceAllInterfaces().AllowMultipleMatches());
+            //container.Register(fromAssemblyContainingQuery.BasedOn(typeof(IStreamRequestHandler<,>)).WithServiceAllInterfaces().AllowMultipleMatches());
+            //container.Register(fromAssemblyContainingQuery.BasedOn(typeof(IRequestPreProcessor<>)).WithServiceAllInterfaces().AllowMultipleMatches());
+            //container.Register(fromAssemblyContainingQuery.BasedOn(typeof(IRequestPostProcessor<,>)).WithServiceAllInterfaces().AllowMultipleMatches());
             container.Register(Component.For<IMediator>().ImplementedBy<Mediator>());
 
             container.Register(Component.For(typeof(IPipelineBehavior<,>)).ImplementedBy(typeof(RequestExceptionProcessorBehavior<,>)));
@@ -65,7 +66,18 @@ namespace RoleManagement.RoleManagementService.Web.Configuration
             })));
         }
 
-        private static object ResolveRequestExceptionHandler(IKernel k, Type type, Type service, object resolvedType, Type[] genericArguments)
+        private static IWindsorContainer RegisterMediatRServices(this IWindsorContainer container, FromAssemblyDescriptor assemblyDescriptor) =>
+            container.Register(
+                assemblyDescriptor.BasedOn(typeof(IRequestHandler<,>)).LifestyleTransient().WithServiceAllInterfaces().AllowMultipleMatches(),
+                assemblyDescriptor.BasedOn(typeof(INotificationHandler<>)).LifestyleTransient().WithServiceAllInterfaces().AllowMultipleMatches(),
+                assemblyDescriptor.BasedOn(typeof(IRequestExceptionAction<,>)).LifestyleTransient().WithServiceAllInterfaces().AllowMultipleMatches(),
+                assemblyDescriptor.BasedOn(typeof(IRequestExceptionHandler<,,>)).LifestyleTransient().WithServiceAllInterfaces().AllowMultipleMatches(),
+                assemblyDescriptor.BasedOn(typeof(IStreamRequestHandler<,>)).LifestyleTransient().WithServiceAllInterfaces().AllowMultipleMatches(),
+                assemblyDescriptor.BasedOn(typeof(IRequestPreProcessor<>)).LifestyleTransient().WithServiceAllInterfaces().AllowMultipleMatches(),
+                assemblyDescriptor.BasedOn(typeof(IRequestPostProcessor<,>)).LifestyleTransient().WithServiceAllInterfaces().AllowMultipleMatches()
+                );
+
+        private static object ResolveRequestExceptionHandler(IKernel k, Type type, Type? service, object resolvedType, Type[]? genericArguments)
         {
             if (service == null
             || genericArguments == null
@@ -101,7 +113,7 @@ namespace RoleManagement.RoleManagementService.Web.Configuration
             return resultArray;
         }
 
-        private static object ResolveRequestExceptionAction(IKernel k, Type type, Type service, object resolvedType, Type[] genericArguments)
+        private static object ResolveRequestExceptionAction(IKernel k, Type type, Type? service, object resolvedType, Type[]? genericArguments)
         {
             if (service == null
             || genericArguments == null

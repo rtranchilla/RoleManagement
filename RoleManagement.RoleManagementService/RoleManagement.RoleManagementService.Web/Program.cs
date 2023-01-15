@@ -14,7 +14,7 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<RoleDbContext>(opt => 
     //opt.UseSqlServer("Server=localhost;Database=roleManagement;User Id=testuser;Password=testuser1;TrustServerCertificate=True"),
     opt.UseSqlServer("Server=SQL1\\MSSQLSERVER2;Database=RoleManagement;Trusted_Connection=Yes;TrustServerCertificate=True"),
-    ServiceLifetime.Transient, ServiceLifetime.Transient);
+    ServiceLifetime.Scoped, ServiceLifetime.Scoped);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

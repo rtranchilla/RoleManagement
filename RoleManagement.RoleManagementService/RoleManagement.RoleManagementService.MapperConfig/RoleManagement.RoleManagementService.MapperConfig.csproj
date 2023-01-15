@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\RoleManagement.RoleManagementService.DataPersistence\RoleManagement.RoleManagementService.DataPersistence.csproj" />
     <ProjectReference Include="..\RoleManagement.RoleManagementService.Dto\RoleManagement.RoleManagementService.Dto.csproj" />
     <ProjectReference Include="..\RoleManagement.RoleManagementService\RoleManagement.RoleManagementService.csproj" />
   </ItemGroup>

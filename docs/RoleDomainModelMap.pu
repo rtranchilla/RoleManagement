@@ -32,7 +32,7 @@ class Role {
 }
 
 note top of Role
-  Roles can be associated to members if three things are true.
+  Roles can be associated to members if two things are true.
   1) The member meets all of the node requirements for the role 
       and the associated tree.
   2) The member is either not a member of a role, or is not 

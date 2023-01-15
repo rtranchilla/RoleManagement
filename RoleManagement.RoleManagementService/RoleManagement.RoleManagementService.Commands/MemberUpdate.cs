@@ -6,13 +6,8 @@ public sealed class MemberUpdateHandler : AggregateRootUpdateHandler<MemberUpdat
 {
     public MemberUpdateHandler(RoleDbContext dbContext, IMapper mapper) : base(dbContext, mapper) { }
 
-    protected override Member? GetAggregateRoot(MemberUpdate request, RoleDbContext dbContext)
-    {
-        return dbContext.Members!.FirstOrDefault(e => e.Id == request.Member.Id);
-    }
+    protected override Member? GetEntity(MemberUpdate request, RoleDbContext dbContext) => 
+        dbContext.Members!.FirstOrDefault(e => e.Id == request.Member.Id);
 
-    protected override Dto.Member GetDto(MemberUpdate request)
-    {
-        return request.Member;
-    }
+    protected override Dto.Member GetDto(MemberUpdate request) => request.Member;
 }

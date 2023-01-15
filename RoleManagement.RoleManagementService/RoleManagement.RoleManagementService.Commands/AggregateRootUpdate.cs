@@ -21,7 +21,7 @@ public abstract class AggregateRootUpdateHandler<TRequest, TAggregateRoot, TDto>
     }
 
     protected abstract TDto GetDto(TRequest request);
-    protected abstract TAggregateRoot? GetAggregateRoot(TRequest request, RoleDbContext dbContext);
+    protected abstract TAggregateRoot? GetEntity(TRequest request, RoleDbContext dbContext);
 
     public async Task<Unit> Handle(TRequest request, CancellationToken cancellationToken)
     {
@@ -29,7 +29,7 @@ public abstract class AggregateRootUpdateHandler<TRequest, TAggregateRoot, TDto>
         if (dto == null)
             throw new ArgumentNullException(nameof(request), $"Unable to find the Dto object from the supplied request.");
 
-        var entity = await Task.Run(() => GetAggregateRoot(request, dbContext), cancellationToken);
+        var entity = await Task.Run(() => GetEntity(request, dbContext), cancellationToken);
         if (entity == null)
             throw new NullReferenceException($"Failed to find an entity with the supplied id: {dto.Id}.");
 

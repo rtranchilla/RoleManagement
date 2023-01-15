@@ -11,7 +11,10 @@ public sealed class Role : EntityWithId
     {
         if (nodeIds.Length < 1)
             throw new ArgumentException($"'{nameof(nodeIds)}' cannot contain less than 1 member(s)", nameof(nodeIds));
-        Nodes = nodeIds.Select(n => new RoleNode(id, n)).ToList();
+        var roleNodes= new List<RoleNode>();
+        for (int i = 0; i < nodeIds.Length; i++)
+            roleNodes.Add(new RoleNode(id, nodeIds[i], i));
+        Nodes = roleNodes;
         TreeId = treeId;
     }
 
