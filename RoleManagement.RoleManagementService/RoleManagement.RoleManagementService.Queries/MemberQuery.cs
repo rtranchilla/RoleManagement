@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using RoleManagement.RoleManagementService.DataPersistence;
+using System.Linq;
 
 namespace RoleManagement.RoleManagementService.Queries;
 
@@ -16,6 +18,7 @@ public sealed record MemberQuery : AggregateRootQuery<Dto.Member>
     }
 
     public Guid? Id { get; }
+    public Guid? RoleId { get; set; }
     public string? UniqueName { get; }
 }
 
@@ -29,6 +32,8 @@ public sealed class MemberQueryHandler : AggregateRootQueryHandler<MemberQuery, 
             return dbContext.Members!.Where(e => e.Id == request.Id);
         if (request.UniqueName != null)
             return dbContext.Members!.Where(e => e.UniqueName == request.UniqueName);
+        if (request.RoleId != null)
+            return dbContext.Members!.FromSqlInterpolated($"Select mem.* from [dbo].[Members] mem inner join [dbo].[MemberRoles] mr on mem.Id = mr.MemberId where mr.RoleId = {request.RoleId}");
 
         return dbContext.Members!;  
     }

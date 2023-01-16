@@ -10,7 +10,9 @@ public sealed class Role : EntityWithId
     public Role(Guid id, Guid treeId, params Guid[] nodeIds) : base(id)
     {
         if (nodeIds.Length < 1)
-            throw new ArgumentException($"'{nameof(nodeIds)}' cannot contain less than 1 member(s)", nameof(nodeIds));
+            throw new ArgumentException($"'{nameof(nodeIds)}' cannot contain less than 1 member", nameof(nodeIds));
+        if (nodeIds.GroupBy(x => x).SelectMany(g => g.Skip(1)).Any())
+            throw new ArgumentException($"'{nameof(nodeIds)}' cannot contain duplicate members", nameof(nodeIds));
         var roleNodes= new List<RoleNode>();
         for (int i = 0; i < nodeIds.Length; i++)
             roleNodes.Add(new RoleNode(id, nodeIds[i], i));

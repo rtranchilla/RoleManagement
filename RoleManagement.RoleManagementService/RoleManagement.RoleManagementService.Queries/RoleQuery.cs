@@ -10,6 +10,7 @@ public sealed record RoleQuery : AggregateRootQuery<Dto.Role>
     public RoleQuery(Guid id) => Id = id;
 
     public Guid? Id { get; }
+    public Guid? MemberId { get; set; }
 }
 
 public sealed class RoleQueryHandler : AggregateRootQueryHandler<RoleQuery, Role, Dto.Role>

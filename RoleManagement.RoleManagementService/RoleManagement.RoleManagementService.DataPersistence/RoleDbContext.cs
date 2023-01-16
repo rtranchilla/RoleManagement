@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.SqlServer;
 
 namespace RoleManagement.RoleManagementService.DataPersistence;
 public sealed class RoleDbContext : DbContext
@@ -15,6 +16,22 @@ public sealed class RoleDbContext : DbContext
 		modelBuilder.Entity<Member>()
 					.HasIndex(e => e.UniqueName)
 					.IsUnique();
+        modelBuilder.Entity<Member>()
+                    .HasMany(e => e.Roles)
+                    .WithOne()
+                    .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<MemberRole>()
+                    .ToTable("MemberRoles")
+                    .HasKey(e => new { e.MemberId, e.TreeId });
+        modelBuilder.Entity<MemberRole>()
+                    .HasOne(e => e.Role)
+                    .WithMany()
+                    .OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<MemberRole>()
+                    .HasOne<Tree>()
+                    .WithMany()
+                    .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<Tree>()
 					.HasIndex(e => e.Name)

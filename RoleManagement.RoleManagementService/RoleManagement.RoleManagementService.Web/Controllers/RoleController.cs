@@ -15,4 +15,7 @@ public class RoleController : AggregateRootCreateDeleteController<Dto.Role, Role
 
     [HttpPut]
     public Task<IActionResult> Update(Dto.Role role) => SendCommand(new RoleUpdate(role));
+
+    [HttpGet("ByMember")]
+    public Task<ActionResult<IEnumerable<Dto.Role>>> GetByRole(Guid memberId) => SendQuery(new MemberRoleQuery(memberId));
 }

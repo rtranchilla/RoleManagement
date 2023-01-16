@@ -16,4 +16,6 @@ public sealed class Member : EntityWithId
 
     public string DisplayName { get; set; }
     public string UniqueName { get; private set; }
+
+    public IList<MemberRole> Roles { get; private set; } = new List<MemberRole>();
 }
