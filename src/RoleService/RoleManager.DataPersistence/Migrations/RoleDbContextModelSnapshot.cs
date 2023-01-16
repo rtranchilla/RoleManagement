@@ -195,7 +195,7 @@ namespace RoleManagement.RoleManagementService.DataPersistence.Migrations
                     b.HasOne("RoleManagement.RoleManagementService.Node", "Node")
                         .WithMany()
                         .HasForeignKey("NodeId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("RoleManagement.RoleManagementService.Role", null)

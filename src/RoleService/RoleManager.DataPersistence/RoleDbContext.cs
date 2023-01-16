@@ -60,6 +60,6 @@ public sealed class RoleDbContext : DbContext
         modelBuilder.Entity<RoleNode>()
                     .HasOne(e => e.Node)
                     .WithMany()
-                    .OnDelete(DeleteBehavior.Cascade);
+                    .OnDelete(DeleteBehavior.Restrict);
     }
 }

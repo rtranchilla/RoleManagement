@@ -3,21 +3,21 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32825.248
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoleManagement.RoleManagementService", "RoleManagement.RoleManagementService\RoleManagement.RoleManagementService.csproj", "{9508CE6D-E8EF-4AD2-ABAB-0818C14BAA09}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoleManager", "RoleManager\RoleManager.csproj", "{9508CE6D-E8EF-4AD2-ABAB-0818C14BAA09}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoleManagement.RoleManagementService.Web", "RoleManagement.RoleManagementService.Web\RoleManagement.RoleManagementService.Web.csproj", "{2FD20BE6-39DF-4051-9A22-4717A708139F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoleManager.WebService", "RoleManager.WebService\RoleManager.WebService.csproj", "{2FD20BE6-39DF-4051-9A22-4717A708139F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataAccess", "DataAccess", "{FD37A32E-F3BB-47CF-B6AC-72B44DFBAD64}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoleManagement.RoleManagementService.Commands", "RoleManagement.RoleManagementService.Commands\RoleManagement.RoleManagementService.Commands.csproj", "{E413DF16-E20E-4937-8108-05F0157312CA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoleManager.Commands", "RoleManager.Commands\RoleManager.Commands.csproj", "{E413DF16-E20E-4937-8108-05F0157312CA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoleManagement.RoleManagementService.Queries", "RoleManagement.RoleManagementService.Queries\RoleManagement.RoleManagementService.Queries.csproj", "{CFE240D8-7066-448F-A89C-2EC3817A61EE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoleManager.Queries", "RoleManager.Queries\RoleManager.Queries.csproj", "{CFE240D8-7066-448F-A89C-2EC3817A61EE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoleManagement.RoleManagementService.DataPersistence", "RoleManagement.RoleManagementService.DataPersistence\RoleManagement.RoleManagementService.DataPersistence.csproj", "{2DCB1F64-EBAC-404A-A532-86D1CCF9FC04}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoleManager.DataPersistence", "RoleManager.DataPersistence\RoleManager.DataPersistence.csproj", "{2DCB1F64-EBAC-404A-A532-86D1CCF9FC04}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoleManagement.RoleManagementService.Dto", "RoleManagement.RoleManagementService.Dto\RoleManagement.RoleManagementService.Dto.csproj", "{C653DA20-9AA2-45FA-9FE3-C9F29F96FB57}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoleManager.Dto", "RoleManager.Dto\RoleManager.Dto.csproj", "{C653DA20-9AA2-45FA-9FE3-C9F29F96FB57}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoleManagement.RoleManagementService.MapperConfig", "RoleManagement.RoleManagementService.MapperConfig\RoleManagement.RoleManagementService.MapperConfig.csproj", "{A357F81D-601D-443C-A99F-EC4C3A6235CD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoleManager.Mapper", "RoleManager.Mapper\RoleManager.Mapper.csproj", "{A357F81D-601D-443C-A99F-EC4C3A6235CD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -22,8 +22,7 @@ public sealed class RoleCreateHandler : AggregateRootCreateHandler<RoleCreate, R
                 await dbContext.Nodes!.AddAsync(node);
             }
             nodes.Add(node);
-        }
-        
+        }        
     }
 
     protected override Role Map(Dto.Role dto, IMapper mapper) => mapper.Map<Dto.Role, Role>(dto, opt => opt.Items["nodeIds"] = nodes!.Select(e => e.Id).ToArray());
