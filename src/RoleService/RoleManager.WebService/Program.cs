@@ -10,7 +10,8 @@ var container = new WindsorContainer();
 builder.Host.UseWindsorContainerServiceProvider(container);
 
 // Add services to the container.
-builder.Services.AddControllers();
+builder.Services.AddDaprClient(); // Adds dapr client for consumption
+builder.Services.AddControllers().AddDapr(); // Adds dapr integration for controlers
 builder.Services.AddDbContext<RoleDbContext>(opt => 
     //opt.UseSqlServer("Server=localhost;Database=roleManagement;User Id=testuser;Password=testuser1;TrustServerCertificate=True"),
     opt.UseSqlServer("Server=SQL1\\MSSQLSERVER2;Database=RoleManagement;Trusted_Connection=Yes;TrustServerCertificate=True"),
@@ -31,8 +32,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCloudEvents(); // Adds event metadata for dapr pubsub
 app.UseAuthorization();
 
-app.MapControllers();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapSubscribeHandler(); // Adds dapr pubsub subscribe endpoints
+    endpoints.MapControllers();
+});
 
 app.Run();

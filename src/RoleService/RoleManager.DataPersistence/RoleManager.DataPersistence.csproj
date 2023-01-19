@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\RoleManagement.RoleManagementService\RoleManagement.RoleManagementService.csproj" />
+    <ProjectReference Include="..\RoleManager\RoleManager.csproj" />
   </ItemGroup>
 
 </Project>

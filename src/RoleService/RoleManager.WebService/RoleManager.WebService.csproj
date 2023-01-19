@@ -18,6 +18,7 @@
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
     <PackageReference Include="Castle.Windsor" Version="5.1.2" />
     <PackageReference Include="Castle.Windsor.Extensions.DependencyInjection" Version="5.1.2" />
+    <PackageReference Include="Dapr.AspNetCore" Version="1.9.0" />
     <PackageReference Include="MediatR" Version="11.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.12">
       <PrivateAssets>all</PrivateAssets>
@@ -33,9 +34,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\RoleManagement.RoleManagementService.Commands\RoleManagement.RoleManagementService.Commands.csproj" />
-    <ProjectReference Include="..\RoleManagement.RoleManagementService.MapperConfig\RoleManagement.RoleManagementService.MapperConfig.csproj" />
-    <ProjectReference Include="..\RoleManagement.RoleManagementService.Queries\RoleManagement.RoleManagementService.Queries.csproj" />
+    <ProjectReference Include="..\RoleManager.Commands\RoleManager.Commands.csproj" />
+    <ProjectReference Include="..\RoleManager.DataPersistence\RoleManager.DataPersistence.csproj" />
+    <ProjectReference Include="..\RoleManager.Dto\RoleManager.Dto.csproj" />
+    <ProjectReference Include="..\RoleManager.Mapper\RoleManager.Mapper.csproj" />
+    <ProjectReference Include="..\RoleManager.Queries\RoleManager.Queries.csproj" />
   </ItemGroup>
 
 </Project>

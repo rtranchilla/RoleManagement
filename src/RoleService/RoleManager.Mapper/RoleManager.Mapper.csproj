@@ -12,9 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\RoleManagement.RoleManagementService.DataPersistence\RoleManagement.RoleManagementService.DataPersistence.csproj" />
-    <ProjectReference Include="..\RoleManagement.RoleManagementService.Dto\RoleManagement.RoleManagementService.Dto.csproj" />
-    <ProjectReference Include="..\RoleManagement.RoleManagementService\RoleManagement.RoleManagementService.csproj" />
+    <ProjectReference Include="..\RoleManager.Dto\RoleManager.Dto.csproj" />
+    <ProjectReference Include="..\RoleManager\RoleManager.csproj" />
   </ItemGroup>
 
 </Project>

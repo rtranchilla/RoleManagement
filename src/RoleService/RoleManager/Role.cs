@@ -1,4 +1,6 @@
-﻿namespace RoleManagement.RoleManagementService;
+﻿using System.Collections.Immutable;
+
+namespace RoleManagement.RoleManagementService;
 
 public sealed class Role : EntityWithId
 {
@@ -13,7 +15,7 @@ public sealed class Role : EntityWithId
             throw new ArgumentException($"'{nameof(nodeIds)}' cannot contain less than 1 member", nameof(nodeIds));
         if (nodeIds.GroupBy(x => x).SelectMany(g => g.Skip(1)).Any())
             throw new ArgumentException($"'{nameof(nodeIds)}' cannot contain duplicate members", nameof(nodeIds));
-        var roleNodes= new List<RoleNode>();
+        var roleNodes = new List<RoleNode>();
         for (int i = 0; i < nodeIds.Length; i++)
             roleNodes.Add(new RoleNode(id, nodeIds[i], i));
         Nodes = roleNodes;
@@ -25,4 +27,26 @@ public sealed class Role : EntityWithId
     public Tree? Tree { get; private set; }
     public Guid TreeId { get; private set; }
 
+    public void AddRequired(Node node) => AddRequired(node.Id, node.TreeId);
+    public void AddRequired(Guid nodeId, Guid nodeTreeId)
+    {
+        if (nodeTreeId == TreeId)
+            throw new ArgumentException("Node requirement cannot be added within the same tree.");
+        if (requiredNodes.Any(e => e.NodeId == nodeId))
+            throw new ArgumentException("Required node already exists.");
+
+        requiredNodes.Add(new RoleRequiredNode(Id, nodeId));
+    }
+
+    public void RemoveRequired(Node node) => RemoveRequired(node.Id);
+    public void RemoveRequired(Guid nodeId)
+    {
+        var reqNode = requiredNodes.FirstOrDefault(e => e.NodeId == nodeId);
+
+        if (reqNode != null)
+            requiredNodes.Remove(reqNode);
+    }
+
+    private readonly List<RoleRequiredNode> requiredNodes = new();
+    public IReadOnlyList<RoleRequiredNode> RequiredNodes { get => requiredNodes.ToImmutableList(); }
 }

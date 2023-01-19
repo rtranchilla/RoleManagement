@@ -36,6 +36,14 @@ public sealed class RoleDbContext : DbContext
         modelBuilder.Entity<Tree>()
 					.HasIndex(e => e.Name)
 					.IsUnique();
+        modelBuilder.Entity<Tree>()
+                    .HasMany(e => e.RequiredNodes)
+                    .WithOne()
+                    .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<TreeRequiredNode>()
+                    .ToTable("TreeRequiredNodes")
+                    .HasKey(e => new { e.TreeId, e.NodeId });
 
         modelBuilder.Entity<Node>()
 					.HasIndex(e => new { e.Name, e.TreeId })
@@ -44,13 +52,25 @@ public sealed class RoleDbContext : DbContext
                     .HasOne(e => e.Tree)
                     .WithMany()
                     .OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<Node>()
+                    .HasMany<TreeRequiredNode>()
+                    .WithOne(e => e.Node)
+                    .OnDelete(DeleteBehavior.Cascade);
+        modelBuilder.Entity<Node>()
+                    .HasMany<RoleRequiredNode>()
+                    .WithOne(e => e.Node)
+                    .OnDelete(DeleteBehavior.Cascade);
 
-		modelBuilder.Entity<Role>()
+        modelBuilder.Entity<Role>()
 					.HasOne(e => e.Tree)
 					.WithMany()
 					.OnDelete(DeleteBehavior.Restrict);
         modelBuilder.Entity<Role>()
 					.HasMany(e => e.Nodes)
+					.WithOne()
+					.OnDelete(DeleteBehavior.Cascade);
+        modelBuilder.Entity<Role>()
+					.HasMany(e => e.RequiredNodes)
 					.WithOne()
 					.OnDelete(DeleteBehavior.Cascade);
 
@@ -61,5 +81,9 @@ public sealed class RoleDbContext : DbContext
                     .HasOne(e => e.Node)
                     .WithMany()
                     .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<RoleRequiredNode>()
+                    .ToTable("RoleRequiredNodes")
+                    .HasKey(e => new { e.RoleId, e.NodeId });
     }
 }

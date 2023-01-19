@@ -1,4 +1,6 @@
-﻿namespace RoleManagement.RoleManagementService;
+﻿using System.Collections.Immutable;
+
+namespace RoleManagement.RoleManagementService;
 
 public sealed class Tree : EntityWithId
 {
@@ -11,4 +13,27 @@ public sealed class Tree : EntityWithId
     }
 
     public string Name { get; private set; }
+
+    public void AddRequired(Node node) => AddRequired(node.Id, node.TreeId);
+    public void AddRequired(Guid nodeId, Guid nodeTreeId)
+    {
+        if (nodeTreeId == Id)
+            throw new ArgumentException("Node requirement cannot be added within the same tree.");
+        if (requiredNodes.Any(e => e.NodeId == nodeId))
+            throw new ArgumentException("Required node already exists.");
+
+        requiredNodes.Add(new TreeRequiredNode(Id, nodeId));
+    }
+
+    public void RemoveRequired(Node node) => RemoveRequired(node.Id);
+    public void RemoveRequired(Guid nodeId)
+    {
+        var reqNode = requiredNodes.FirstOrDefault(e => e.NodeId == nodeId);
+
+        if (reqNode != null)
+            requiredNodes.Remove(reqNode);
+    }
+
+    private readonly List<TreeRequiredNode> requiredNodes = new();
+    public IReadOnlyList<TreeRequiredNode> RequiredNodes { get => requiredNodes.ToImmutableList(); }
 }

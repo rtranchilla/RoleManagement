@@ -10,4 +10,5 @@ public class Role : IEntity
     public string Name { get; set; }
     [Required]
     public Guid TreeId { get; set; }
+    public Guid[] RequiredNodes { get; set; }
 }
