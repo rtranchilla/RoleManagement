@@ -1,4 +1,4 @@
-﻿namespace RoleManagement.RoleManagementService.Dto; 
+﻿namespace RoleManager.Dto; 
 public interface IEntity
 {
     Guid Id { get; set; }

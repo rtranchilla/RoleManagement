@@ -1,4 +1,4 @@
-﻿namespace RoleManagement.RoleManagementService.Dto;
+﻿namespace RoleManager.Dto;
 
 public class Tree : IEntity
 {

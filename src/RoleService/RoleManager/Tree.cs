@@ -1,6 +1,6 @@
 ﻿using System.Collections.Immutable;
 
-namespace RoleManagement.RoleManagementService;
+namespace RoleManager;
 
 public sealed class Tree : EntityWithId
 {

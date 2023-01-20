@@ -1,4 +1,4 @@
-﻿namespace RoleManagement.RoleManagementService;
+﻿namespace RoleManager;
 
 public sealed class Member : EntityWithId
 {

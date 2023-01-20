@@ -1,9 +1,9 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using RoleManagement.RoleManagementService.Commands;
-using RoleManagement.RoleManagementService.Queries;
+using RoleManager.Commands;
+using RoleManager.Queries;
 
-namespace RoleManagement.RoleManagementService.Web.Controllers;
+namespace RoleManager.Web.Controllers;
 
 public class RoleController : AggregateRootCreateDeleteController<Dto.Role, RoleCreate, RoleQuery, RoleDelete>
 {

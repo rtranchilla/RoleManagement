@@ -1,7 +1,7 @@
 ﻿using MediatR;
-using RoleManagement.RoleManagementService.DataPersistence;
+using RoleManager.DataPersistence;
 
-namespace RoleManagement.RoleManagementService.Commands;
+namespace RoleManager.Commands;
 
 public abstract record AggregateRootDelete : AggregateRootCommon;
 

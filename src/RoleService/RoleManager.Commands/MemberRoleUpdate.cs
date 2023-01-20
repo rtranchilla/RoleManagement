@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using RoleManagement.RoleManagementService.DataPersistence;
+using RoleManager.DataPersistence;
 
-namespace RoleManagement.RoleManagementService.Commands
+namespace RoleManager.Commands
 {
     public sealed record MemberRoleUpdate(Guid MemberId, Guid TreeId, Guid RoleId) : AggregateRootCommon;
     public sealed class MemberRoleUpdateHandler : IRequestHandler<MemberRoleUpdate>

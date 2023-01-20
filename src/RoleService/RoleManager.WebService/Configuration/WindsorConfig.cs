@@ -4,11 +4,11 @@ using Castle.MicroKernel.Resolvers.SpecializedResolvers;
 using Castle.Windsor;
 using MediatR;
 using MediatR.Pipeline;
-using RoleManagement.RoleManagementService.Commands;
-using RoleManagement.RoleManagementService.Queries;
+using RoleManager.Commands;
+using RoleManager.Queries;
 using System.Diagnostics;
 
-namespace RoleManagement.RoleManagementService.Web.Configuration
+namespace RoleManager.Web.Configuration
 {
     public static class WindsorConfig
     {
@@ -34,7 +34,7 @@ namespace RoleManagement.RoleManagementService.Web.Configuration
             //container.Register(fromAssemblyContainingQuery.BasedOn(typeof(IStreamRequestHandler<,>)).WithServiceAllInterfaces().AllowMultipleMatches());
             //container.Register(fromAssemblyContainingQuery.BasedOn(typeof(IRequestPreProcessor<>)).WithServiceAllInterfaces().AllowMultipleMatches());
             //container.Register(fromAssemblyContainingQuery.BasedOn(typeof(IRequestPostProcessor<,>)).WithServiceAllInterfaces().AllowMultipleMatches());
-            container.Register(Component.For<IMediator>().ImplementedBy<Mediator>());
+            container.Register(Component.For<IMediator, IPublisher, ISender>().ImplementedBy<Mediator>());
 
             container.Register(Component.For(typeof(IPipelineBehavior<,>)).ImplementedBy(typeof(RequestExceptionProcessorBehavior<,>)));
             container.Register(Component.For(typeof(IPipelineBehavior<,>)).ImplementedBy(typeof(RequestExceptionActionProcessorBehavior<,>)));

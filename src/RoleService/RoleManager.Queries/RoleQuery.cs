@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using RoleManagement.RoleManagementService.DataPersistence;
+using RoleManager.DataPersistence;
 
-namespace RoleManagement.RoleManagementService.Queries;
+namespace RoleManager.Queries;
 
 public sealed record RoleQuery : AggregateRootQuery<Dto.Role>
 {

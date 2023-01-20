@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using RoleManagement.RoleManagementService.DataPersistence;
+using RoleManager.DataPersistence;
 
 
-namespace RoleManagement.RoleManagementService.Commands;
+namespace RoleManager.Commands;
 
 public sealed record TreeDelete(Guid Id) : AggregateRootDelete;
 public sealed class TreeDeleteHandler : AggregateRootDeleteHandler<TreeDelete, Tree>

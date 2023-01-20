@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace RoleManagement.RoleManagementService.DataPersistence.Migrations
+namespace RoleManager.DataPersistence.Migrations
 {
     public partial class p : Migration
     {

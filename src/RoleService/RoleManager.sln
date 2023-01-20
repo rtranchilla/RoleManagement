@@ -17,7 +17,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoleManager.DataPersistence
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoleManager.Dto", "RoleManager.Dto\RoleManager.Dto.csproj", "{C653DA20-9AA2-45FA-9FE3-C9F29F96FB57}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoleManager.Mapper", "RoleManager.Mapper\RoleManager.Mapper.csproj", "{A357F81D-601D-443C-A99F-EC4C3A6235CD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoleManager.Mapper", "RoleManager.Mapper\RoleManager.Mapper.csproj", "{A357F81D-601D-443C-A99F-EC4C3A6235CD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoleManager.Events", "RoleManager.Events\RoleManager.Events.csproj", "{16AE6C8F-D563-4A64-B574-2291570D1E17}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoleManager.Events.Payloads", "RoleManager.Events.Dto\RoleManager.Events.Payloads.csproj", "{DB8CE6E4-311E-4000-906C-10A9C39F83D2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -53,6 +57,14 @@ Global
 		{A357F81D-601D-443C-A99F-EC4C3A6235CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A357F81D-601D-443C-A99F-EC4C3A6235CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A357F81D-601D-443C-A99F-EC4C3A6235CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{16AE6C8F-D563-4A64-B574-2291570D1E17}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{16AE6C8F-D563-4A64-B574-2291570D1E17}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{16AE6C8F-D563-4A64-B574-2291570D1E17}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{16AE6C8F-D563-4A64-B574-2291570D1E17}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB8CE6E4-311E-4000-906C-10A9C39F83D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB8CE6E4-311E-4000-906C-10A9C39F83D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB8CE6E4-311E-4000-906C-10A9C39F83D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB8CE6E4-311E-4000-906C-10A9C39F83D2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -62,6 +74,8 @@ Global
 		{CFE240D8-7066-448F-A89C-2EC3817A61EE} = {FD37A32E-F3BB-47CF-B6AC-72B44DFBAD64}
 		{2DCB1F64-EBAC-404A-A532-86D1CCF9FC04} = {FD37A32E-F3BB-47CF-B6AC-72B44DFBAD64}
 		{A357F81D-601D-443C-A99F-EC4C3A6235CD} = {FD37A32E-F3BB-47CF-B6AC-72B44DFBAD64}
+		{16AE6C8F-D563-4A64-B574-2291570D1E17} = {FD37A32E-F3BB-47CF-B6AC-72B44DFBAD64}
+		{DB8CE6E4-311E-4000-906C-10A9C39F83D2} = {FD37A32E-F3BB-47CF-B6AC-72B44DFBAD64}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C4A06ADF-EDC9-40EE-90DD-23D2A1A1B175}

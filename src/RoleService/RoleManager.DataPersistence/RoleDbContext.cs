@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.SqlServer;
 
-namespace RoleManagement.RoleManagementService.DataPersistence;
+namespace RoleManager.DataPersistence;
 public sealed class RoleDbContext : DbContext
 {
 	public RoleDbContext(DbContextOptions<RoleDbContext> options) : base(options) { }

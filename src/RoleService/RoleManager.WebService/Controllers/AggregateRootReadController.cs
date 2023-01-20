@@ -1,10 +1,10 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using RoleManagement.RoleManagementService.Commands;
-using RoleManagement.RoleManagementService.Dto;
-using RoleManagement.RoleManagementService.Queries;
+using RoleManager.Commands;
+using RoleManager.Dto;
+using RoleManager.Queries;
 
-namespace RoleManagement.RoleManagementService.Web.Controllers;
+namespace RoleManager.Web.Controllers;
 
 public abstract class AggregateRootReadController<TDto, TRead> : MediatorControllerBase
     where TRead : AggregateRootQuery<TDto>, new()

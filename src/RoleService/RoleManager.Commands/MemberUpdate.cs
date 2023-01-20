@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using RoleManagement.RoleManagementService.DataPersistence;
-namespace RoleManagement.RoleManagementService.Commands;
+using RoleManager.DataPersistence;
+namespace RoleManager.Commands;
 public sealed record MemberUpdate(Dto.Member Member) : AggregateRootUpdate;
 public sealed class MemberUpdateHandler : AggregateRootUpdateHandler<MemberUpdate, Member, Dto.Member>
 {

@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using RoleManagement.RoleManagementService.DataPersistence;
+using RoleManager.DataPersistence;
 
-namespace RoleManagement.RoleManagementService.Queries;
+namespace RoleManager.Queries;
 
 public sealed record MemberRoleQuery : AggregateRootQuery<Dto.Role>
 {

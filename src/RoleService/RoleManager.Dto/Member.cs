@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace RoleManagement.RoleManagementService.Dto;
+namespace RoleManager.Dto;
 public class Member : IEntity
 {
     public Guid Id { get; set; }

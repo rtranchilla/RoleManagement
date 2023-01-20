@@ -1,4 +1,4 @@
-﻿namespace RoleManagement.RoleManagementService;
+﻿namespace RoleManager;
 
 public abstract class EntityWithId : Entity<EntityWithId>, IEquatable<EntityWithId>, IEntity
 {

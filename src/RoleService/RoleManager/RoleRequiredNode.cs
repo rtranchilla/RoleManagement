@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RoleManagement.RoleManagementService;
+namespace RoleManager;
 
 public sealed class RoleRequiredNode : AssociatorEntity<RoleRequiredNode>
 {

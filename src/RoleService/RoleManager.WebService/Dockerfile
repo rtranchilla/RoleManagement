@@ -6,22 +6,22 @@ EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["RoleManagement.RoleManagementService.Web/RoleManagement.RoleManagementService.Web.csproj", "RoleManagement.RoleManagementService.Web/"]
-COPY ["RoleManagement.RoleManagementService.Commands/RoleManagement.RoleManagementService.Commands.csproj", "RoleManagement.RoleManagementService.Commands/"]
-COPY ["RoleManagement.RoleManagementService.DataPersistence/RoleManagement.RoleManagementService.DataPersistence.csproj", "RoleManagement.RoleManagementService.DataPersistence/"]
-COPY ["RoleManagement.RoleManagementService/RoleManagement.RoleManagementService.csproj", "RoleManagement.RoleManagementService/"]
-COPY ["RoleManagement.RoleManagementService.Dto/RoleManagement.RoleManagementService.Dto.csproj", "RoleManagement.RoleManagementService.Dto/"]
-COPY ["RoleManagement.RoleManagementService.MapperConfig/RoleManagement.RoleManagementService.MapperConfig.csproj", "RoleManagement.RoleManagementService.MapperConfig/"]
-COPY ["RoleManagement.RoleManagementService.Queries/RoleManagement.RoleManagementService.Queries.csproj", "RoleManagement.RoleManagementService.Queries/"]
-RUN dotnet restore "RoleManagement.RoleManagementService.Web/RoleManagement.RoleManagementService.Web.csproj"
+COPY ["RoleManagement.Web/RoleManagement.Web.csproj", "RoleManagement.Web/"]
+COPY ["RoleManagement.Commands/RoleManagement.Commands.csproj", "RoleManagement.Commands/"]
+COPY ["RoleManagement.DataPersistence/RoleManagement.DataPersistence.csproj", "RoleManagement.DataPersistence/"]
+COPY ["RoleManagement/RoleManagement.csproj", "RoleManagement/"]
+COPY ["RoleManagement.Dto/RoleManagement.Dto.csproj", "RoleManagement.Dto/"]
+COPY ["RoleManagement.MapperConfig/RoleManagement.MapperConfig.csproj", "RoleManagement.MapperConfig/"]
+COPY ["RoleManagement.Queries/RoleManagement.Queries.csproj", "RoleManagement.Queries/"]
+RUN dotnet restore "RoleManagement.Web/RoleManagement.Web.csproj"
 COPY . .
-WORKDIR "/src/RoleManagement.RoleManagementService.Web"
-RUN dotnet build "RoleManagement.RoleManagementService.Web.csproj" -c Release -o /app/build
+WORKDIR "/src/RoleManagement.Web"
+RUN dotnet build "RoleManagement.Web.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "RoleManagement.RoleManagementService.Web.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "RoleManagement.Web.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "RoleManagement.RoleManagementService.Web.dll"]
+ENTRYPOINT ["dotnet", "RoleManagement.Web.dll"]

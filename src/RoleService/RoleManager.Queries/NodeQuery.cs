@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using RoleManagement.RoleManagementService.DataPersistence;
+using RoleManager.DataPersistence;
 
-namespace RoleManagement.RoleManagementService.Queries;
+namespace RoleManager.Queries;
 
 public sealed record NodeQuery : AggregateRootQuery<Dto.Node>
 {

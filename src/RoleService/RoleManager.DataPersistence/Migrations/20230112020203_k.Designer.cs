@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using RoleManagement.RoleManagementService.DataPersistence;
+using RoleManager.DataPersistence;
 
 #nullable disable
 
-namespace RoleManagement.RoleManagementService.DataPersistence.Migrations
+namespace RoleManager.DataPersistence.Migrations
 {
     [DbContext(typeof(RoleDbContext))]
     [Migration("20230112020203_k")]
@@ -24,7 +24,7 @@ namespace RoleManagement.RoleManagementService.DataPersistence.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("RoleManagement.RoleManagementService.Member", b =>
+            modelBuilder.Entity("RoleManagement.Member", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -46,7 +46,7 @@ namespace RoleManagement.RoleManagementService.DataPersistence.Migrations
                     b.ToTable("Members");
                 });
 
-            modelBuilder.Entity("RoleManagement.RoleManagementService.Node", b =>
+            modelBuilder.Entity("RoleManagement.Node", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -72,7 +72,7 @@ namespace RoleManagement.RoleManagementService.DataPersistence.Migrations
                     b.ToTable("Nodes");
                 });
 
-            modelBuilder.Entity("RoleManagement.RoleManagementService.Tree", b =>
+            modelBuilder.Entity("RoleManagement.Tree", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -90,9 +90,9 @@ namespace RoleManagement.RoleManagementService.DataPersistence.Migrations
                     b.ToTable("Trees");
                 });
 
-            modelBuilder.Entity("RoleManagement.RoleManagementService.Node", b =>
+            modelBuilder.Entity("RoleManagement.Node", b =>
                 {
-                    b.HasOne("RoleManagement.RoleManagementService.Tree", "Tree")
+                    b.HasOne("RoleManagement.Tree", "Tree")
                         .WithMany()
                         .HasForeignKey("TreeId")
                         .OnDelete(DeleteBehavior.Cascade)

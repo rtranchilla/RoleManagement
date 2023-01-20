@@ -16,13 +16,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="12.0.0" />
+    <PackageReference Include="AutoMapper" Version="12.0.1" />
     <PackageReference Include="MediatR" Version="11.1.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\RoleManager.DataPersistence\RoleManager.DataPersistence.csproj" />
     <ProjectReference Include="..\RoleManager.Dto\RoleManager.Dto.csproj" />
+    <ProjectReference Include="..\RoleManager.Events\RoleManager.Events.csproj" />
   </ItemGroup>
 
 </Project>

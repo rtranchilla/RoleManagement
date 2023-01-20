@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using RoleManagement.RoleManagementService.DataPersistence;
+using RoleManager.DataPersistence;
 
-namespace RoleManagement.RoleManagementService.Commands;
+namespace RoleManager.Commands;
 
 public sealed record RoleUpdate(Dto.Role Role) : AggregateRootUpdate;
 public sealed class RoleUpdateHandler : AggregateRootUpdateHandler<RoleUpdate, Role, Dto.Role>

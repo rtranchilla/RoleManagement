@@ -1,4 +1,4 @@
-﻿namespace RoleManagement.RoleManagementService;
+﻿namespace RoleManager;
 
 public abstract class AssociatorEntity<T> : Entity<AssociatorEntity<T>>, IEquatable<AssociatorEntity<T>>
     where T : AssociatorEntity<T>

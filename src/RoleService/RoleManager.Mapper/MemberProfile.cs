@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
-using RoleManagement.RoleManagementService;
 using AutoMapper.EquivalencyExpression;
 
-namespace RoleManagement.RoleManagementService.MapperConfig;
+namespace RoleManager.MapperConfig;
 
 public sealed class MemberProfile : Profile
 {

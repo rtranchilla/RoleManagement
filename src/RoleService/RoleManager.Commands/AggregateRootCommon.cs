@@ -2,7 +2,7 @@
 using MediatR.Pipeline;
 using Microsoft.Extensions.Logging;
 
-namespace RoleManagement.RoleManagementService.Commands;
+namespace RoleManager.Commands;
 
 public abstract record AggregateRootCommon : IRequest;
 

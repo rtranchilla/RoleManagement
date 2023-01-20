@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using RoleManagement.RoleManagementService.DataPersistence;
+using RoleManager.DataPersistence;
 
-namespace RoleManagement.RoleManagementService.Commands
+namespace RoleManager.Commands
 {
     public sealed record MemberRoleDelete(Guid MemberId, Guid TreeId) : AggregateRootCommon;
     public sealed class MemberRoleDeleteHandler : IRequestHandler<MemberRoleDelete>

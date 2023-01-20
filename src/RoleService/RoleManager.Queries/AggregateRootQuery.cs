@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using MediatR;
-using RoleManagement.RoleManagementService.DataPersistence;
+using RoleManager.DataPersistence;
 using System.Linq;
 
-namespace RoleManagement.RoleManagementService.Queries;
+namespace RoleManager.Queries;
 
 public abstract record AggregateRootQuery<TResult> : AggregateRootCommon<IEnumerable<TResult>>;
 

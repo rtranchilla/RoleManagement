@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using RoleManagement.RoleManagementService.DataPersistence;
-namespace RoleManagement.RoleManagementService.Commands;
+using RoleManager.DataPersistence;
+namespace RoleManager.Commands;
 
 public sealed record RoleCreate(Dto.Role Role) : AggregateRootCreate;
 public sealed class RoleCreateHandler : AggregateRootCreateHandler<RoleCreate, Role, Dto.Role>

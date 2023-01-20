@@ -1,17 +1,19 @@
 ﻿using AutoMapper;
-using RoleManagement.RoleManagementService.DataPersistence;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using RoleManager.DataPersistence;
+using MediatR;
+using RoleManager.Events;
 
-namespace RoleManagement.RoleManagementService.Commands;
+namespace RoleManager.Commands;
 
 public sealed record MemberCreate(Dto.Member Member) : AggregateRootCreate;
 public sealed class MemberCreateHandler : AggregateRootCreateHandler<MemberCreate, Member, Dto.Member>
 {
-    public MemberCreateHandler(RoleDbContext dbContext, IMapper mapper) : base(dbContext, mapper) { }
+    private readonly IPublisher publisher;
+
+    public MemberCreateHandler(RoleDbContext dbContext, IMapper mapper, IPublisher publisher) : base(dbContext, mapper) => this.publisher = publisher;
 
     protected override Dto.Member GetDto(MemberCreate request) => request.Member;
+    protected override Task PostSave(Member aggregateRoot, RoleDbContext dbContext) => publisher.Publish(new MemberCreated(aggregateRoot)); 
+    //TODO: figure out Node mapping
+
 }

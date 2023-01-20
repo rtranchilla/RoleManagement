@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using RoleManagement.RoleManagementService.DataPersistence;
+using RoleManager.DataPersistence;
 
 
-namespace RoleManagement.RoleManagementService.Commands;
+namespace RoleManager.Commands;
 
 public sealed record RoleDelete(Guid Id) : AggregateRootDelete;
 public sealed class RoleDeleteHandler : AggregateRootDeleteHandler<RoleDelete, Role>

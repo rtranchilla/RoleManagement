@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "RoleManagement.RoleManagementService.Web": {
+    "RoleManagement.Web": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "swagger",

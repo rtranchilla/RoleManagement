@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
-using RoleManagement.RoleManagementService.DataPersistence;
+using RoleManager.DataPersistence;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RoleManagement.RoleManagementService.Commands;
+namespace RoleManager.Commands;
 
 public sealed record MemberDelete(Guid Id) : AggregateRootDelete;
 public sealed class MemberDeleteHandler : AggregateRootDeleteHandler<MemberDelete, Member>

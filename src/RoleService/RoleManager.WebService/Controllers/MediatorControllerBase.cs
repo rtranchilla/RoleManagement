@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace RoleManagement.RoleManagementService.Web.Controllers;
+namespace RoleManager.Web.Controllers;
 
 [ApiController]
 [Route("[controller]")]

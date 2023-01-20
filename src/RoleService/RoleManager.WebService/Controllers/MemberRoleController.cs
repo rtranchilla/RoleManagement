@@ -1,8 +1,8 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using RoleManagement.RoleManagementService.Commands;
+using RoleManager.Commands;
 
-namespace RoleManagement.RoleManagementService.Web.Controllers
+namespace RoleManager.Web.Controllers
 {
     public sealed class MemberRoleController : MediatorControllerBase
     {

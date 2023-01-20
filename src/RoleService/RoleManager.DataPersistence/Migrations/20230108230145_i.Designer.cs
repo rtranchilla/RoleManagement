@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using RoleManagement.RoleManagementService.DataPersistence;
+using RoleManager.DataPersistence;
 
 #nullable disable
 
-namespace RoleManagement.RoleManagementService.DataPersistence.Migrations
+namespace RoleManager.DataPersistence.Migrations
 {
     [DbContext(typeof(RoleDbContext))]
     [Migration("20230108230145_i")]
@@ -24,7 +24,7 @@ namespace RoleManagement.RoleManagementService.DataPersistence.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("RoleManagement.RoleManagementService.Member", b =>
+            modelBuilder.Entity("RoleManagement.Member", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
