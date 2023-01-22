@@ -4,7 +4,11 @@ using Castle.MicroKernel.Resolvers.SpecializedResolvers;
 using Castle.Windsor;
 using MediatR;
 using MediatR.Pipeline;
+using Microsoft.AspNetCore;
+using Microsoft.EntityFrameworkCore;
 using RoleManager.Commands;
+using RoleManager.DataPersistence;
+using RoleManager.Events;
 using RoleManager.Queries;
 using System.Diagnostics;
 
@@ -12,6 +16,12 @@ namespace RoleManager.Web.Configuration
 {
     public static class WindsorConfig
     {
+        public static void UpdateDatabase(this IWindsorContainer container)
+        {
+            using (var context = container.Resolve<RoleDbContext>())
+                context.Database.Migrate();
+        }
+
         public static void ConfigureMediatR(this IWindsorContainer container)
         {
             container.Kernel.Resolver.AddSubResolver(new CollectionResolver(container.Kernel));
@@ -19,21 +29,8 @@ namespace RoleManager.Web.Configuration
 
             container.RegisterMediatRServices(Classes.FromAssemblyContaining<MemberCreate>()); // Register Commands
             container.RegisterMediatRServices(Classes.FromAssemblyContaining<MemberQuery>()); // Register Queries
+            container.RegisterMediatRServices(Classes.FromAssemblyContaining<MemberCreated>()); // Register Events
 
-            //container.Register(fromAssemblyContainingCmd.BasedOn(typeof(IRequestHandler<,>)).LifestyleTransient().WithServiceAllInterfaces().AllowMultipleMatches());
-            //container.Register(fromAssemblyContainingCmd.BasedOn(typeof(INotificationHandler<>)).WithServiceAllInterfaces().AllowMultipleMatches());
-            //container.Register(fromAssemblyContainingCmd.BasedOn(typeof(IRequestExceptionAction<,>)).WithServiceAllInterfaces().AllowMultipleMatches());
-            //container.Register(fromAssemblyContainingCmd.BasedOn(typeof(IRequestExceptionHandler<,,>)).WithServiceAllInterfaces().AllowMultipleMatches());
-            //container.Register(fromAssemblyContainingCmd.BasedOn(typeof(IStreamRequestHandler<,>)).WithServiceAllInterfaces().AllowMultipleMatches());
-            //container.Register(fromAssemblyContainingCmd.BasedOn(typeof(IRequestPreProcessor<>)).WithServiceAllInterfaces().AllowMultipleMatches());
-            //container.Register(fromAssemblyContainingCmd.BasedOn(typeof(IRequestPostProcessor<,>)).WithServiceAllInterfaces().AllowMultipleMatches());
-            //container.Register(fromAssemblyContainingQuery.BasedOn(typeof(IRequestHandler<,>)).LifestyleTransient().WithServiceAllInterfaces().AllowMultipleMatches());
-            //container.Register(fromAssemblyContainingQuery.BasedOn(typeof(INotificationHandler<>)).WithServiceAllInterfaces().AllowMultipleMatches());
-            //container.Register(fromAssemblyContainingQuery.BasedOn(typeof(IRequestExceptionAction<,>)).WithServiceAllInterfaces().AllowMultipleMatches());
-            //container.Register(fromAssemblyContainingQuery.BasedOn(typeof(IRequestExceptionHandler<,,>)).WithServiceAllInterfaces().AllowMultipleMatches());
-            //container.Register(fromAssemblyContainingQuery.BasedOn(typeof(IStreamRequestHandler<,>)).WithServiceAllInterfaces().AllowMultipleMatches());
-            //container.Register(fromAssemblyContainingQuery.BasedOn(typeof(IRequestPreProcessor<>)).WithServiceAllInterfaces().AllowMultipleMatches());
-            //container.Register(fromAssemblyContainingQuery.BasedOn(typeof(IRequestPostProcessor<,>)).WithServiceAllInterfaces().AllowMultipleMatches());
             container.Register(Component.For<IMediator, IPublisher, ISender>().ImplementedBy<Mediator>());
 
             container.Register(Component.For(typeof(IPipelineBehavior<,>)).ImplementedBy(typeof(RequestExceptionProcessorBehavior<,>)));
