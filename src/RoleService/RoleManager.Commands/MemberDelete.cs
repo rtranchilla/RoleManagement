@@ -1,18 +1,18 @@
-﻿using AutoMapper;
+﻿using MediatR;
 using RoleManager.DataPersistence;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using RoleManager.Events;
 
 namespace RoleManager.Commands;
 
 public sealed record MemberDelete(Guid Id) : AggregateRootDelete;
 public sealed class MemberDeleteHandler : AggregateRootDeleteHandler<MemberDelete, Member>
 {
-    public MemberDeleteHandler(RoleDbContext dbContext) : base(dbContext) { }
+    private readonly IPublisher publisher;
+
+    public MemberDeleteHandler(RoleDbContext dbContext, IPublisher publisher) : base(dbContext) => this.publisher = publisher;
 
     protected override Member? GetEntity(MemberDelete request, RoleDbContext dbContext) => 
         dbContext.Members!.FirstOrDefault(e => e.Id == request.Id);
+    protected override Task PostSave(MemberDelete request, RoleDbContext dbContext, CancellationToken cancellationToken) =>
+        publisher.Publish(new MemberDeleted(request.Id), cancellationToken);
 }

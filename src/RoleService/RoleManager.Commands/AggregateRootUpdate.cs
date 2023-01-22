@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
+using Microsoft.EntityFrameworkCore.Storage;
 using RoleManager.DataPersistence;
 
 namespace RoleManager.Commands;
@@ -22,6 +23,7 @@ public abstract class AggregateRootUpdateHandler<TRequest, TAggregateRoot, TDto>
 
     protected abstract TDto GetDto(TRequest request);
     protected abstract TAggregateRoot? GetEntity(TRequest request, RoleDbContext dbContext);
+    protected virtual Task PostSave(TAggregateRoot aggregateRoot, RoleDbContext dbContext, CancellationToken cancellationToken) => Task.CompletedTask;
 
     public async Task<Unit> Handle(TRequest request, CancellationToken cancellationToken)
     {
@@ -33,8 +35,19 @@ public abstract class AggregateRootUpdateHandler<TRequest, TAggregateRoot, TDto>
         if (entity == null)
             throw new NullReferenceException($"Failed to find an entity with the supplied id: {dto.Id}.");
 
-        entity = mapper.Map(dto, entity);
-        await dbContext.SaveChangesAsync(cancellationToken);
+        using (IDbContextTransaction transaction = await dbContext.Database.BeginTransactionAsync(cancellationToken))
+            try
+            {
+                entity = mapper.Map(dto, entity);
+                await dbContext.SaveChangesAsync(cancellationToken);
+                await PostSave(entity, dbContext, cancellationToken);
+                await transaction.CommitAsync(cancellationToken);
+            }
+            catch
+            {
+                transaction.Rollback();
+                throw;
+            }
         return Unit.Value;
     }
 }

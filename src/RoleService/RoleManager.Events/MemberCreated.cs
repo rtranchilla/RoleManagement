@@ -1,26 +1,11 @@
-﻿using AutoMapper;
-using Dapr.Client;
-using MediatR;
+﻿namespace RoleManager.Events;
 
-namespace RoleManager.Events;
+public record MemberCreated(Member Member, Guid[] NodeIds) : INotification;
 
-public record MemberCreated(Member Member) : INotification { }
-
-public class MemberCreatedHandler : INotificationHandler<MemberCreated>
+public class MemberCreatedHandler : PubSubNotificationHandler<MemberCreated, Payloads.MemberCreated>
 {
-    private readonly IMapper mapper;
-    private readonly DaprClient daprClient;
+    public MemberCreatedHandler(IMapper mapper, DaprClient daprClient) : base(mapper, daprClient, PubSubSpec.TopicMembers) { }
 
-    public MemberCreatedHandler(IMapper mapper, DaprClient daprClient)
-    {
-        this.mapper = mapper;
-        this.daprClient = daprClient;
-    }
-
-    public async Task Handle(MemberCreated notification, CancellationToken cancellationToken)
-    {
-        var payload = await Task.Run(() =>  mapper.Map<Member,Payloads.MemberCreated>(notification.Member), cancellationToken);
-        await daprClient.PublishEventAsync(PubSubSpec.Name, PubSubSpec.TopicMembers, payload, cancellationToken);
-    }
+    public override Task<Payloads.MemberCreated> GeneratePayload(MemberCreated notification, IMapper mapper, CancellationToken cancellationToken) => 
+        Task.Run(() => mapper.Map<Member, Payloads.MemberCreated>(notification.Member, opt => opt.Items["nodeIds"] = notification.NodeIds), cancellationToken);
 }
-

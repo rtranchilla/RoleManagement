@@ -13,6 +13,8 @@ public sealed class RoleDeleteHandler : AggregateRootDeleteHandler<RoleDelete, R
     protected override Role? GetEntity(RoleDelete request, RoleDbContext dbContext) => 
         dbContext.Roles!.FirstOrDefault(e => e.Id == request.Id);
 
-    protected override async Task PostSave(RoleDelete request, RoleDbContext dbContext) => 
-        await dbContext.Database.ExecuteSqlInterpolatedAsync($"Delete from [dbo].[Nodes] where Id not in (Select NodeId from [dbo].[RoleNodes])");
+    protected override async Task PostSave(RoleDelete request, RoleDbContext dbContext, CancellationToken cancellationToken) => 
+        await dbContext.Database.ExecuteSqlInterpolatedAsync($"Delete from [dbo].[Nodes] where Id not in (Select NodeId from [dbo].[RoleNodes])", cancellationToken);
+
+    //TODO: Rebuild to publish node delete notifications
 }
