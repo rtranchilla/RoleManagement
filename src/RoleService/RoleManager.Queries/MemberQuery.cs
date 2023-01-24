@@ -28,13 +28,15 @@ public sealed class MemberQueryHandler : AggregateRootQueryHandler<MemberQuery, 
 
     protected override IQueryable<Member> QueryEntities(MemberQuery request, RoleDbContext dbContext)
     {
+        var query = dbContext.Members!;
+
         if (request.Id != null)
-            return dbContext.Members!.Where(e => e.Id == request.Id);
+            return query.Where(e => e.Id == request.Id);
         if (request.UniqueName != null)
-            return dbContext.Members!.Where(e => e.UniqueName == request.UniqueName);
+            return query.Where(e => e.UniqueName == request.UniqueName);
         if (request.RoleId != null)
             return dbContext.Members!.FromSqlInterpolated($"Select mem.* from [dbo].[Members] mem inner join [dbo].[MemberRoles] mr on mem.Id = mr.MemberId where mr.RoleId = {request.RoleId}");
 
-        return dbContext.Members!;  
+        return query;  
     }
 }

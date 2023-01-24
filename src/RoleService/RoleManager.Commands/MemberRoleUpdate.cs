@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using RoleManager.DataPersistence;
 using RoleManager.Events;
+using RoleManager.Validation;
 using System.Security.Policy;
 
 namespace RoleManager.Commands
@@ -25,19 +26,31 @@ namespace RoleManager.Commands
             using (IDbContextTransaction transaction = await dbContext.Database.BeginTransactionAsync(cancellationToken))
                 try
                 {
-                    var member = dbContext.Members!.Include(e => e.Roles).ThenInclude(e => e.Role!.Nodes).FirstOrDefault(e => e.Id == request.MemberId);
+                    var member = dbContext.Members!.IncludeSubordinate(true)
+                                                   .FirstOrDefault(e => e.Id == request.MemberId);
                     if (member == null)
                         throw new NullReferenceException("Failed to locate member with specified id.");
 
+                    var memberNodeIds = member.Roles.SelectMany(e => e.Role!.Nodes).Select(e => e.NodeId);
+                    var newRole = dbContext.Roles!.First(e => e.Id == request.RoleId);
                     var entity = member.Roles.FirstOrDefault(e => e.TreeId == request.TreeId);
                     if (entity == null)
                     {
+                        if (!Validation.MemberRoleUpdate.IsValid(newRole, memberNodeIds))
+                            throw new ArgumentException("Invalid role assignment.");
+
                         entity = new MemberRole(request.MemberId, request.TreeId, request.RoleId);
                         await dbContext.AddAsync(entity, cancellationToken);
                         member.Roles.Add(entity);
                     }
                     else
+                    {
+                        var currentRole = entity.Role!;
+                        if (!Validation.MemberRoleUpdate.IsValid(currentRole, newRole, dbContext.Roles!.IncludeSubordinate().Where(e => e.TreeId == currentRole.TreeId), memberNodeIds))
+                            throw new ArgumentException("Invalid role assignment.");
+
                         entity.RoleId = request.RoleId;
+                    }
 
                     await dbContext.SaveChangesAsync(cancellationToken);
 

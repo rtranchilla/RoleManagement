@@ -19,16 +19,12 @@ public sealed class RoleQueryHandler : AggregateRootQueryHandler<RoleQuery, Role
 
     protected override IQueryable<Role> QueryEntities(RoleQuery request, RoleDbContext dbContext)
     {
-        IQueryable<Role> query = dbContext.Roles!.Include(e => e.Nodes.OrderBy(rn => rn.Order))
-                                                 .ThenInclude(e => e.Node);
+        IQueryable<Role> query = dbContext.Roles!.IncludeSubordinate(true);
 
         if (request.Id != null)
             return query.Where(e => e.Id == request.Id);
         if (request.MemberId != null)
-            return dbContext.Members!.Include(e => e.Roles)
-                                     .ThenInclude(e => e.Role)
-                                     .ThenInclude(e => e!.Nodes.OrderBy(rn => rn.Order))
-                                     .ThenInclude(e => e.Node)
+            return dbContext.Members!.IncludeSubordinate(true)
                                      .Where(e => e.Id == request.MemberId)
                                      .SelectMany(e => e.Roles)
                                      .Select(e => e.Role)

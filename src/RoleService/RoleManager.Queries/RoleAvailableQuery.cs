@@ -12,8 +12,7 @@ public sealed class RoleAvailableQueryHandler : AggregateRootQueryHandler<RoleAv
 
     protected override IQueryable<Role> QueryEntities(RoleAvailableQuery request, RoleDbContext dbContext)
     {
-        IQueryable<Role> query = dbContext.Roles!.Include(e => e.Nodes.OrderBy(rn => rn.Order))
-                                                 .ThenInclude(e => e.Node);
+        IQueryable<Role> query = dbContext.Roles!.IncludeSubordinate();
 
         //if (request.Id != null)
         //    return query.Where(e => e.Id == request.Id);

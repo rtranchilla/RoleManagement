@@ -27,17 +27,18 @@ public sealed class NodeQueryHandler : AggregateRootQueryHandler<NodeQuery, Node
 
     protected override IQueryable<Node> QueryEntities(NodeQuery request, RoleDbContext dbContext)
     {
+        var query = dbContext.Nodes!.IncludeSubordinate();
+
         if (request.Id != null)
-            return dbContext.Nodes!.Where(e => e.Id == request.Id);
+            return query.Where(e => e.Id == request.Id);
         if (request.Name != null)
-            return dbContext.Nodes!.Where(e => e.Name == request.Name);
+            return query.Where(e => e.Name == request.Name);
         if (request.RoleId != null)
-            return dbContext.Roles!.Include(e => e.Nodes)
-                                   .ThenInclude(e => e.Node)
+            return dbContext.Roles!.IncludeSubordinate(true)
                                    .Where(e => e.Id == request.RoleId)
                                    .SelectMany(e => e.Nodes)
                                    .Select(e => e.Node!);
 
-        return dbContext.Nodes!;  
+        return query;  
     }
 }

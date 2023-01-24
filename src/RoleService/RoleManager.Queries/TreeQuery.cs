@@ -25,11 +25,13 @@ public sealed class TreeQueryHandler : AggregateRootQueryHandler<TreeQuery, Tree
 
     protected override IQueryable<Tree> QueryEntities(TreeQuery request, RoleDbContext dbContext)
     {
-        if (request.Id != null)
-            return dbContext.Trees!.Where(e => e.Id == request.Id);
-        if (request.Name != null)
-            return dbContext.Trees!.Where(e => e.Name == request.Name);
+        var query = dbContext.Trees!.IncludeSubordinate();
 
-        return dbContext.Trees!;  
+        if (request.Id != null)
+            return query.Where(e => e.Id == request.Id);
+        if (request.Name != null)
+            return query.Where(e => e.Name == request.Name);
+
+        return query;  
     }
 }
