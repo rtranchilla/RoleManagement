@@ -13,6 +13,16 @@ public sealed class TreeCreateHandler : AggregateRootCreateHandler<TreeCreate, T
     public TreeCreateHandler(RoleDbContext dbContext, IMapper mapper, IPublisher publisher) : base(dbContext, mapper) => this.publisher = publisher;
 
     protected override Dto.Tree GetDto(TreeCreate request) => request.Tree;
-    protected override Task PostSave(Tree aggregateRoot, RoleDbContext dbContext, CancellationToken cancellationToken) => 
+    protected override Task PostSave(Tree aggregateRoot, RoleDbContext dbContext, CancellationToken cancellationToken) =>
         publisher.Publish(new TreeCreated(aggregateRoot), cancellationToken);
+    protected override Task PostMap(TreeCreate request, Tree aggregateRoot, RoleDbContext dbContext, CancellationToken cancellationToken) =>
+        Task.Run(() =>
+        {
+            foreach (var id in request.Tree.RequiredNodes ?? Array.Empty<Guid>())
+            {
+                var node = dbContext.Nodes?.FirstOrDefault(e => e.Id == id);
+                if (node != null)
+                    aggregateRoot.AddRequiredNode(node);
+            }
+        }, cancellationToken);
 }

@@ -34,6 +34,16 @@ public sealed class RoleCreateHandler : AggregateRootCreateHandler<RoleCreate, R
 
     protected override Role Map(Dto.Role dto, IMapper mapper) => mapper.Map<Dto.Role, Role>(dto, opt => opt.Items["nodeIds"] = nodes!.Select(e => e.Id).ToArray());
     protected override Dto.Role GetDto(RoleCreate request) => request.Role;
+    protected override Task PostMap(RoleCreate request, Role aggregateRoot, RoleDbContext dbContext, CancellationToken cancellationToken) =>
+        Task.Run(() =>
+        {
+            foreach (var id in request.Role.RequiredNodes ?? Array.Empty<Guid>())
+            {
+                var node = dbContext.Nodes?.FirstOrDefault(e => e.Id == id);
+                if (node != null)
+                    aggregateRoot.AddRequiredNode(node);
+            }
+        }, cancellationToken);
     protected override async Task PostSave(Role aggregateRoot, RoleDbContext dbContext, CancellationToken cancellationToken)
     {
         foreach (var node in nodes!)

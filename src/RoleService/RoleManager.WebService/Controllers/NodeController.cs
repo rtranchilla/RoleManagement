@@ -5,12 +5,19 @@ using RoleManager.Queries;
 
 namespace RoleManager.Web.Controllers;
 
-public class NodeController : AggregateRootReadController<Dto.Node, NodeQuery>
+public class NodeController : SenderControllerBase
 {
-    public NodeController(IMediator mediator) : base(mediator) { }
+    public NodeController(ISender sender) : base(sender) { }
 
-    protected override NodeQuery GetReadQuery(Guid id) => new(id);
+    [HttpGet]
+    public Task<ActionResult<IEnumerable<Dto.Node>>> Get() => SendQuery(new NodeQuery());
+
+    [HttpGet("ById")]
+    public Task<ActionResult<IEnumerable<Dto.Node>>> Get(Guid id) => SendQuery(new NodeQuery(id));
 
     [HttpGet("ByName")]
     public Task<ActionResult<IEnumerable<Dto.Node>>> Get(string name) => SendQuery(new NodeQuery(name));
+
+    [HttpGet("ByRole")]
+    public Task<ActionResult<IEnumerable<Dto.Node>>> GetByRole(Guid roleId) => SendQuery(new NodeQuery { RoleId = roleId });
 }

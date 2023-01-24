@@ -5,17 +5,25 @@ using RoleManager.Queries;
 
 namespace RoleManager.Web.Controllers;
 
-public class RoleController : AggregateRootCreateDeleteController<Dto.Role, RoleCreate, RoleQuery, RoleDelete>
+public class RoleController : SenderControllerBase
 {
-    public RoleController(IMediator mediator) : base(mediator) { }
+    public RoleController(ISender sender) : base(sender) { }
 
-    protected override RoleCreate GetCreateCommand(Dto.Role dto) => new(dto);
-    protected override RoleDelete GetDeleteCommand(Guid id) => new(id);
-    protected override RoleQuery GetReadQuery(Guid id) => new(id);
+    [HttpPost]
+    public Task<IActionResult> Create(Dto.Role dto) => SendCommand(new RoleCreate(dto));
+
+    [HttpGet]
+    public Task<ActionResult<IEnumerable<Dto.Role>>> Get() => SendQuery(new RoleQuery());
+
+    [HttpGet("ById")]
+    public Task<ActionResult<IEnumerable<Dto.Role>>> Get(Guid id) => SendQuery(new RoleQuery(id));
+
+    [HttpGet("ByMember")]
+    public Task<ActionResult<IEnumerable<Dto.Role>>> GetByMember(Guid memberId) => SendQuery(new MemberRoleQuery(memberId));
 
     [HttpPut]
     public Task<IActionResult> Update(Dto.Role role) => SendCommand(new RoleUpdate(role));
 
-    [HttpGet("ByMember")]
-    public Task<ActionResult<IEnumerable<Dto.Role>>> GetByRole(Guid memberId) => SendQuery(new MemberRoleQuery(memberId));
+    [HttpDelete]
+    public Task<IActionResult> Delete(Guid id) => SendCommand(new RoleDelete(id));
 }

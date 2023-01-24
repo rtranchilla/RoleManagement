@@ -39,6 +39,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dc-config", "dc-config", "{
 		dapr\dc-config\config.yaml = dapr\dc-config\config.yaml
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{C0AF4008-5F02-48EF-BCF9-E23777EF2A36}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoleManager.Queries.Tests", "..\RoleManager.Queries.Tests\RoleManager.Queries.Tests.csproj", "{CCB27D50-766E-4A44-9831-AC18402C08F3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -85,6 +89,10 @@ Global
 		{C01D0ED7-8A99-4759-A635-F8F2A7F32ACB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C01D0ED7-8A99-4759-A635-F8F2A7F32ACB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C01D0ED7-8A99-4759-A635-F8F2A7F32ACB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CCB27D50-766E-4A44-9831-AC18402C08F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CCB27D50-766E-4A44-9831-AC18402C08F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CCB27D50-766E-4A44-9831-AC18402C08F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CCB27D50-766E-4A44-9831-AC18402C08F3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -99,6 +107,8 @@ Global
 		{9C0B7280-6ACA-49D5-AEEF-091D49F1DB7F} = {2F0074BE-EF8A-4F21-B2A3-ED651FF5EADB}
 		{D3D0F60B-0FC3-42B2-AF3E-079F223DEA9A} = {9C0B7280-6ACA-49D5-AEEF-091D49F1DB7F}
 		{243E0A21-8698-4248-9BEF-62326B29CDAA} = {9C0B7280-6ACA-49D5-AEEF-091D49F1DB7F}
+		{C0AF4008-5F02-48EF-BCF9-E23777EF2A36} = {FD37A32E-F3BB-47CF-B6AC-72B44DFBAD64}
+		{CCB27D50-766E-4A44-9831-AC18402C08F3} = {C0AF4008-5F02-48EF-BCF9-E23777EF2A36}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C4A06ADF-EDC9-40EE-90DD-23D2A1A1B175}

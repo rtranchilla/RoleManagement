@@ -13,6 +13,7 @@ public sealed class RoleProfile : Profile
                                    .ForMember(dest => dest.RequiredNodes, cfg => cfg.MapFrom(src => src.RequiredNodes.Select(e => e.NodeId)))
                                    .ReverseMap()
                                    .ForCtorParam("nodeIds", cfg => cfg.MapFrom((src, ctx) => ctx.Items["nodeIds"]))
+                                   //.ForMember(dest => dest.RequiredNodes, opt => opt.MapFrom((src, dest, sm, ctx) => ctx.Items["nodeIds"]))
                                    .EqualityComparison((s, d) => s.Id == d.Id);
     }
 }

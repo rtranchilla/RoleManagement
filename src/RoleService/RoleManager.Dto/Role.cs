@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace RoleManager.Dto;
+﻿namespace RoleManager.Dto;
 
 public class Role : IEntity
 {

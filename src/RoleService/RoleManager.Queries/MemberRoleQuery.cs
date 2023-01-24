@@ -30,6 +30,7 @@ public sealed class MemberRoleQueryHandler : IRequestHandler<MemberRoleQuery, IE
                                                   .ThenInclude(e => e.Role)
                                                   .ThenInclude(e => e!.Nodes.OrderBy(rn => rn.Order))
                                                   .ThenInclude(e => e.Node)
+                                                  .Where(e => e.Id == request.MemberId)
                                                   .SelectMany(e => e.Roles)
                                                   .Select(e => e.Role).ToArray());
 

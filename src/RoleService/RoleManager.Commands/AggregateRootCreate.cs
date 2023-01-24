@@ -25,6 +25,7 @@ public abstract class AggregateRootCreateHandler<TRequest, TAggregateRoot, TDto>
     protected abstract TDto GetDto(TRequest request);
     protected virtual TAggregateRoot Map(TDto dto, IMapper mapper) => mapper.Map<TDto, TAggregateRoot>(dto);
     protected virtual Task PreCreate(TRequest request, RoleDbContext dbContext, CancellationToken cancellationToken) => Task.CompletedTask;
+    protected virtual Task PostMap(TRequest request, TAggregateRoot aggregateRoot, RoleDbContext dbContext, CancellationToken cancellationToken) => Task.CompletedTask;
     protected virtual Task PostSave(TAggregateRoot aggregateRoot, RoleDbContext dbContext, CancellationToken cancellationToken) => Task.CompletedTask;
 
     public async Task<Unit> Handle(TRequest request, CancellationToken cancellationToken)
@@ -36,6 +37,7 @@ public abstract class AggregateRootCreateHandler<TRequest, TAggregateRoot, TDto>
                 var newEntity = await Task.Run(() => Map(GetDto(request), mapper), cancellationToken);
                 if (newEntity == null)
                     throw new NullReferenceException($"Failed to generate new object for supplied dto of type: {GetDto(request)?.GetType().Name ?? "Unknown"}.");
+                await PostMap(request, newEntity, dbContext, cancellationToken);
                 await dbContext.AddAsync(newEntity, cancellationToken);
                 await dbContext.SaveChangesAsync(cancellationToken);
                 await PostSave(newEntity, dbContext, cancellationToken);

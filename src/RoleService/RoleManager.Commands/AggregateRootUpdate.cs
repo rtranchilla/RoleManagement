@@ -23,6 +23,7 @@ public abstract class AggregateRootUpdateHandler<TRequest, TAggregateRoot, TDto>
 
     protected abstract TDto GetDto(TRequest request);
     protected abstract TAggregateRoot? GetEntity(TRequest request, RoleDbContext dbContext);
+    protected virtual Task PostMap(TRequest request, TAggregateRoot aggregateRoot, RoleDbContext dbContext, CancellationToken cancellationToken) => Task.CompletedTask;
     protected virtual Task PostSave(TAggregateRoot aggregateRoot, RoleDbContext dbContext, CancellationToken cancellationToken) => Task.CompletedTask;
 
     public async Task<Unit> Handle(TRequest request, CancellationToken cancellationToken)
@@ -39,6 +40,7 @@ public abstract class AggregateRootUpdateHandler<TRequest, TAggregateRoot, TDto>
             try
             {
                 entity = mapper.Map(dto, entity);
+                await PostMap(request, entity, dbContext, cancellationToken);
                 await dbContext.SaveChangesAsync(cancellationToken);
                 await PostSave(entity, dbContext, cancellationToken);
                 await transaction.CommitAsync(cancellationToken);

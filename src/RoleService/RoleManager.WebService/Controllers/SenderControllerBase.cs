@@ -5,17 +5,17 @@ namespace RoleManager.Web.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class MediatorControllerBase : ControllerBase
+public class SenderControllerBase : ControllerBase
 {
-    protected readonly IMediator mediator;
+    protected readonly ISender sender;
 
-    public MediatorControllerBase(IMediator mediator) => this.mediator = mediator;
+    public SenderControllerBase(ISender sender) => this.sender = sender;
 
     protected async Task<ActionResult<TResult>> SendQuery<TResult>(IRequest<TResult> request)
     {
         try
         {
-            var result = await mediator.Send(request);
+            var result = await sender.Send(request);
             return Ok(result);
         }
         catch (Exception)
@@ -28,7 +28,7 @@ public class MediatorControllerBase : ControllerBase
     {
         try
         {
-            await mediator.Send(request);
+            await sender.Send(request);
             return Ok();
         }
         catch (Exception)
@@ -36,4 +36,7 @@ public class MediatorControllerBase : ControllerBase
             return StatusCode(StatusCodes.Status500InternalServerError);
         }
     }
+
+    protected Task<TResponse> Send<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken = default) => sender.Send(request, cancellationToken);
+    protected Task<Unit> Send(IRequest request, CancellationToken cancellationToken = default) => sender.Send(request, cancellationToken);
 }

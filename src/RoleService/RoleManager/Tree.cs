@@ -14,8 +14,8 @@ public sealed class Tree : EntityWithId
 
     public string Name { get; private set; }
 
-    public void AddRequired(Node node) => AddRequired(node.Id, node.TreeId);
-    public void AddRequired(Guid nodeId, Guid nodeTreeId)
+    public void AddRequiredNode(Node node) => AddRequiredNode(node.Id, node.TreeId);
+    public void AddRequiredNode(Guid nodeId, Guid nodeTreeId)
     {
         if (nodeTreeId == Id)
             throw new ArgumentException("Node requirement cannot be added within the same tree.");
@@ -25,8 +25,8 @@ public sealed class Tree : EntityWithId
         requiredNodes.Add(new TreeRequiredNode(Id, nodeId));
     }
 
-    public void RemoveRequired(Node node) => RemoveRequired(node.Id);
-    public void RemoveRequired(Guid nodeId)
+    public void RemoveRequiredNode(Node node) => RemoveRequiredNode(node.Id);
+    public void RemoveRequiredNode(Guid nodeId)
     {
         var reqNode = requiredNodes.FirstOrDefault(e => e.NodeId == nodeId);
 
