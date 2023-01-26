@@ -2,6 +2,7 @@ version: '3.8'
 
 services:
   rolemanager.webservice:
+    container_name: rolemanager.webservice
     image: ${DOCKER_REGISTRY-}rolemanagerwebservice
     build:
       context: .
@@ -13,12 +14,15 @@ services:
     command: ["dotnet", "ef", "database update"]
     depends_on:
       - mssql
+      - redis
+    ports:
+      - "3500"
 
   rolemanager-dapr:
     image: "daprio/daprd"
     command: [
       "./daprd",
-     "-app-id", "catalog",
+     "-app-id", "rolemanager.webservice",
      "-app-port", "80",
      "-components-path", "/components",
      "-config", "/config/config.yaml",
@@ -28,12 +32,13 @@ services:
       - "./dapr/dc-components/:/components"
       - "./dapr/dc-config/:/config"  
     network_mode: "service:rolemanager.webservice"
-    
+
+
   redis:
     container_name: rolemanager-redis
     image: "redis:6"
     ports:
-      - "6379"
+      - "6380:6379"
     networks:
       - rolemanager
 
