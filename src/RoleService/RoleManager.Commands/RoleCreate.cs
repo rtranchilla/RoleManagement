@@ -19,7 +19,7 @@ public sealed class RoleCreateHandler : AggregateRootCreateHandler<RoleCreate, R
         nodes = new List<Node>();
         foreach (var nodeName in request.Role.Name.Split('_')) 
         {
-            var node = dbContext.Nodes!.FirstOrDefault(e => e.Name == nodeName);
+            var node = dbContext.Nodes!.FirstOrDefault(e => e.Name == nodeName && e.TreeId == request.Role.TreeId);
             if (node == null)
             {
                 node = new Node(nodeName, request.Role.TreeId)

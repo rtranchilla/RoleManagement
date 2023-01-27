@@ -19,17 +19,16 @@ public abstract class AggregateRootDeleteHandler<TRequest, TAggregateRoot> : IRe
 
     public async Task<Unit> Handle(TRequest request, CancellationToken cancellationToken)
     {
-        await Task.Run(() =>
-        {
-            var entity = GetEntity(request, dbContext);
-            if (entity != null)
-                dbContext.Remove(entity);
-        }, cancellationToken);
         using (IDbContextTransaction transaction = await dbContext.Database.BeginTransactionAsync(cancellationToken))
             try
             {
+                await Task.Run(() =>
+                {
+                    var entity = GetEntity(request, dbContext);
+                    if (entity != null)
+                        dbContext.Remove(entity);
+                }, cancellationToken);
                 await dbContext.SaveChangesAsync(cancellationToken);
-                await dbContext.Database.CommitTransactionAsync(cancellationToken);
                 await PostSave(request, dbContext, cancellationToken);
                 await transaction.CommitAsync(cancellationToken);
             }

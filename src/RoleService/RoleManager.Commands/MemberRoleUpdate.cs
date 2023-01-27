@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using RoleManager.DataPersistence;
 using RoleManager.Events;
+using RoleManager.RoleHierarchy;
 using RoleManager.Validation;
 using System.Security.Policy;
 
@@ -36,7 +37,7 @@ namespace RoleManager.Commands
                     var entity = member.Roles.FirstOrDefault(e => e.TreeId == request.TreeId);
                     if (entity == null)
                     {
-                        if (!Validation.MemberRoleUpdate.IsValid(newRole, memberNodeIds))
+                        if (!Validation.MemberRoleUpdate.HasRequired(newRole, memberNodeIds))
                             throw new ArgumentException("Invalid role assignment.");
 
                         entity = new MemberRole(request.MemberId, request.TreeId, request.RoleId);
@@ -45,8 +46,12 @@ namespace RoleManager.Commands
                     }
                     else
                     {
+                        if (!Validation.MemberRoleUpdate.HasRequired(newRole, memberNodeIds))
+                            throw new ArgumentException("Invalid role assignment.");
+
                         var currentRole = entity.Role!;
-                        if (!Validation.MemberRoleUpdate.IsValid(currentRole, newRole, dbContext.Roles!.IncludeSubordinate().Where(e => e.TreeId == currentRole.TreeId), memberNodeIds))
+                        var treeMap = TreeMap.Build(dbContext.Roles!.IncludeSubordinate().Where(e => e.TreeId == currentRole.TreeId));
+                        if (!treeMap.IsTraversable(currentRole, newRole))
                             throw new ArgumentException("Invalid role assignment.");
 
                         entity.RoleId = request.RoleId;

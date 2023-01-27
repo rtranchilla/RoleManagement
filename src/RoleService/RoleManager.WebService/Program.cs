@@ -41,7 +41,7 @@ app.UseAuthorization();
 
 app.UseEndpoints(endpoints =>
 {
-    endpoints.MapSubscribeHandler(); // Adds dapr pubsub subscribe endpoints
+    //endpoints.MapSubscribeHandler(); // Adds dapr pubsub subscribe endpoints
     endpoints.MapControllers();
 });
 
