@@ -15,5 +15,8 @@ public sealed class RoleProfile : Profile
                                    .ForCtorParam("nodeIds", cfg => cfg.MapFrom((src, ctx) => ctx.Items["nodeIds"]))
                                    .ForMember(dest => dest.RequiredNodes, opt => opt.Ignore())
                                    .EqualityComparison((s, d) => s.Id == d.Id);
+
+        CreateMap<Dto.RoleUpdate, Role>().ForMember(dest => dest.RequiredNodes, opt => opt.Ignore())
+                                         .EqualityComparison((s, d) => s.Id == d.Id);
     }
 }

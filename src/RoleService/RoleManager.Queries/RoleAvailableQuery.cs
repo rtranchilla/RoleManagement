@@ -1,6 +1,9 @@
 ﻿using AutoMapper;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using RoleManager.DataPersistence;
+using System.Data;
+using System.Linq;
 
 namespace RoleManager.Queries;
 
@@ -12,9 +15,24 @@ public sealed class RoleAvailableQueryHandler : AggregateRootQueryHandler<RoleAv
 
     protected override IQueryable<Role> QueryEntities(RoleAvailableQuery request, RoleDbContext dbContext)
     {
+        var dataTable = new DataTable();
+        using (var command = dbContext.Database.GetDbConnection().CreateCommand())
+        {
+            command.CommandText = "sp_GetAvailableMemberRoles";
+            command.CommandType = CommandType.StoredProcedure;
+            command.Parameters.Add(new SqlParameter("MemberId", request.MemberId));
 
+            dbContext.Database.OpenConnection();
 
-        IQueryable<Role> query = dbContext.Roles!.IncludeSubordinate();
+            using var result = command.ExecuteReader();
+            dataTable.Load(result);
+        }
+
+        var roleIds = new List<Guid>();
+        foreach (DataRow row in dataTable.Rows)
+            roleIds.Add((Guid)row[0]);
+
+        IQueryable<Role> query = dbContext.Roles!.IncludeSubordinate().Where(e => roleIds.Contains(e.Id));
 
         //if (request.Id != null)
         //    return query.Where(e => e.Id == request.Id);

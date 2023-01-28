@@ -1,4 +1,5 @@
 ﻿using Castle.MicroKernel;
+using Castle.MicroKernel.Lifestyle;
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.Resolvers.SpecializedResolvers;
 using Castle.Windsor;
@@ -10,12 +11,22 @@ using RoleManager.Commands;
 using RoleManager.DataPersistence;
 using RoleManager.Events;
 using RoleManager.Queries;
+using RoleManager.WebService.Configuration;
 using System.Diagnostics;
 
 namespace RoleManager.Web.Configuration
 {
     public static class WindsorConfig
     {
+#if DEBUG
+        public static void AddTestData(this IWindsorContainer container)
+        {
+            container.Register(Component.For<TestData>().LifestyleScoped());
+            using (container.BeginScope())
+                container.Resolve<TestData>();
+        }
+#endif
+
         public static void UpdateDatabase(this IWindsorContainer container)
         {
             using (var context = container.Resolve<RoleDbContext>())

@@ -22,7 +22,7 @@ namespace RoleManager.DataPersistence.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("RoleManagement.Member", b =>
+            modelBuilder.Entity("RoleManager.Member", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -44,7 +44,7 @@ namespace RoleManager.DataPersistence.Migrations
                     b.ToTable("Members");
                 });
 
-            modelBuilder.Entity("RoleManagement.MemberRole", b =>
+            modelBuilder.Entity("RoleManager.MemberRole", b =>
                 {
                     b.Property<Guid>("MemberId")
                         .HasColumnType("uniqueidentifier");
@@ -64,7 +64,7 @@ namespace RoleManager.DataPersistence.Migrations
                     b.ToTable("MemberRoles", (string)null);
                 });
 
-            modelBuilder.Entity("RoleManagement.Node", b =>
+            modelBuilder.Entity("RoleManager.Node", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -90,7 +90,7 @@ namespace RoleManager.DataPersistence.Migrations
                     b.ToTable("Nodes");
                 });
 
-            modelBuilder.Entity("RoleManagement.Role", b =>
+            modelBuilder.Entity("RoleManager.Role", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -109,7 +109,7 @@ namespace RoleManager.DataPersistence.Migrations
                     b.ToTable("Roles");
                 });
 
-            modelBuilder.Entity("RoleManagement.RoleNode", b =>
+            modelBuilder.Entity("RoleManager.RoleNode", b =>
                 {
                     b.Property<Guid>("RoleId")
                         .HasColumnType("uniqueidentifier");
@@ -127,7 +127,7 @@ namespace RoleManager.DataPersistence.Migrations
                     b.ToTable("RoleNodes", (string)null);
                 });
 
-            modelBuilder.Entity("RoleManagement.RoleRequiredNode", b =>
+            modelBuilder.Entity("RoleManager.RoleRequiredNode", b =>
                 {
                     b.Property<Guid>("RoleId")
                         .HasColumnType("uniqueidentifier");
@@ -142,7 +142,7 @@ namespace RoleManager.DataPersistence.Migrations
                     b.ToTable("RoleRequiredNodes", (string)null);
                 });
 
-            modelBuilder.Entity("RoleManagement.Tree", b =>
+            modelBuilder.Entity("RoleManager.Tree", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -160,7 +160,7 @@ namespace RoleManager.DataPersistence.Migrations
                     b.ToTable("Trees");
                 });
 
-            modelBuilder.Entity("RoleManagement.TreeRequiredNode", b =>
+            modelBuilder.Entity("RoleManager.TreeRequiredNode", b =>
                 {
                     b.Property<Guid>("TreeId")
                         .HasColumnType("uniqueidentifier");
@@ -175,21 +175,21 @@ namespace RoleManager.DataPersistence.Migrations
                     b.ToTable("TreeRequiredNodes", (string)null);
                 });
 
-            modelBuilder.Entity("RoleManagement.MemberRole", b =>
+            modelBuilder.Entity("RoleManager.MemberRole", b =>
                 {
-                    b.HasOne("RoleManagement.Member", null)
+                    b.HasOne("RoleManager.Member", null)
                         .WithMany("Roles")
                         .HasForeignKey("MemberId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("RoleManagement.Role", "Role")
+                    b.HasOne("RoleManager.Role", "Role")
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("RoleManagement.Tree", null)
+                    b.HasOne("RoleManager.Tree", null)
                         .WithMany()
                         .HasForeignKey("TreeId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -198,9 +198,9 @@ namespace RoleManager.DataPersistence.Migrations
                     b.Navigation("Role");
                 });
 
-            modelBuilder.Entity("RoleManagement.Node", b =>
+            modelBuilder.Entity("RoleManager.Node", b =>
                 {
-                    b.HasOne("RoleManagement.Tree", "Tree")
+                    b.HasOne("RoleManager.Tree", "Tree")
                         .WithMany()
                         .HasForeignKey("TreeId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -209,9 +209,9 @@ namespace RoleManager.DataPersistence.Migrations
                     b.Navigation("Tree");
                 });
 
-            modelBuilder.Entity("RoleManagement.Role", b =>
+            modelBuilder.Entity("RoleManager.Role", b =>
                 {
-                    b.HasOne("RoleManagement.Tree", "Tree")
+                    b.HasOne("RoleManager.Tree", "Tree")
                         .WithMany()
                         .HasForeignKey("TreeId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -220,15 +220,15 @@ namespace RoleManager.DataPersistence.Migrations
                     b.Navigation("Tree");
                 });
 
-            modelBuilder.Entity("RoleManagement.RoleNode", b =>
+            modelBuilder.Entity("RoleManager.RoleNode", b =>
                 {
-                    b.HasOne("RoleManagement.Node", "Node")
+                    b.HasOne("RoleManager.Node", "Node")
                         .WithMany()
                         .HasForeignKey("NodeId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("RoleManagement.Role", null)
+                    b.HasOne("RoleManager.Role", null)
                         .WithMany("Nodes")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -237,15 +237,15 @@ namespace RoleManager.DataPersistence.Migrations
                     b.Navigation("Node");
                 });
 
-            modelBuilder.Entity("RoleManagement.RoleRequiredNode", b =>
+            modelBuilder.Entity("RoleManager.RoleRequiredNode", b =>
                 {
-                    b.HasOne("RoleManagement.Node", "Node")
+                    b.HasOne("RoleManager.Node", "Node")
                         .WithMany()
                         .HasForeignKey("NodeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("RoleManagement.Role", null)
+                    b.HasOne("RoleManager.Role", null)
                         .WithMany("RequiredNodes")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -254,15 +254,15 @@ namespace RoleManager.DataPersistence.Migrations
                     b.Navigation("Node");
                 });
 
-            modelBuilder.Entity("RoleManagement.TreeRequiredNode", b =>
+            modelBuilder.Entity("RoleManager.TreeRequiredNode", b =>
                 {
-                    b.HasOne("RoleManagement.Node", "Node")
+                    b.HasOne("RoleManager.Node", "Node")
                         .WithMany()
                         .HasForeignKey("NodeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("RoleManagement.Tree", null)
+                    b.HasOne("RoleManager.Tree", null)
                         .WithMany("RequiredNodes")
                         .HasForeignKey("TreeId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -271,19 +271,19 @@ namespace RoleManager.DataPersistence.Migrations
                     b.Navigation("Node");
                 });
 
-            modelBuilder.Entity("RoleManagement.Member", b =>
+            modelBuilder.Entity("RoleManager.Member", b =>
                 {
                     b.Navigation("Roles");
                 });
 
-            modelBuilder.Entity("RoleManagement.Role", b =>
+            modelBuilder.Entity("RoleManager.Role", b =>
                 {
                     b.Navigation("Nodes");
 
                     b.Navigation("RequiredNodes");
                 });
 
-            modelBuilder.Entity("RoleManagement.Tree", b =>
+            modelBuilder.Entity("RoleManager.Tree", b =>
                 {
                     b.Navigation("RequiredNodes");
                 });
