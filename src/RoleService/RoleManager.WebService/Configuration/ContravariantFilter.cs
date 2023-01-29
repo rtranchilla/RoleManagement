@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using Castle.MicroKernel;
 
-namespace RoleManager.Web;
+namespace RoleManager.WebService;
 
 public class ContravariantFilter : IHandlersFilter
 {

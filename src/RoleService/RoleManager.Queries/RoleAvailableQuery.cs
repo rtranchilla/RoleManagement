@@ -32,7 +32,7 @@ public sealed class RoleAvailableQueryHandler : AggregateRootQueryHandler<RoleAv
         foreach (DataRow row in dataTable.Rows)
             roleIds.Add((Guid)row[0]);
 
-        IQueryable<Role> query = dbContext.Roles!.IncludeSubordinate().Where(e => roleIds.Contains(e.Id));
+        IQueryable<Role> query = dbContext.Roles!.IncludeSubordinate(true).Where(e => roleIds.Contains(e.Id));
 
         //if (request.Id != null)
         //    return query.Where(e => e.Id == request.Id);

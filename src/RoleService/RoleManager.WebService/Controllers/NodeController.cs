@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using RoleManager.Commands;
 using RoleManager.Queries;
 
-namespace RoleManager.Web.Controllers;
+namespace RoleManager.WebService.Controllers;
 
 public class NodeController : SenderControllerBase
 {

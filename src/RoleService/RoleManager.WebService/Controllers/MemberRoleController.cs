@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using RoleManager.Commands;
 
-namespace RoleManager.Web.Controllers;
+namespace RoleManager.WebService.Controllers;
 
 public sealed class MemberRoleController : SenderControllerBase
 {

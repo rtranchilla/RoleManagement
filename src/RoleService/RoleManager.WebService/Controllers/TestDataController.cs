@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using RoleManager.DataPersistence;
 using RoleManager.WebService.Configuration;
 
@@ -32,6 +33,7 @@ public class TestDataController : ControllerBase
 
     public static void Load(RoleDbContext dbContext)
     {
+        // Dataset 1
         if (dbContext.Members!.FirstOrDefault(e => e.UniqueName == "Member1") == null)
         {
             var trees = new List<Tree>
@@ -84,13 +86,15 @@ public class TestDataController : ControllerBase
                 new Role(Guid.NewGuid(), trees[0].Id, nodes[1].Id, nodes[4].Id, nodes[7].Id),
                 new Role(Guid.NewGuid(), trees[0].Id, nodes[1].Id, nodes[4].Id, nodes[7].Id, nodes[8].Id),
                 new Role(Guid.NewGuid(), trees[0].Id, nodes[1].Id, nodes[5].Id),
-                new Role(Guid.NewGuid(), trees[1].Id, nodes[9].Id),//12
+                new Role(Guid.NewGuid(), trees[0].Id, nodes[2].Id),
+                new Role(Guid.NewGuid(), trees[0].Id, nodes[2].Id, nodes[3].Id),
+                new Role(Guid.NewGuid(), trees[1].Id, nodes[9].Id),//14
                 new Role(Guid.NewGuid(), trees[1].Id, nodes[9].Id, nodes[11].Id, nodes[13].Id),
                 new Role(Guid.NewGuid(), trees[1].Id, nodes[9].Id, nodes[12].Id),
                 new Role(Guid.NewGuid(), trees[1].Id, nodes[10].Id),
                 new Role(Guid.NewGuid(), trees[1].Id, nodes[10].Id, nodes[11].Id),
                 new Role(Guid.NewGuid(), trees[1].Id, nodes[10].Id, nodes[11].Id, nodes[13].Id),
-                new Role(Guid.NewGuid(), trees[2].Id, nodes[14].Id),//18
+                new Role(Guid.NewGuid(), trees[2].Id, nodes[14].Id),//20
                 new Role(Guid.NewGuid(), trees[2].Id, nodes[15].Id),
             };
             dbContext.Roles!.AddRange(roles);
@@ -109,12 +113,26 @@ public class TestDataController : ControllerBase
                 new Member("Member10", "Member10")
             };
             members[0].Roles.Add(new MemberRole(members[0].Id, roles[0].TreeId, roles[0].Id));
-            members[0].Roles.Add(new MemberRole(members[0].Id, roles[13].TreeId, roles[13].Id));
+            members[0].Roles.Add(new MemberRole(members[0].Id, roles[15].TreeId, roles[15].Id));
             members[1].Roles.Add(new MemberRole(members[1].Id, roles[10].TreeId, roles[10].Id));
-            members[2].Roles.Add(new MemberRole(members[2].Id, roles[18].TreeId, roles[18].Id));
+            members[2].Roles.Add(new MemberRole(members[2].Id, roles[20].TreeId, roles[20].Id));
 
             dbContext.Members!.AddRange(members);
 
+            dbContext.SaveChanges();
+        }
+        
+        // Dataset 2
+        if (dbContext.Trees!.IncludeSubordinate().First(e => e.Name == "Tree3").RequiredNodes.Count == 0) 
+        {
+            var tree1 = dbContext.Trees!.First(e => e.Name == "Tree1");
+            var tree2 = dbContext.Trees!.First(e => e.Name == "Tree2");
+            var tree3 = dbContext.Trees!.First(e => e.Name == "Tree3");
+            var baseNode3 = dbContext.Nodes!.First(e => e.TreeId == tree1.Id && e.Name == "Base3");
+            tree3.AddRequiredNode(baseNode3);
+            var roleBaseNode3 = dbContext.Roles!.FromSqlRaw($"SELECT Roles.Id, Roles.Reversible, Roles.TreeId FROM Roles INNER JOIN RoleNodes ON Roles.Id = RoleNodes.RoleId INNER JOIN (Select RoleId, Count(RoleNodes.NodeId) as Count From RoleNodes Group By RoleId) as RoleNodeCount on RoleNodes.RoleId=RoleNodeCount.RoleId Where NodeId = '{baseNode3.Id}' and Count = 1 Group By Roles.Id, Roles.Reversible, Roles.TreeId").First();
+            var tree2Child2 = dbContext.Nodes!.First(e => e.TreeId == tree2.Id && e.Name == "Child2");
+            roleBaseNode3.AddRequiredNode(tree2Child2);
             dbContext.SaveChanges();
         }
     }

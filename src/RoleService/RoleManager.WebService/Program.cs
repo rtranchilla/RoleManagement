@@ -3,7 +3,7 @@ using Castle.Windsor;
 using Microsoft.EntityFrameworkCore;
 using RoleManager.DataPersistence;
 using RoleManager.MapperConfig;
-using RoleManager.Web.Configuration;
+using RoleManager.WebService.Configuration;
 using RoleManager.WebService.Configuration;
 using System.ComponentModel;
 using System.Net;
@@ -30,9 +30,6 @@ var app = builder.Build();
 container.UpdateDatabase();
 container.ConfigureMediatR();
 
-#if DEBUG
-container.AddTestData();
-#endif
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
