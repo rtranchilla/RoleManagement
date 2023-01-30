@@ -12,13 +12,8 @@ namespace RoleManager.WebService.Controllers;
 public class TestDataController : ControllerBase
 {
     private readonly IServiceScopeFactory _serviceScopeFactory;
-    private readonly IHttpContextAccessor _contextAccessor;
 
-    public TestDataController(IServiceScopeFactory serviceScopeFactory, IHttpContextAccessor contextAccessor)
-    {
-        _serviceScopeFactory = serviceScopeFactory;
-        _contextAccessor = contextAccessor;
-    }
+    public TestDataController(IServiceScopeFactory serviceScopeFactory) => _serviceScopeFactory = serviceScopeFactory;
 
     [HttpPost]
     public IActionResult Post()

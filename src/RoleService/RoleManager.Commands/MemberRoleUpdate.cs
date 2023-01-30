@@ -5,12 +5,14 @@ using Microsoft.EntityFrameworkCore.Storage;
 using RoleManager.DataPersistence;
 using RoleManager.Events;
 using RoleManager.RoleHierarchy;
-using RoleManager.Validation;
 using System.Security.Policy;
 
 namespace RoleManager.Commands
 {
-    public sealed record MemberRoleUpdate(Guid MemberId, Guid TreeId, Guid RoleId) : AggregateRootCommon;
+    public sealed record MemberRoleUpdate(Guid MemberId, Guid TreeId, Guid RoleId) : AggregateRootCommon
+    {
+        public bool Force { get; set; }
+    }
     public sealed class MemberRoleUpdateHandler : IRequestHandler<MemberRoleUpdate>
     {
         private readonly RoleDbContext dbContext;
@@ -34,10 +36,11 @@ namespace RoleManager.Commands
 
                     var memberNodeIds = member.Roles.SelectMany(e => e.Role!.Nodes).Select(e => e.NodeId);
                     var newRole = dbContext.Roles!.First(e => e.Id == request.RoleId);
+                    var treeMap = TreeMap.Build(dbContext.Roles!.IncludeSubordinate().Where(e => e.TreeId == request.TreeId));
                     var entity = member.Roles.FirstOrDefault(e => e.TreeId == request.TreeId);
                     if (entity == null)
                     {
-                        if (!Validation.MemberRoleUpdate.HasRequired(newRole, memberNodeIds))
+                        if (!treeMap.IsAssignable(newRole, memberNodeIds))
                             throw new ArgumentException("Invalid role assignment.");
 
                         entity = new MemberRole(request.MemberId, request.TreeId, request.RoleId);
@@ -46,12 +49,8 @@ namespace RoleManager.Commands
                     }
                     else
                     {
-                        if (!Validation.MemberRoleUpdate.HasRequired(newRole, memberNodeIds))
-                            throw new ArgumentException("Invalid role assignment.");
-
                         var currentRole = entity.Role!;
-                        var treeMap = TreeMap.Build(dbContext.Roles!.IncludeSubordinate().Where(e => e.TreeId == currentRole.TreeId));
-                        if (!treeMap.IsTraversable(currentRole, newRole))
+                        if (!treeMap.IsTraversable(currentRole, newRole, memberNodeIds))
                             throw new ArgumentException("Invalid role assignment.");
 
                         entity.RoleId = request.RoleId;

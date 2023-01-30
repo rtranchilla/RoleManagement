@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using RoleManager.DataPersistence;
 using RoleManager.MapperConfig;
 using RoleManager.WebService.Configuration;
-using RoleManager.WebService.Configuration;
 using System.ComponentModel;
 using System.Net;
 

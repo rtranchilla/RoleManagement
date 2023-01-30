@@ -21,7 +21,7 @@ public abstract class AggregateRootQueryHandler<TRequest, TAggregateRoot, TDto> 
         this.mapper = mapper;
     }
 
-    protected abstract IQueryable<TAggregateRoot> QueryEntities(TRequest request, RoleDbContext dbContext);
+    protected abstract IEnumerable<TAggregateRoot> QueryEntities(TRequest request, RoleDbContext dbContext);
 
     public async Task<IEnumerable<TDto>> Handle(TRequest request, CancellationToken cancellationToken)
     {
