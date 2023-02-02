@@ -15,15 +15,15 @@ public class TreeController : SenderControllerBase
     [HttpGet]
     public Task<ActionResult<IEnumerable<Dto.Tree>>> Get() => SendQuery(new TreeQuery());
 
-    [HttpGet("ById")]
+    [HttpGet("{id}")]
     public Task<ActionResult<IEnumerable<Dto.Tree>>> Get(Guid id) => SendQuery(new TreeQuery(id));
 
-    [HttpGet("ByName")]
+    [HttpGet("ByName/{name}")]
     public Task<ActionResult<IEnumerable<Dto.Tree>>> Get(string name) => SendQuery(new TreeQuery(name));
 
     [HttpPut]
     public Task<IActionResult> Update(Dto.TreeUpdate tree) => SendCommand(new TreeUpdate(tree));
 
-    [HttpDelete]
+    [HttpDelete("{id}")]
     public Task<IActionResult> Delete(Guid id) => SendCommand(new TreeDelete(id));
 }

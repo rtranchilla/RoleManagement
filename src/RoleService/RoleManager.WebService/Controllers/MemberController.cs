@@ -15,18 +15,18 @@ public sealed class MemberController : SenderControllerBase
     [HttpGet]
     public Task<ActionResult<IEnumerable<Dto.Member>>> Get() => SendQuery(new MemberQuery());
 
-    [HttpGet("ById")]
+    [HttpGet("{id}")]
     public Task<ActionResult<IEnumerable<Dto.Member>>> Get(Guid id) => SendQuery(new MemberQuery(id));
 
-    [HttpGet("ByUniqueName")]
+    [HttpGet("ByUniqueName/{uniqueName}")]
     public Task<ActionResult<IEnumerable<Dto.Member>>> Get(string uniqueName) => SendQuery(new MemberQuery(uniqueName));
 
-    [HttpGet("ByRole")]
+    [HttpGet("ByRole/{roleId}")]
     public Task<ActionResult<IEnumerable<Dto.Member>>> GetByRole(Guid roleId) => SendQuery(new MemberQuery { RoleId = roleId });
 
     [HttpPut]
     public Task<IActionResult> Update(Dto.Member member) => SendCommand(new MemberUpdate(member));
 
-    [HttpDelete]
+    [HttpDelete("{id}")]
     public Task<IActionResult> Delete(Guid id) => SendCommand(new MemberDelete(id));
 }

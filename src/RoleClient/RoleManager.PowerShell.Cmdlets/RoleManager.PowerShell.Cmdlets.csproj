@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Castle.Windsor" Version="5.1.2" />
+    <PackageReference Include="MediatR" Version="11.1.0" />
+    <PackageReference Include="System.Management.Automation" Version="7.2.9" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RoleManager.PowerShell.Mapper\RoleManager.PowerShell.Mapper.csproj" />
+    <ProjectReference Include="..\RoleManager.PowerShell.Requests\RoleManager.PowerShell.Requests.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="RoleManager.psd1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="RoleManager.psm1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

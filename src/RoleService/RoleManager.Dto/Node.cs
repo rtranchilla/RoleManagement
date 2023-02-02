@@ -1,6 +1,6 @@
 ﻿namespace RoleManager.Dto;
 
-public class Node : IEntity
+public sealed class Node : IEntity
 {
     public Guid Id { get; set; }
     public string Name { get; set; }

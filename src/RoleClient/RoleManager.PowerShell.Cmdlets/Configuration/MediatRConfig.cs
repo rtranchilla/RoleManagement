@@ -1,38 +1,24 @@
-﻿using Castle.MicroKernel;
-using Castle.MicroKernel.Lifestyle;
-using Castle.MicroKernel.Registration;
+﻿using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.Resolvers.SpecializedResolvers;
+using Castle.MicroKernel;
 using Castle.Windsor;
-using MediatR;
 using MediatR.Pipeline;
-using Microsoft.AspNetCore;
-using Microsoft.EntityFrameworkCore;
-using RoleManager.Commands;
-using RoleManager.DataPersistence;
-using RoleManager.Events;
-using RoleManager.Queries;
+using MediatR;
 using System.Diagnostics;
+using RoleManager.PowerShell.Requests;
 
-namespace RoleManager.WebService.Configuration;
+namespace RoleManager.PowerShell.Cmdlets.Configuration;
 
-public static class WindsorConfig
+internal static class MediatRConfig
 {
-    public static void UpdateDatabase(this IWindsorContainer container)
-    {
-        using (var context = container.Resolve<RoleDbContext>())
-            context.Database.Migrate();
-    }
-
     public static void ConfigureMediatR(this IWindsorContainer container)
     {
         container.Kernel.Resolver.AddSubResolver(new CollectionResolver(container.Kernel));
         container.Kernel.AddHandlersFilter(new ContravariantFilter());
 
-        container.RegisterMediatRServices(Classes.FromAssemblyContaining<MemberCreate>()); // Register Commands
-        container.RegisterMediatRServices(Classes.FromAssemblyContaining<MemberQuery>()); // Register Queries
-        container.RegisterMediatRServices(Classes.FromAssemblyContaining<MemberCreated>()); // Register Events
+        container.RegisterMediatRServices(Classes.FromAssemblyContaining<MemberQuery>()); // Register Commands
 
-        container.Register(Component.For<IMediator, IPublisher, ISender>().ImplementedBy<Mediator>());
+        container.Register(Component.For<IMediator, IPublisher, ISender>().ImplementedBy<MediatR.Mediator>());
 
         container.Register(Component.For(typeof(IPipelineBehavior<,>)).ImplementedBy(typeof(RequestExceptionProcessorBehavior<,>)));
         container.Register(Component.For(typeof(IPipelineBehavior<,>)).ImplementedBy(typeof(RequestExceptionActionProcessorBehavior<,>)));

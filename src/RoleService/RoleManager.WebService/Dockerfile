@@ -6,18 +6,18 @@ EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["RoleManager.WebService/RoleManager.WebService.csproj", "RoleManager.WebService/"]
-COPY ["RoleManager.Commands/RoleManager.Commands.csproj", "RoleManager.Commands/"]
-COPY ["RoleManager.DataPersistence/RoleManager.DataPersistence.csproj", "RoleManager.DataPersistence/"]
-COPY ["RoleManager/RoleManager.csproj", "RoleManager/"]
-COPY ["RoleManager.Dto/RoleManager.Dto.csproj", "RoleManager.Dto/"]
-COPY ["RoleManager.Events/RoleManager.Events.csproj", "RoleManager.Events/"]
-COPY ["RoleManager.Events.Dto/RoleManager.Events.Payloads.csproj", "RoleManager.Events.Dto/"]
-COPY ["RoleManager.Mapper/RoleManager.Mapper.csproj", "RoleManager.Mapper/"]
-COPY ["RoleManager.Queries/RoleManager.Queries.csproj", "RoleManager.Queries/"]
-RUN dotnet restore "RoleManager.WebService/RoleManager.WebService.csproj"
+COPY ["RoleService/RoleManager.WebService/RoleManager.WebService.csproj", "RoleService/RoleManager.WebService/"]
+COPY ["RoleService/RoleManager.Commands/RoleManager.Commands.csproj", "RoleService/RoleManager.Commands/"]
+COPY ["RoleService/RoleManager.DataPersistence/RoleManager.DataPersistence.csproj", "RoleService/RoleManager.DataPersistence/"]
+COPY ["RoleService/RoleManager/RoleManager.csproj", "RoleService/RoleManager/"]
+COPY ["RoleService/RoleManager.Dto/RoleManager.Dto.csproj", "RoleService/RoleManager.Dto/"]
+COPY ["RoleService/RoleManager.Events/RoleManager.Events.csproj", "RoleService/RoleManager.Events/"]
+COPY ["RoleService/RoleManager.Events.Dto/RoleManager.Events.Payloads.csproj", "RoleService/RoleManager.Events.Dto/"]
+COPY ["RoleService/RoleManager.Mapper/RoleManager.Mapper.csproj", "RoleService/RoleManager.Mapper/"]
+COPY ["RoleService/RoleManager.Queries/RoleManager.Queries.csproj", "RoleService/RoleManager.Queries/"]
+RUN dotnet restore "RoleService/RoleManager.WebService/RoleManager.WebService.csproj"
 COPY . .
-WORKDIR "/src/RoleManager.WebService"
+WORKDIR "/src/RoleService/RoleManager.WebService"
 RUN dotnet build "RoleManager.WebService.csproj" -c Release -o /app/build
 
 FROM build AS publish

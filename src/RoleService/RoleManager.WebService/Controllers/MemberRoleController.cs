@@ -8,9 +8,9 @@ public sealed class MemberRoleController : SenderControllerBase
 {
     public MemberRoleController(ISender sender) : base(sender) { }
 
-    [HttpPut]
-    public Task<IActionResult> Update(Guid memberId, Guid treeId, Guid roleId) => SendCommand(new MemberRoleUpdate(memberId, treeId, roleId));
+    [HttpPut("{memberId}/{roleId}/{treeId}")]
+    public Task<IActionResult> Update(Guid memberId, Guid roleId, Guid treeId) => SendCommand(new MemberRoleUpdate(memberId, treeId, roleId));
 
-    [HttpDelete]
+    [HttpDelete("{memberId}/{treeId}")]
     public Task<IActionResult> Delete(Guid memberId, Guid treeId) => SendCommand(new MemberRoleDelete(memberId, treeId));
 }

@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "Powershell 7": {
+      "commandName": "Executable",
+      "executablePath": "C:\\Program Files\\PowerShell\\7\\pwsh.exe",
+      "commandLineArgs": "-NoExit -NoLogo -ExecutionPolicy RemoteSigned -command \"Import-Module '.\\\\RoleManager.psd1' -Verbose;\""
+    }
+  }
+}

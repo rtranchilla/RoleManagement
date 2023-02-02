@@ -1,6 +1,6 @@
 ﻿namespace RoleManager.Dto;
 
-public class Tree : IEntity
+public sealed class Tree : IEntity
 {
     public Guid Id { get; set; }
     [Required]

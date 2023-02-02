@@ -1,5 +1,5 @@
 ﻿namespace RoleManager.Dto;
-public class Member : IEntity
+public sealed class Member : IEntity
 {
     public Guid Id { get; set; }
     public string DisplayName { get; set; }

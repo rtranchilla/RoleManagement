@@ -15,18 +15,18 @@ public class RoleController : SenderControllerBase
     [HttpGet]
     public Task<ActionResult<IEnumerable<Dto.Role>>> Get() => SendQuery(new RoleQuery());
 
-    [HttpGet("ById")]
+    [HttpGet("{id}")]
     public Task<ActionResult<IEnumerable<Dto.Role>>> Get(Guid id) => SendQuery(new RoleQuery(id));
 
-    [HttpGet("ByMember")]
+    [HttpGet("ByMember/{memberId}")]
     public Task<ActionResult<IEnumerable<Dto.Role>>> GetByMember(Guid memberId) => SendQuery(new MemberRoleQuery(memberId));
 
-    [HttpGet("AvailableForMember")]
+    [HttpGet("AvailableForMember/{memberId}")]
     public Task<ActionResult<IEnumerable<Dto.Role>>> GetAvailableForMember(Guid memberId) => SendQuery(new RoleAvailableQuery(memberId));
 
     [HttpPut]
     public Task<IActionResult> Update(Dto.RoleUpdate role) => SendCommand(new RoleUpdate(role));
 
-    [HttpDelete]
+    [HttpDelete("{id}")]
     public Task<IActionResult> Delete(Guid id) => SendCommand(new RoleDelete(id));
 }

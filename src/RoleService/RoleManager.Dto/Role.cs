@@ -1,6 +1,6 @@
 ﻿namespace RoleManager.Dto;
 
-public class Role : IEntity
+public sealed class Role : IEntity
 {
     public Guid Id { get; set; }
     public bool Reversible { get; set; }
