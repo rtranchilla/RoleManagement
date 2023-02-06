@@ -1,28 +1,25 @@
-﻿using AutoMapper;
+﻿namespace RoleManager.PowerShell.Requests;
 
-namespace RoleManager.PowerShell.Requests;
-
-public sealed record MemberQuery() : Query<Member>
+public sealed record MemberQuery() : RmQuery<Member>
 {
     public Guid? Id { get; set; }
     public Guid? RoleId { get; set; }
     public string? UniqueName { get; set; }
 }
 
-public sealed class MemberQueryHandler : QueryHandler<MemberQuery, Member, Dto.Member>
+public sealed class MemberQueryHandler : RmQueryHandler<MemberQuery, Member, Dto.Member>
 {
-    public MemberQueryHandler(HttpClient httpClient, IMapper mapper) : base(httpClient, mapper) { }
+    public MemberQueryHandler(IHttpClientProvider httpClientProvider, IMapper mapper, IJsonSerializerSettingsProvider serializerSettingsProvider) : base(httpClientProvider, mapper, serializerSettingsProvider) { }
 
-    protected override string GetPath() => "http://localhost:60301/Member"; 
-    protected override string GetQueryString(MemberQuery request)
+    protected override Uri BuildRequestPath(Uri baseUri, MemberQuery request)
     {
         if (request.Id != null)
-            return $"/ById/{request.Id}";
+            return new Uri(baseUri, $"/Member/{request.Id}");
         if (request.RoleId != null)
-            return $"/ByRole/{request.RoleId}";
+            return new Uri(baseUri, $"/Member/ByRole/{request.RoleId}");
         if (!string.IsNullOrEmpty(request.UniqueName))
-            return $"/ByUniqueName/{request.UniqueName}";
+            return new Uri(baseUri, $"/Member/ByUniqueName/{request.UniqueName}");
 
-        return "";
+        return new Uri(baseUri, $"/Member");
     }
 }

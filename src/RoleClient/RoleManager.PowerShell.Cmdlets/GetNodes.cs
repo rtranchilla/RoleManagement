@@ -2,9 +2,9 @@
 
 namespace RoleManager.PowerShell.Cmdlets;
 
-[Cmdlet(VerbsCommon.Get, "Members", DefaultParameterSetName = parameterSetNone)]
-[OutputType(typeof(Member))]
-public sealed class GetMembers : RmCmdlet
+[Cmdlet(VerbsCommon.Get, "Nodes", DefaultParameterSetName = parameterSetNone)]
+[OutputType(typeof(Node))]
+public sealed class GetNodes : RmCmdlet
 {
     const string parameterSetNone = "None";
     const string parameterSetId = "NameOrId";
@@ -19,12 +19,12 @@ public sealed class GetMembers : RmCmdlet
     protected override void BeginProcessingErrorHandling()
     {
         if (ParameterSetName == parameterSetNone)
-            WriteObject(SendRequest(new MemberQuery()));
+            WriteObject(SendRequest(new NodeQuery()));
         else if (ParameterSetName == parameterSetRole)
-            WriteObject(SendRequest(new MemberQuery { RoleId = RoleId }), true);
+            WriteObject(SendRequest(new NodeQuery { RoleId = RoleId }), true);
         else if (Guid.TryParse(Identifier, out var id))
-            WriteObject(SendRequest(new MemberQuery { Id = id }), true);
+            WriteObject(SendRequest(new NodeQuery { Id = id }), true);
         else
-            WriteObject(SendRequest(new MemberQuery { UniqueName = Identifier }), true);
+            WriteObject(SendRequest(new NodeQuery { Name = Identifier }), true);
     }
 }

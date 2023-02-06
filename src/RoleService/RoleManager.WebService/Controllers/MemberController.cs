@@ -25,7 +25,7 @@ public sealed class MemberController : SenderControllerBase
     public Task<ActionResult<IEnumerable<Dto.Member>>> GetByRole(Guid roleId) => SendQuery(new MemberQuery { RoleId = roleId });
 
     [HttpPut]
-    public Task<IActionResult> Update(Dto.Member member) => SendCommand(new MemberUpdate(member));
+    public Task<IActionResult> Update(Dto.MemberUpdate member) => SendCommand(new MemberUpdate(member));
 
     [HttpDelete("{id}")]
     public Task<IActionResult> Delete(Guid id) => SendCommand(new MemberDelete(id));

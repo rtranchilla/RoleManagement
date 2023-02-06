@@ -7,5 +7,6 @@ public class MemberProfile : Profile
 	public MemberProfile()
 	{
 		CreateMap<Member, Dto.Member>().ReverseMap();
+		CreateMap<Member, Dto.MemberUpdate>();
 	}
 }
