@@ -72,7 +72,12 @@ Copyright = 'Copyright © Ryan Tranchilla 2022. All rights reserved.'
 FunctionsToExport = @()
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
-CmdletsToExport = @('Get-Members', 'Get-Trees', 'Get-Nodes', 'Get-Roles')
+CmdletsToExport = @(
+    'New-Member', 'New-Tree', 'New-Role',
+    'Get-Member', 'Get-Tree', 'Get-Node', 'Get-Role',
+    'Set-Member', 'Set-Tree', 'Set-Role', 'Set-MemberRole',
+    'Remove-Member', 'Remove-Tree', 'Remove-Node', 'Remove-Role', 'Remove-MemberRole'
+)
 
 # Variables to export from this module
 # VariablesToExport = @()

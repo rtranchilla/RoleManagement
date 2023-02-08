@@ -2,9 +2,9 @@
 
 namespace RoleManager.PowerShell.Cmdlets;
 
-[Cmdlet(VerbsCommon.Add, "Members", DefaultParameterSetName = parameterSetByProperty)]
+[Cmdlet(VerbsCommon.New, "Member", DefaultParameterSetName = parameterSetByProperty)]
 [OutputType(typeof(Member))]
-public sealed class AddMember : RmCmdlet
+public sealed class MemberNew : RmCmdlet
 {
     const string parameterSetByObject = "ByObject";
     const string parameterSetByProperty = "ByProperty";

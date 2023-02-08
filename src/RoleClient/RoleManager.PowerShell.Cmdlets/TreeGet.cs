@@ -2,9 +2,9 @@
 
 namespace RoleManager.PowerShell.Cmdlets;
 
-[Cmdlet(VerbsCommon.Get, "Trees")]
+[Cmdlet(VerbsCommon.Get, "Tree")]
 [OutputType(typeof(Tree))]
-public sealed class GetTrees : RmCmdlet
+public sealed class TreeGet : RmCmdlet
 {
     [Parameter(Position = 0)]
     public string? Identifier { get; set; }

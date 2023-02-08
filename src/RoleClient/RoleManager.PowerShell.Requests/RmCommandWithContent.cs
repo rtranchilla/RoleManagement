@@ -1,4 +1,5 @@
 ﻿using RoleManager.Dto;
+using System.Net.Http.Headers;
 
 namespace RoleManager.PowerShell.Requests;
 
@@ -25,6 +26,6 @@ public abstract class RmCommandWithContentHandler<TRequest, TEntity, TDto> : RmC
         {
             var dto = mapper.Map<TEntity, TDto>(GetEntity(request));
             var contentBody = JsonConvert.SerializeObject(dto, serializerSettings);
-            httpRequestMessage.Content = new StringContent(contentBody);
+            httpRequestMessage.Content = new StringContent(contentBody, System.Text.Encoding.Default, "application/json");
         });
 }

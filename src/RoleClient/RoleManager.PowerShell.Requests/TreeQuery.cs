@@ -13,10 +13,10 @@ public sealed class TreeQueryHandler : RmQueryHandler<TreeQuery, Tree, Dto.Tree>
     protected override Uri BuildRequestPath(Uri baseUri, TreeQuery request)
     {
         if (request.Id != null)
-            return new Uri(baseUri, $"/Member/{request.Id}");
+            return new Uri(baseUri, $"/Tree/{request.Id}");
         if (!string.IsNullOrEmpty(request.Name))
-            return new Uri(baseUri, $"/Member/ByName/{request.Name}");
+            return new Uri(baseUri, $"/Tree/ByName/{request.Name}");
 
-        return new Uri(baseUri, $"/Member");
+        return new Uri(baseUri, $"/Tree");
     }
 }

@@ -2,9 +2,9 @@
 
 namespace RoleManager.PowerShell.Cmdlets;
 
-[Cmdlet(VerbsCommon.Get, "Roles", DefaultParameterSetName = parameterSetNone)]
+[Cmdlet(VerbsCommon.Get, "Role", DefaultParameterSetName = parameterSetNone)]
 [OutputType(typeof(Role))]
-public sealed class GetRoles : RmCmdlet
+public sealed class RoleGet : RmCmdlet
 {
     const string parameterSetNone = "None";
     const string parameterSetId = "NameOrId";
