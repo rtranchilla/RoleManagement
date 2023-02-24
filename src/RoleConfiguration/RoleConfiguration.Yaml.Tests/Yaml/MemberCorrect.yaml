@@ -1,0 +1,10 @@
+﻿Roles:
+- Name: BaseNode1_SubNode1_SubSubNode1
+  Tree: Tree1
+Members:
+- DisplayName: Member1
+  UniqueName: Member1
+- UniqueName: Member2
+  Roles:
+  - Name: BaseNode1_SubNode1_SubSubNode1
+    Tree: Tree2

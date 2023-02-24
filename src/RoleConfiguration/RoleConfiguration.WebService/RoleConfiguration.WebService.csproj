@@ -5,13 +5,9 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-    <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
     <DockerfileContext>..\..</DockerfileContext>
+    <UserSecretsId>3b5237d0-2bf3-4b64-8067-8bd7dac98766</UserSecretsId>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Remove="Configuration\NewFile.txt" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="12.0.1" />
@@ -26,7 +22,6 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.14" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.14">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -36,11 +31,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\RoleManager.Commands\RoleManager.Commands.csproj" />
-    <ProjectReference Include="..\RoleManager.DataPersistence\RoleManager.DataPersistence.csproj" />
-    <ProjectReference Include="..\RoleManager.Dto\RoleManager.Dto.csproj" />
-    <ProjectReference Include="..\RoleManager.Mapper\RoleManager.Mapper.csproj" />
-    <ProjectReference Include="..\RoleManager.Queries\RoleManager.Queries.csproj" />
+    <ProjectReference Include="..\..\..\RoleConfiguration.Dto\RoleConfiguration.Dto.csproj" />
+    <ProjectReference Include="..\RoleConfiguration.Commands\RoleConfiguration.Commands.csproj" />
+    <ProjectReference Include="..\RoleConfiguration.DataPersistence\RoleConfiguration.DataPersistence.csproj" />
+    <ProjectReference Include="..\RoleConfiguration.Mapper\RoleConfiguration.Mapper.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Dapr\Components\" />
   </ItemGroup>
 
 </Project>

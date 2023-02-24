@@ -1,6 +1,37 @@
 version: '3.8'
 
 services:
+  roleconfig.webservice:
+    container_name: roleconfig.webservice
+    image: ${DOCKER_REGISTRY-}roleconfigwebservice
+    build:
+      context: .
+      dockerfile: RoleConfiguration/RoleConfiguration.WebService/Dockerfile
+    environment:
+      - DAPR_HTTP_PORT=3500
+    networks:
+      - rolemanager
+    #command: ["dotnet", "ef", "database update"]
+    depends_on:
+      - mssql
+
+  roleconfig-dapr:
+    image: "daprio/daprd"
+    command: [
+      "./daprd",
+     "-app-id", "roleconfig.webservice",
+     "-app-port", "80",
+     "-components-path", "/components",
+     "-config", "/config/config.yaml",
+     "-log-level", "debug"
+     ]
+    volumes:
+      - "./RoleConfiguration/RoleConfiguration.WebService/Dapr/Components/:/components"
+      - "./RoleConfiguration/RoleConfiguration.WebService/Dapr/Config/:/config"  
+    depends_on:
+      - roleconfig.webservice
+    network_mode: "service:roleconfig.webservice"
+
   rolemanager.webservice:
     container_name: rolemanager.webservice
     image: ${DOCKER_REGISTRY-}rolemanagerwebservice
@@ -11,12 +42,10 @@ services:
       - DAPR_HTTP_PORT=3500
     networks:
       - rolemanager
-    command: ["dotnet", "ef", "database update"]
+    #command: ["dotnet", "ef", "database update"]
     depends_on:
       - mssql
       - redis
-    ports:
-      - "3500"
 
   rolemanager-dapr:
     image: "daprio/daprd"
@@ -29,8 +58,10 @@ services:
      "-log-level", "debug"
      ]
     volumes:
-      - "./RoleService/dapr/components/:/components"
-      - "./RoleService/dapr/config/:/config"  
+      - "./RoleService/RoleManager.WebService/Dapr/Components/:/components"
+      - "./RoleService/RoleManager.WebService/Dapr/Config/:/config"  
+    depends_on:
+      - rolemanager.webservice
     network_mode: "service:rolemanager.webservice"
 
 

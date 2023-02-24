@@ -1,0 +1,18 @@
+﻿DefaultRoleTree: Tree1
+Roles:
+- Name: BaseNode1
+  Reversible: false
+- Name: BaseNode1_SubNode1_SubSubNode1_SubSubNode2
+  Reversible: true
+  BuildParents: true
+  RequiredNodes:
+  - Name: SubNode1
+    Tree: Tree2
+- Name: BaseNode1
+  Reversible: false
+  Tree: Tree2
+Trees:
+- Name: Tree1
+  RequiredNodes:
+  - Name: SubNode1
+    Tree: Tree2

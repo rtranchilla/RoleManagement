@@ -6,7 +6,7 @@
     <ProjectGuid>c01d0ed7-8a99-4759-a635-f8f2a7f32acb</ProjectGuid>
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
     <DockerServiceUrl>{Scheme}://localhost:{ServicePort}/swagger</DockerServiceUrl>
-    <DockerServiceName>rolemanager.webservice</DockerServiceName>
+    <DockerServiceName>roleconfig.webservice</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>
     <None Include="docker-compose.override.yml">
