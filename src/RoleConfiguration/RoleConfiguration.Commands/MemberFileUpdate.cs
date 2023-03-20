@@ -1,34 +1,31 @@
 ﻿using AutoMapper;
-using Dapr.Client;
-using Google.Type;
-using Grpc.Core;
 using Microsoft.EntityFrameworkCore.Storage;
 using RoleConfiguration.DataPersistence;
+using RoleConfiguration.Repositories;
 using RoleConfiguration.Yaml;
 using RoleConfiguration.Yaml.Serialization;
 
 namespace RoleConfiguration.Commands;
 
-public sealed record MemberFileUpdate(string Source, string Path, string Content) : IRequest;
+public sealed record MemberFileUpdate(string Source, string Path, string Content) : CommandRequest;
 
 public sealed class MemberFileUpdateHandler : IRequestHandler<MemberFileUpdate>
 {
     private readonly Deserializer deserializer;
     private readonly ConfigDbContext dbContext;
     private readonly IMapper mapper;
-    private readonly DaprClient daprClient;
+    private readonly IMemberRepository memberRepository;
 
-    public MemberFileUpdateHandler(Deserializer deserializer, ConfigDbContext dbContext, IMapper mapper, DaprClient daprClient)
+    public MemberFileUpdateHandler(Deserializer deserializer, ConfigDbContext dbContext, IMapper mapper, IMemberRepository memberRepository)
     {
         this.deserializer = deserializer;
         this.dbContext = dbContext;
         this.mapper = mapper;
-        this.daprClient = daprClient;
+        this.memberRepository = memberRepository;
     }
 
     public async Task<Unit> Handle(MemberFileUpdate request, CancellationToken cancellationToken)
     {
-
         using (IDbContextTransaction transaction = await dbContext.Database.BeginTransactionAsync(cancellationToken))
             try
             {
@@ -40,29 +37,47 @@ public sealed class MemberFileUpdateHandler : IRequestHandler<MemberFileUpdate>
                     await dbContext.Files!.AddAsync(fileRecord, cancellationToken);
                 }
 
-                var fileContent = deserializer.DeserializeMember(request.Content);
+                var fileContent = deserializer.DeserializeMember(request.Content, true);
 
                 var members = dbContext.Members!.Where(e => fileContent.Members.Select(m => m.UniqueName).Contains(e.UniqueName)).ToDictionary(e => e.UniqueName);
                 foreach (var memberContent in fileContent.Members)
                 {
-                    RoleManager.Dto.Member memberDto;
-                    Member member;
+                    Member? member;
                     if (members.TryGetValue(memberContent.UniqueName ?? "", out member!))
                     {
-                        memberDto = mapper.Map<Member, RoleManager.Dto.Member>(member);
-                        memberDto = mapper.Map(memberContent, memberDto);
+                        try
+                        {
+                            await memberRepository.Update(member, memberContent, cancellationToken);
+                        }
+                        catch (HttpRequestException ex)
+                        {
+                            if (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
+                                await memberRepository.Add(member!, memberContent, cancellationToken);
+                            else
+                                throw;
+                        }
                     }
                     else
                     {
-                        memberDto = await daprClient.InvokeMethodAsync<string, RoleManager.Dto.Member>(HttpMethod.Get, "RoleManager", "Member/ByUniqueName", memberContent.UniqueName ?? "", cancellationToken);
-                        memberDto = mapper.Map(memberContent, memberDto);
-                        if (memberDto.Id == default)
-                            memberDto.Id = Guid.NewGuid();
-                        member = mapper.Map<RoleManager.Dto.Member, Member>(memberDto);
-                        await dbContext.Members!.AddAsync(member, cancellationToken);
-                    }
+                        MemberContent? currentContent;
+                        try
+                        {
+                            (member, currentContent) = await memberRepository.Get(memberContent.UniqueName!, cancellationToken);
+                        }
+                        catch (HttpRequestException ex)
+                        {
+                            if (ex.StatusCode != System.Net.HttpStatusCode.NotFound)
+                                throw;
+                        }
 
-                    await daprClient.InvokeMethodAsync(HttpMethod.Post, "RoleManager", "Member", memberDto, cancellationToken);
+                        if (member == null)
+                        {
+                            member = mapper.Map<MemberContent, Member>(memberContent);
+                            await memberRepository.Add(member!, memberContent, cancellationToken);
+                        }
+                        else
+                            await dbContext.Members!.AddAsync(member, cancellationToken);
+                    }
                 }
 
                 await dbContext.SaveChangesAsync(cancellationToken);
@@ -74,8 +89,6 @@ public sealed class MemberFileUpdateHandler : IRequestHandler<MemberFileUpdate>
                 throw;
             }
 
-
-                
         return Unit.Value;
     }
 }

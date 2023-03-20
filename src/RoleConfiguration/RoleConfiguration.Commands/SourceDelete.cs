@@ -2,7 +2,7 @@
 
 namespace RoleConfiguration.Commands;
 
-public sealed record SourceDelete(string Name) : IRequest;
+public sealed record SourceDelete(string Name) : CommandRequest;
 
 public sealed class SourceDeleteHandler : IRequestHandler<SourceDelete>
 {

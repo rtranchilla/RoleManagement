@@ -2,7 +2,7 @@
 
 namespace RoleConfiguration.Commands;
 
-public sealed record FileDelete(string Source, string Path) : IRequest;
+public sealed record FileDelete(string Source, string Path) : CommandRequest;
 
 public sealed class FileDeleteHandler : IRequestHandler<FileDelete>
 {

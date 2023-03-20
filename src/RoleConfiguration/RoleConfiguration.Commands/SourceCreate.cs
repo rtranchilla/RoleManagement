@@ -4,7 +4,7 @@ using RoleConfiguration.DataPersistence;
 
 namespace RoleConfiguration.Commands;
 
-public sealed record SourceCreate(string Name) : IRequest;
+public sealed record SourceCreate(string Name) : CommandRequest;
 
 public sealed class SourceCreateHandler : IRequestHandler<SourceCreate>
 {

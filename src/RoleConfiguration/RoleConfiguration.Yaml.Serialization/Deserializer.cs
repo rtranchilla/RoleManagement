@@ -11,7 +11,7 @@ public sealed class Deserializer
 
     public Deserializer() => deserializer = new DeserializerBuilder().Build();
 
-    public RoleTreeFileContent DeserializeRoleTree(string content)
+    public RoleTreeFileContent DeserializeRoleTree(string content, bool expandImplied = false)
     {
         var result = deserializer.Deserialize<RoleTreeFileContent>(content);
 
@@ -28,10 +28,20 @@ public sealed class Deserializer
             foreach (var node in tree.RequiredNodes)
                 Validator.ValidateObject(node, new ValidationContext(node), validateAllProperties: true);
         }
+
+        if (expandImplied)
+            return Expand(result);
+
         return result;
     }
 
-    public MemberFileContent DeserializeMember(string content)
+    private static RoleTreeFileContent Expand(RoleTreeFileContent content)
+    {
+        // ToDo: Complete expand logic
+        return content;
+    }
+
+    public MemberFileContent DeserializeMember(string content, bool expandImplied = false)
     {
         var result = deserializer.Deserialize<MemberFileContent>(content);
 
@@ -45,6 +55,23 @@ public sealed class Deserializer
                 Validator.ValidateObject(role, new ValidationContext(role), validateAllProperties: true);
         }
 
+        if (expandImplied)
+            return Expand(result);
+
         return result;
+    }
+
+    private static MemberFileContent Expand(MemberFileContent content)
+    {
+        foreach (var member in content.Members)
+        {
+            if (string.IsNullOrWhiteSpace(member.DisplayName))
+                member.DisplayName = member.UniqueName;
+
+            foreach (var role in content.Roles)
+                if (!member.Roles.Any(r => r.Tree == role.Tree))
+                    member.Roles.Add(role);
+        }
+        return content;
     }
 }

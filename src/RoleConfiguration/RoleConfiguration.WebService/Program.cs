@@ -24,8 +24,11 @@ builder.Services.AddAutoMapper(typeof(MemberProfile).Assembly);
 var app = builder.Build();
 
 container.UpdateDatabase();
+container.ConfigureRoleManagerRepositories();
 container.ConfigureMediatR();
 container.ConfigureYamlSerialization();
+container.ConfigureRoleManagerHttpClient();
+container.ConfigureJsonSettings();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

@@ -7,8 +7,10 @@ using MediatR;
 using MediatR.Pipeline;
 using Microsoft.AspNetCore;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using RoleConfiguration.Commands;
 using RoleConfiguration.DataPersistence;
+using RoleConfiguration.Repositories;
 using RoleConfiguration.Yaml.Serialization;
 using System.Diagnostics;
 
@@ -16,16 +18,37 @@ namespace RoleConfiguration.WebService.Configuration;
 
 public static class WindsorConfig
 {
+    public static void ConfigureRoleManagerRepositories(this IWindsorContainer container)
+    {
+        container.Register(Component.For<IRoleRepository, RoleCachingRepository>().ImplementedBy<RoleCachingRepository>().LifestylePerThread());
+        container.Register(Component.For<ITreeRepository, TreeCachingRepository>().ImplementedBy<TreeCachingRepository>().LifestylePerThread());
+        container.Register(Component.For<IMemberRepository, MemberCachingRepository>().ImplementedBy<MemberCachingRepository>().LifestylePerThread());
+        container.Register(Component.For<NodeCachingRepository>().ImplementedBy<NodeCachingRepository>().LifestylePerThread());
+    }
+
     public static void ConfigureYamlSerialization(this IWindsorContainer container)
     {
         container.Register(Component.For<Serializer>());
         container.Register(Component.For<Deserializer>());
     }
 
+    public static void ConfigureRoleManagerHttpClient(this IWindsorContainer container)
+    {
+        container.Register(Component.For<HttpClient>().Instance(new HttpClient
+        {
+            BaseAddress = new Uri(container.Resolve<IConfiguration>()["RoleManagerUrl"])
+        }));
+    }
+
     public static void UpdateDatabase(this IWindsorContainer container)
     {
         using var context = container.Resolve<ConfigDbContext>();
         context.Database.Migrate();
+    }
+
+    public static void ConfigureJsonSettings(this IWindsorContainer container)
+    {
+        container.Register(Component.For<JsonSerializerSettings>());
     }
 
     public static void ConfigureMediatR(this IWindsorContainer container)

@@ -12,5 +12,9 @@ public sealed class MemberProfile : Profile
 			.EqualityComparison((s, d) => s.Id == d.Id)
 			.ReverseMap()
             .EqualityComparison((s, d) => s.Id == d.Id);
+        CreateMap<MemberContent, Member>();
+
+        CreateMap<RoleManager.Dto.Member, RoleManager.Dto.MemberUpdate>();
+		CreateMap<MemberContent, RoleManager.Dto.MemberUpdate>();
 	}
 }
