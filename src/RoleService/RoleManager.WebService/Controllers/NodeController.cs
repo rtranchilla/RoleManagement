@@ -15,9 +15,9 @@ public class NodeController : SenderControllerBase
     [HttpGet("{id}")]
     public Task<ActionResult<IEnumerable<Dto.Node>>> Get(Guid id) => SendQuery(new NodeQuery(id));
 
-    [HttpGet("ByName/{name}")]
-    public Task<ActionResult<IEnumerable<Dto.Node>>> Get(string name) => SendQuery(new NodeQuery(name));
+    [HttpGet("ByName/{name}/{treeId}")]
+    public Task<ActionResult<IEnumerable<Dto.Node>>> Get(string name, Guid? treeId = null) => SendQuery(new NodeQuery(name) { TreeId = treeId });
 
-    [HttpGet("ByRole/{roleId}")]
-    public Task<ActionResult<IEnumerable<Dto.Node>>> GetByRole(Guid roleId) => SendQuery(new NodeQuery { RoleId = roleId });
+    [HttpGet("ByRole/{roleId}/{treeId}")]
+    public Task<ActionResult<IEnumerable<Dto.Node>>> GetByRole(Guid roleId, Guid? treeId = null) => SendQuery(new NodeQuery { RoleId = roleId, TreeId = treeId });
 }

@@ -8,9 +8,21 @@ public sealed record RoleQuery : AggregateRootQuery<Dto.Role>
 {
     public RoleQuery() { }
     public RoleQuery(Guid id) => Id = id;
+    public RoleQuery(string name, string tree)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+            throw new ArgumentException($"'{nameof(name)}' cannot be null or whitespace.", nameof(name));
+        if (string.IsNullOrWhiteSpace(tree))
+            throw new ArgumentException($"'{nameof(tree)}' cannot be null or whitespace.", nameof(tree));
+
+        Name = name;
+        Tree = tree;
+    }
 
     public Guid? Id { get; }
     public Guid? MemberId { get; set; }
+    public string? Name { get; }
+    public string? Tree { get; }
 }
 
 public sealed class RoleQueryHandler : AggregateRootQueryHandler<RoleQuery, Role, Dto.Role>
@@ -29,6 +41,9 @@ public sealed class RoleQueryHandler : AggregateRootQueryHandler<RoleQuery, Role
                                      .SelectMany(e => e.Roles)
                                      .Select(e => e.Role)
                                      .Cast<Role>();
+        if (request.Name != null)
+            return query;
+        // ToDo: Setup role query by name
 
         return query;
     }

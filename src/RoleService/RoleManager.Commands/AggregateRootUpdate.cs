@@ -34,7 +34,7 @@ public abstract class AggregateRootUpdateHandler<TRequest, TAggregateRoot, TDto>
 
         var entity = await Task.Run(() => GetEntity(request, dbContext), cancellationToken);
         if (entity == null)
-            throw new NullReferenceException($"Failed to find an entity with the supplied id: {dto.Id}.");
+            throw new KeyNotFoundException($"Failed to find an entity with the supplied id: {dto.Id}.");
 
         using (IDbContextTransaction transaction = await dbContext.Database.BeginTransactionAsync(cancellationToken))
             try

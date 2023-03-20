@@ -22,6 +22,10 @@ public class SenderControllerBase : ControllerBase
         {
             return BadRequest(ex.Message);
         }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
         catch (Exception)
         {
             return StatusCode(StatusCodes.Status500InternalServerError);
@@ -38,6 +42,10 @@ public class SenderControllerBase : ControllerBase
         catch (InvalidOperationException ex)
         {
             return BadRequest(ex.Message);
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(ex.Message);
         }
         catch (Exception)
         {

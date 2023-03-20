@@ -19,6 +19,7 @@ public sealed record NodeQuery : AggregateRootQuery<Dto.Node>
     public Guid? Id { get; }
     public string? Name { get; }
     public Guid? RoleId { get; set; }
+    public Guid? TreeId { get; set; }
 }
 
 public sealed class NodeQueryHandler : AggregateRootQueryHandler<NodeQuery, Node, Dto.Node>
@@ -28,7 +29,8 @@ public sealed class NodeQueryHandler : AggregateRootQueryHandler<NodeQuery, Node
     protected override IQueryable<Node> QueryEntities(NodeQuery request, RoleDbContext dbContext)
     {
         var query = dbContext.Nodes!.IncludeSubordinate();
-
+        if (request.TreeId != null)
+            query = query.Where(e => e.TreeId == request.TreeId);
         if (request.Id != null)
             return query.Where(e => e.Id == request.Id);
         if (request.Name != null)

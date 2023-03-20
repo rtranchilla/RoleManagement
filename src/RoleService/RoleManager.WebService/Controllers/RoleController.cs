@@ -18,6 +18,9 @@ public class RoleController : SenderControllerBase
     [HttpGet("{id}")]
     public Task<ActionResult<IEnumerable<Dto.Role>>> Get(Guid id) => SendQuery(new RoleQuery(id));
 
+    [HttpGet("ByName/{name}/{tree}")]
+    public Task<ActionResult<IEnumerable<Dto.Role>>> Get(string name, string tree) => SendQuery(new RoleQuery(name));
+
     [HttpGet("ByMember/{memberId}")]
     public Task<ActionResult<IEnumerable<Dto.Role>>> GetByMember(Guid memberId) => SendQuery(new MemberRoleQuery(memberId));
 
