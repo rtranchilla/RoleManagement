@@ -199,7 +199,7 @@ public sealed class RoleTreeFileUpdateHandler : IRequestHandler<RoleTreeFileUpda
                 RoleContent? currentContent;
                 try
                 {
-                    (role, currentContent) = await roleRepository.Get(roleContent.Name!, cancellationToken);
+                    (role, currentContent) = await roleRepository.Get(roleContent.Name!, roleContent.Tree!, cancellationToken);
                 }
                 catch (HttpRequestException ex)
                 {

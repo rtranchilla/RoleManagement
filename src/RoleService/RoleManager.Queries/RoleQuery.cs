@@ -42,8 +42,7 @@ public sealed class RoleQueryHandler : AggregateRootQueryHandler<RoleQuery, Role
                                      .Select(e => e.Role)
                                      .Cast<Role>();
         if (request.Name != null)
-            return query;
-        // ToDo: Setup role query by name
+            return query.Where(e => e.Id == RoleDbContext.RoleIdFromName(request.Name, request.Tree!));
 
         return query;
     }

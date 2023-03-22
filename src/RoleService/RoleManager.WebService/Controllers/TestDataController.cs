@@ -118,7 +118,7 @@ public class TestDataController : ControllerBase
         }
         
         // Dataset 2
-        if (dbContext.Trees!.IncludeSubordinate().First(e => e.Name == "Tree3").RequiredNodes.Count == 0) 
+        if ((dbContext.Trees!.IncludeSubordinate().FirstOrDefault(e => e.Name == "Tree3")?.RequiredNodes.Count ?? 0) == 0) 
         {
             var tree1 = dbContext.Trees!.First(e => e.Name == "Tree1");
             var tree2 = dbContext.Trees!.First(e => e.Name == "Tree2");

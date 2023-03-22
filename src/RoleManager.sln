@@ -73,11 +73,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastru
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PowerShell", "PowerShell", "{E7395E5F-3008-41CA-AD1D-6ECFB233FC03}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoleConfiguration.Repositories", "..\RoleConfiguration.Repositories\RoleConfiguration.Repositories.csproj", "{5D586056-3CCC-485D-8574-D511C6B34052}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoleConfiguration.Repositories", "..\RoleConfiguration.Repositories\RoleConfiguration.Repositories.csproj", "{5D586056-3CCC-485D-8574-D511C6B34052}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{BB0209C3-966A-485B-AC07-B4EA2F684BDD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoleConfiguration.Repositories.Tests", "..\RoleConfiguration.Repositories.Tests\RoleConfiguration.Repositories.Tests.csproj", "{126F16DA-4994-4BA6-B9FE-277F497D128D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoleConfiguration.Repositories.Tests", "..\RoleConfiguration.Repositories.Tests\RoleConfiguration.Repositories.Tests.csproj", "{126F16DA-4994-4BA6-B9FE-277F497D128D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -230,7 +230,7 @@ Global
 		{10A99D7E-8C6E-4C39-B48E-E3E8B544DE41} = {152F0C48-598F-4F3B-AA09-C8A5B1A5629E}
 		{9D05EC75-5882-4622-B4A7-3B80FFB001D5} = {152F0C48-598F-4F3B-AA09-C8A5B1A5629E}
 		{E7395E5F-3008-41CA-AD1D-6ECFB233FC03} = {152F0C48-598F-4F3B-AA09-C8A5B1A5629E}
-		{5D586056-3CCC-485D-8574-D511C6B34052} = {54C45549-FE3F-4347-AE3C-404E60AA75A3}
+		{5D586056-3CCC-485D-8574-D511C6B34052} = {03D87379-92AC-4C34-9662-A8606878E5B4}
 		{BB0209C3-966A-485B-AC07-B4EA2F684BDD} = {54C45549-FE3F-4347-AE3C-404E60AA75A3}
 		{126F16DA-4994-4BA6-B9FE-277F497D128D} = {BB0209C3-966A-485B-AC07-B4EA2F684BDD}
 	EndGlobalSection

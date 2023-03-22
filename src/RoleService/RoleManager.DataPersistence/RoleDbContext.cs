@@ -86,4 +86,7 @@ public sealed class RoleDbContext : DbContext
                     .ToTable("RoleRequiredNodes")
                     .HasKey(e => new { e.RoleId, e.NodeId });
     }
+
+    [DbFunction(Name = "RoleIdFromName", Schema = "dbo", IsBuiltIn = false, IsNullable = true)]
+    public static Guid RoleIdFromName(string name, string tree) => throw new NotImplementedException();
 }

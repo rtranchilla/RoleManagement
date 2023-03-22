@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RoleManager.DataPersistence;
 
@@ -11,9 +12,10 @@ using RoleManager.DataPersistence;
 namespace RoleManager.DataPersistence.Migrations
 {
     [DbContext(typeof(RoleDbContext))]
-    partial class RoleDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230322043151_RoleNameFunction")]
+    partial class RoleNameFunction
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
