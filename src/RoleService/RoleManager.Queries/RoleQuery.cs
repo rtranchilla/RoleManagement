@@ -8,6 +8,13 @@ public sealed record RoleQuery : AggregateRootQuery<Dto.Role>
 {
     public RoleQuery() { }
     public RoleQuery(Guid id) => Id = id;
+    public RoleQuery(string tree)
+    {
+        if (string.IsNullOrWhiteSpace(tree))
+            throw new ArgumentException($"'{nameof(tree)}' cannot be null or whitespace.", nameof(tree));
+
+        Tree = tree;
+    }
     public RoleQuery(string name, string tree)
     {
         if (string.IsNullOrWhiteSpace(name))
@@ -43,6 +50,8 @@ public sealed class RoleQueryHandler : AggregateRootQueryHandler<RoleQuery, Role
                                      .Cast<Role>();
         if (request.Name != null)
             return query.Where(e => e.Id == RoleDbContext.RoleIdFromName(request.Name, request.Tree!));
+
+        // ToDo: Implement Tree Query
 
         return query;
     }

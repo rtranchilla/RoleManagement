@@ -36,7 +36,7 @@ namespace RoleManager.Commands
 
                     var memberNodeIds = member.Roles.SelectMany(e => e.Role!.Nodes).Select(e => e.NodeId);
                     var newRole = dbContext.Roles!.First(e => e.Id == request.RoleId);
-                    var treeMap = TreeMap.Build(dbContext.Roles!.IncludeSubordinate().Where(e => e.TreeId == request.TreeId));
+                    var treeMap = TreeMap.Build(dbContext.Roles!.IncludeSubordinate(true).Where(e => e.TreeId == request.TreeId));
                     var entity = member.Roles.FirstOrDefault(e => e.TreeId == request.TreeId);
                     if (entity == null)
                     {

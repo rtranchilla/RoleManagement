@@ -102,4 +102,6 @@ public sealed class RoleCachingRepository : Repository<Role, RoleContent, RoleMa
 
         return (entity, content);
     }
+
+    internal void ClearMemberCache(Guid memberId) => byMemberId.Remove(memberId);
 }

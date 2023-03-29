@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using YamlDotNet.Core;
 
 namespace RoleConfiguration.WebService.Controllers;
 
@@ -18,6 +19,10 @@ public class SenderControllerBase : ControllerBase
             var result = await sender.Send(request);
             return Ok(result);
         }
+        catch (YamlException ex)
+        {
+            return BadRequest(ex.Message);
+        }
         catch (InvalidOperationException ex)
         {
             return BadRequest(ex.Message);
@@ -34,6 +39,10 @@ public class SenderControllerBase : ControllerBase
         {
             await sender.Send(request);
             return Ok();
+        }
+        catch (YamlException ex)
+        {
+            return BadRequest(ex.Message);
         }
         catch (InvalidOperationException ex)
         {

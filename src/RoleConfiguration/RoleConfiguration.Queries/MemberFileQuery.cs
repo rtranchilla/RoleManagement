@@ -52,7 +52,7 @@ public sealed class MemberFileQueryHandler : IRequestHandler<MemberFileQuery, st
             {
                 var members = await memberRepository.GetByRole(roleEntity.Id, cancellationToken);
                 foreach (var (memberEntity, memberContent) in members)
-                    if (memberEntity != null && currentMembers.Contains(memberEntity.Id))
+                    if (memberEntity != null && !currentMembers.Contains(memberEntity.Id))
                     {
                         content.Members.Add(memberContent!);
                         currentMembers.Add(memberEntity.Id);

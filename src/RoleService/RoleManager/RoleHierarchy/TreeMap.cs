@@ -63,7 +63,7 @@ public sealed class TreeMap : IReadOnlyDictionary<Guid, RoleNodeRelation>
         return false;
     }
 
-    public bool IsTraversable(Role startRole, Role endRole, IEnumerable<Guid> memberNodeIds) => IsTraversable(startRole, endRole, memberNodeIds);
+    public bool IsTraversable(Role startRole, Role endRole, IEnumerable<Guid> memberNodeIds) => IsTraversable(startRole, endRole, memberNodeIds.ToArray());
     public bool IsTraversable(Role startRole, Role endRole, Guid[] memberNodeIds)
     {
         if (startRole.TreeId != Tree.Id || endRole.TreeId != Tree.Id)

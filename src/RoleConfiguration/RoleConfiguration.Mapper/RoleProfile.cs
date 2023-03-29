@@ -15,9 +15,12 @@ public sealed class RoleProfile : Profile
             .ReverseMap()
             .EqualityComparison((s, d) => s.Id == d.Id);
         CreateMap<RoleContent, Role>();
+        CreateMap<RoleManager.Dto.Role, MemberRoleContent>();
 
         CreateMap<RoleManager.Dto.Role, RoleManager.Dto.RoleUpdate>();
         CreateMap<RoleContent, RoleManager.Dto.RoleUpdate>()
             .ForMember(dest => dest.RequiredNodes, cfg => cfg.Ignore());
+
+        CreateMap<RoleManager.Dto.Node, RequiredNodeContent>();
     }
 }

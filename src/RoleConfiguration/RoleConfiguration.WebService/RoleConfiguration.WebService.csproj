@@ -28,6 +28,7 @@
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.5.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -35,6 +36,7 @@
     <ProjectReference Include="..\RoleConfiguration.Commands\RoleConfiguration.Commands.csproj" />
     <ProjectReference Include="..\RoleConfiguration.DataPersistence\RoleConfiguration.DataPersistence.csproj" />
     <ProjectReference Include="..\RoleConfiguration.Mapper\RoleConfiguration.Mapper.csproj" />
+    <ProjectReference Include="..\RoleConfiguration.Queries\RoleConfiguration.Queries.csproj" />
   </ItemGroup>
 
   <ItemGroup>

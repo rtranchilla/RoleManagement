@@ -14,6 +14,7 @@ public sealed class MemberProfile : Profile
             .EqualityComparison((s, d) => s.Id == d.Id);
         CreateMap<MemberContent, Member>();
 
+        CreateMap<Member, RoleManager.Dto.MemberUpdate>();
         CreateMap<RoleManager.Dto.Member, RoleManager.Dto.MemberUpdate>();
 		CreateMap<MemberContent, RoleManager.Dto.MemberUpdate>();
 	}

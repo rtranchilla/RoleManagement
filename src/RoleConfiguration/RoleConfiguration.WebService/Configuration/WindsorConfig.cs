@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using RoleConfiguration.Commands;
 using RoleConfiguration.DataPersistence;
+using RoleConfiguration.Queries;
 using RoleConfiguration.Repositories;
 using RoleConfiguration.Yaml.Serialization;
 using System.Diagnostics;
@@ -57,14 +58,14 @@ public static class WindsorConfig
         container.Kernel.AddHandlersFilter(new ContravariantFilter());
 
         container.RegisterMediatRServices(Classes.FromAssemblyContaining<MemberFileUpdate>()); // Register Commands
-        //container.RegisterMediatRServices(Classes.FromAssemblyContaining<MemberQuery>()); // Register Queries
+        container.RegisterMediatRServices(Classes.FromAssemblyContaining<MemberFileQuery>()); // Register Queries
 
         container.Register(Component.For<IMediator, IPublisher, ISender>().ImplementedBy<Mediator>());
 
         container.Register(Component.For(typeof(IPipelineBehavior<,>)).ImplementedBy(typeof(RequestExceptionProcessorBehavior<,>)));
         container.Register(Component.For(typeof(IPipelineBehavior<,>)).ImplementedBy(typeof(RequestExceptionActionProcessorBehavior<,>)));
 
-        container.Register(Component.For<ServiceFactory>().UsingFactoryMethod<ServiceFactory>(k => (type =>
+        container.Register(Component.For<ServiceFactory>().UsingFactoryMethod<ServiceFactory>(k => type =>
         {
             var enumerableType = type
                 .GetInterfaces()
@@ -88,7 +89,7 @@ public static class WindsorConfig
                 return ResolveRequestExceptionAction(k, type, service, resolvedType, genericArguments);
 
             return resolvedType;
-        })));
+        }));
     }
 
     private static IWindsorContainer RegisterMediatRServices(this IWindsorContainer container, FromAssemblyDescriptor assemblyDescriptor) =>

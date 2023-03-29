@@ -52,7 +52,7 @@ public abstract class Repository<TEntity, TContent, TDto, TUpdateDto> : IReposit
         return (entity, content);
     }
 
-    public async Task Add(TEntity entity, TContent content, CancellationToken cancellationToken = default)
+    public virtual async Task Add(TEntity entity, TContent content, CancellationToken cancellationToken = default)
     {
         TDto dto = mapper.Map<TEntity, TDto>(entity);
         dto = mapper.Map(content, dto);
@@ -61,7 +61,7 @@ public abstract class Repository<TEntity, TContent, TDto, TUpdateDto> : IReposit
         response.EnsureSuccessStatusCode();
     }
 
-    public async Task Update(TEntity entity, TContent content, CancellationToken cancellationToken = default)
+    public virtual async Task Update(TEntity entity, TContent content, CancellationToken cancellationToken = default)
     {
         TUpdateDto dto = mapper.Map<TEntity, TUpdateDto>(entity);
         dto = mapper.Map(content, dto);
@@ -70,7 +70,7 @@ public abstract class Repository<TEntity, TContent, TDto, TUpdateDto> : IReposit
         response.EnsureSuccessStatusCode();
     }
 
-    public async Task Delete(Guid id, CancellationToken cancellationToken = default)
+    public virtual async Task Delete(Guid id, CancellationToken cancellationToken = default)
     {
         HttpResponseMessage response = await roleManagerClient.DeleteAsync($"{ControllerRequestUri}/{id}", cancellationToken);
         response.EnsureSuccessStatusCode();
