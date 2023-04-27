@@ -34,7 +34,7 @@ public class MemberController : SenderControllerBase
     /// </param>
     /// <returns>member yaml content</returns>
     [HttpGet("ByRole")]
-    [SwaggerOperation(Summary = "Generates the member yaml file content for members of roles specified.",
+    [SwaggerOperation(Summary = "Generates the member yaml file content for members of specified roles.",
         Description = "Generates the member yaml file content for members of roles specified. " +
                       "Takes tree and role names separated by an underscore. E.g. TreeName_Role_Name")]
     public async Task<ActionResult<string>> GetByRole([FromQuery] params string[] roles) =>

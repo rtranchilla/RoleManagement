@@ -17,6 +17,7 @@ public interface IMemberRepository : IRepository<Member, MemberContent>
 public interface IRoleRepository : IRepository<Role, RoleContent>
 {
     Task<(Role? Entity, RoleContent? Content)> Get(string name, string tree, CancellationToken cancellationToken = default);
+    Task<IEnumerable<(Role? Entity, RoleContent? Content)>> GetByTree(string tree, CancellationToken cancellationToken = default);
     Task<IEnumerable<(Role? Entity, MemberRoleContent? Content)>> GetByMember(Guid memberId, CancellationToken cancellationToken = default);
 }
 public interface ITreeRepository : IRepository<Tree, TreeContent>

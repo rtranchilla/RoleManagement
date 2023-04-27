@@ -37,7 +37,11 @@ public sealed class Deserializer
 
     private static RoleTreeFileContent Expand(RoleTreeFileContent content)
     {
-        // ToDo: Complete expand logic
+        if (!string.IsNullOrWhiteSpace(content.DefaultRoleTree))
+            foreach (var role in content.Roles)
+                if (string.IsNullOrWhiteSpace(role.Tree))
+                    role.Tree = content.DefaultRoleTree;
+
         return content;
     }
 

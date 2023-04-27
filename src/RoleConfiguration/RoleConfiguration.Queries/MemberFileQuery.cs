@@ -39,7 +39,7 @@ public sealed class MemberFileQueryHandler : IRequestHandler<MemberFileQuery, st
 
         MergeRoles(content);
 
-        return serializer.Serialize(content);
+        return serializer.Serialize(content, true);
     }
 
     private async Task AddSpecifiedRoleMembers(MemberFileQuery request, MemberFileContent content, CancellationToken cancellationToken)

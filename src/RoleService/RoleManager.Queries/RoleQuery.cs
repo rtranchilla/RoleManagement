@@ -48,10 +48,11 @@ public sealed class RoleQueryHandler : AggregateRootQueryHandler<RoleQuery, Role
                                      .SelectMany(e => e.Roles)
                                      .Select(e => e.Role)
                                      .Cast<Role>();
-        if (request.Name != null)
-            return query.Where(e => e.Id == RoleDbContext.RoleIdFromName(request.Name, request.Tree!));
 
-        // ToDo: Implement Tree Query
+        if (!string.IsNullOrWhiteSpace(request.Name))
+            return query.Where(e => e.Id == RoleDbContext.RoleIdFromName(request.Name!, request.Tree!));
+        if (!string.IsNullOrWhiteSpace(request.Tree))
+            return query.Where(e => e.Tree!.Name == request.Tree);
 
         return query;
     }

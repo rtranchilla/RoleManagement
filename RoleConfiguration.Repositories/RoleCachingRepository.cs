@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using System.Collections.Generic;
 
 namespace RoleConfiguration.Repositories;
 
@@ -16,6 +17,7 @@ public sealed class RoleCachingRepository : Repository<Role, RoleContent, RoleMa
 
     private readonly Dictionary<Guid, RoleManager.Dto.Role> byId = new();
     private readonly Dictionary<Guid, RoleManager.Dto.Role[]> byMemberId = new();
+    private readonly Dictionary<string, RoleManager.Dto.Role[]> byTreeName = new();
     private readonly Dictionary<string, RoleManager.Dto.Role> byName = new(StringComparer.InvariantCultureIgnoreCase);
     private readonly IMapper mapper;
     private readonly NodeCachingRepository nodeRepository;
@@ -49,6 +51,40 @@ public sealed class RoleCachingRepository : Repository<Role, RoleContent, RoleMa
         }
 
         return await MapToResult(dto, cancellationToken);
+    }
+
+    public async Task<IEnumerable<(Role? Entity, RoleContent? Content)>> GetByTree(string tree, CancellationToken cancellationToken = default)
+    {
+        if (!byTreeName.TryGetValue(tree, out RoleManager.Dto.Role[]? dtos))
+        {
+            dtos = await GetCollectionByUri($"{requestUri}/ByTree/{tree}", cancellationToken) ?? Array.Empty<RoleManager.Dto.Role>();
+            if (dtos != null)
+            {
+                byTreeName.TryAdd(tree, dtos);
+                foreach (var dto in dtos)
+                {
+                    byId.TryAdd(dto.Id, dto);
+                    byName.TryAdd(dto.Name, dto);
+                }
+            }
+        }
+
+        var result = new List<(Role? Entity, RoleContent? Content)>();
+        foreach (RoleManager.Dto.Role dto in dtos!)
+            result.Add(await MapMemberContent(dto));
+
+        return result;
+
+        async Task<(Role? Entity, RoleContent? Content)> MapMemberContent(RoleManager.Dto.Role dto)
+        {
+            if (dto == null)
+                return (null, null);
+
+            var entity = mapper.Map<RoleManager.Dto.Role, Role>(dto);
+            var content = mapper.Map<RoleManager.Dto.Role, RoleContent>(dto);
+            content.Tree = (await treeRepository.Get(dto.TreeId, cancellationToken)).Entity?.Name;
+            return (entity, content);
+        }
     }
 
     public async Task<IEnumerable<(Role? Entity, MemberRoleContent? Content)>> GetByMember(Guid id, CancellationToken cancellationToken = default)
