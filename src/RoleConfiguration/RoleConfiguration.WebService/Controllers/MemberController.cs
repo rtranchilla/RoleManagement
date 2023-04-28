@@ -15,18 +15,18 @@ public class MemberController : SenderControllerBase
     /// <summary>
     /// Generates the member yaml file content for specified members.
     /// </summary>
-    /// <param name="members">Takes member names.</param>
+    /// <param name="member">Takes member names.</param>
     /// <returns>member yaml content</returns>
     [HttpGet()]
     [SwaggerOperation(Summary = "Generates the member yaml file content for specified members.",
         Description = "Generates the member yaml file content for specified members. Takes member names.")]
-    public async Task<ActionResult<string>> Get([FromQuery] params string[] members) =>
-        await SendQuery(new MemberFileQuery(members));
+    public async Task<ActionResult<string>> Get([FromQuery] params string[] member) =>
+        await SendQuery(new MemberFileQuery(member));
 
     /// <summary>
     /// Generates the member yaml file content for members of roles specified.
     /// </summary>
-    /// <param name="roles">
+    /// <param name="role">
     /// Takes tree and role names separated by an underscore. 
     /// <example>
     /// Example: TreeName_Role_Name
@@ -37,14 +37,16 @@ public class MemberController : SenderControllerBase
     [SwaggerOperation(Summary = "Generates the member yaml file content for members of specified roles.",
         Description = "Generates the member yaml file content for members of roles specified. " +
                       "Takes tree and role names separated by an underscore. E.g. TreeName_Role_Name")]
-    public async Task<ActionResult<string>> GetByRole([FromQuery] params string[] roles) =>
-        await SendQuery(new MemberFileQuery(roles.Where(e => e.Contains('_')).Select(r =>
+    public async Task<ActionResult<string>> GetByRole([FromQuery] params string[] role) =>
+        await SendQuery(new MemberFileQuery(role.Where(e => e.Contains('_')).Select(r =>
         {
             var tree = r.Split('_')[0];
             return (r.Substring(tree.Length + 1), tree);
         }).ToArray()));
 
     [HttpPut("{source}")]
+    [SwaggerOperation(Summary = "Updates a member yaml file's content.",
+        Description = "Updates a member yaml file's content for a specified source.")]
     public async Task<IActionResult> Update(string source, ContentUpdate content) =>
         await SendCommand(new MemberFileUpdate(source, content.Path, content.Content));
 }

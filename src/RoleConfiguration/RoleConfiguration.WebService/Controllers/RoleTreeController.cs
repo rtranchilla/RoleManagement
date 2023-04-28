@@ -15,9 +15,14 @@ public sealed class RoleTreeController : SenderControllerBase
 
     [HttpGet()]
     [SwaggerOperation(Summary = "Generates the role tree yaml file content for specified roles.",
-        Description = "Generates the role tree yaml file content for specified roles. Takes role and tree names.")]
-    public async Task<ActionResult<string>> Get([FromQuery]params RoleQuery[] roles) => 
-        await SendQuery(new RoleTreeFileQuery(roles.Select(r => (r.Name, r.Tree)).ToArray()));
+        Description = "Generates the role tree yaml file content for specified roles. " +
+                      "Takes tree and role names separated by an underscore. E.g. TreeName_Role_Name")]
+    public async Task<ActionResult<string>> Get([FromQuery]params string[] role) => 
+        await SendQuery(new RoleTreeFileQuery(role.Where(e => e.Contains('_')).Select(r =>
+        {
+            var tree = r.Split('_')[0];
+            return (r.Substring(tree.Length + 1), tree);
+        }).ToArray()));
 
     [HttpGet("ByTree")]
     [SwaggerOperation(Summary = "Generates the role tree yaml file content for specified tree.",
@@ -26,6 +31,8 @@ public sealed class RoleTreeController : SenderControllerBase
         await SendQuery(new RoleTreeFileQuery(tree));
 
     [HttpPut("{source}")]
+    [SwaggerOperation(Summary = "Updates a role tree yaml file's content.",
+        Description = "Updates a role tree yaml file's content for a specified source.")]
     public async Task<IActionResult> Update(string source, ContentUpdate content) =>
         await SendCommand(new RoleTreeFileUpdate(source, content.Path, content.Content));
 }

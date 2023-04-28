@@ -125,6 +125,7 @@ public sealed class RoleCachingRepository : Repository<Role, RoleContent, RoleMa
     {
         var (entity, content) = MapFromDto(dto);
         if (content != null)
+        {
             foreach (var id in dto!.RequiredNodes)
             {
                 var node = await nodeRepository.Get(id, cancellationToken);
@@ -135,6 +136,9 @@ public sealed class RoleCachingRepository : Repository<Role, RoleContent, RoleMa
                     content.RequiredNodes.Add(requiredNode);
                 }
             }
+
+            content.Tree = (await treeRepository.Get(dto.TreeId, cancellationToken)).Entity?.Name;
+        }
 
         return (entity, content);
     }

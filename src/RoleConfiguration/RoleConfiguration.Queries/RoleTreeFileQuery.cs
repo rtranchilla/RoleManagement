@@ -53,15 +53,19 @@ public sealed class RoleTreeFileQueryHandler : IRequestHandler<RoleTreeFileQuery
         }
     }
 
-    // ToDo: Fill Tree Info
     private async Task AddSpecifiedRoles(RoleTreeFileQuery request, RoleTreeFileContent content, CancellationToken cancellationToken)
     {
         foreach (var (roleName, roleTree) in request.Roles!)
         {
             var (_, roleContent) = await roleRepository.Get(roleName, roleTree, cancellationToken);
             if (roleContent != null)
-            {
                 content.Roles.Add(roleContent);
+
+            if (!string.IsNullOrEmpty(roleTree))
+            {
+                var treeContent = (await treeRepository.Get(roleTree, cancellationToken)).Content;
+                if (treeContent != null && !content.Trees.Contains(treeContent))
+                    content.Trees.Add(treeContent);
             }
         }
     }
