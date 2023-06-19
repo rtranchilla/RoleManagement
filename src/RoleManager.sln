@@ -59,7 +59,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoleConfiguration.Mapper", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoleConfiguration.WebService", "RoleConfiguration\RoleConfiguration.WebService\RoleConfiguration.WebService.csproj", "{85F40C3E-D67A-44FE-813E-7F7EE421BB5B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoleConfiguration.Dto", "..\RoleConfiguration.Dto\RoleConfiguration.Dto.csproj", "{8224BB53-E311-4374-A315-22B08ABD456B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoleConfiguration.Dto", "RoleConfiguration\RoleConfiguration.Dto\RoleConfiguration.Dto.csproj", "{8224BB53-E311-4374-A315-22B08ABD456B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Requests", "Requests", "{A0AA3B35-D039-4411-8A73-DFBD3E33AE6F}"
 EndProject
@@ -73,11 +73,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastru
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PowerShell", "PowerShell", "{E7395E5F-3008-41CA-AD1D-6ECFB233FC03}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoleConfiguration.Repositories", "..\RoleConfiguration.Repositories\RoleConfiguration.Repositories.csproj", "{5D586056-3CCC-485D-8574-D511C6B34052}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoleConfiguration.Repositories", "RoleConfiguration\RoleConfiguration.Repositories\RoleConfiguration.Repositories.csproj", "{5D586056-3CCC-485D-8574-D511C6B34052}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{BB0209C3-966A-485B-AC07-B4EA2F684BDD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoleConfiguration.Repositories.Tests", "..\RoleConfiguration.Repositories.Tests\RoleConfiguration.Repositories.Tests.csproj", "{126F16DA-4994-4BA6-B9FE-277F497D128D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoleConfiguration.Repositories.Tests", "RoleConfiguration\RoleConfiguration.Repositories.Tests\RoleConfiguration.Repositories.Tests.csproj", "{126F16DA-4994-4BA6-B9FE-277F497D128D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ApiGateway", "ApiGateway", "{088E536A-143E-4764-A09E-C030F888D075}"
 EndProject
