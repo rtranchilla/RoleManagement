@@ -32,9 +32,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\RoleConfiguration.Dto\RoleConfiguration.Dto.csproj" />
     <ProjectReference Include="..\RoleConfiguration.Commands\RoleConfiguration.Commands.csproj" />
     <ProjectReference Include="..\RoleConfiguration.DataPersistence\RoleConfiguration.DataPersistence.csproj" />
+    <ProjectReference Include="..\RoleConfiguration.Dto\RoleConfiguration.Dto.csproj" />
     <ProjectReference Include="..\RoleConfiguration.Mapper\RoleConfiguration.Mapper.csproj" />
     <ProjectReference Include="..\RoleConfiguration.Queries\RoleConfiguration.Queries.csproj" />
   </ItemGroup>

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -13,8 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\RoleConfiguration.Repositories\RoleConfiguration.Repositories.csproj" />
     <ProjectReference Include="..\RoleConfiguration.DataPersistence\RoleConfiguration.DataPersistence.csproj" />
+    <ProjectReference Include="..\RoleConfiguration.Repositories\RoleConfiguration.Repositories.csproj" />
     <ProjectReference Include="..\RoleConfiguration.Yaml.Serialization\RoleConfiguration.Yaml.Serialization.csproj" />
   </ItemGroup>
 

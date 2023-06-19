@@ -14,9 +14,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\RoleConfiguration.Repositories\RoleConfiguration.Repositories.csproj" />
-    <ProjectReference Include="..\..\RoleService\RoleManager.Dto\RoleManager.Dto.csproj" />
     <ProjectReference Include="..\RoleConfiguration.DataPersistence\RoleConfiguration.DataPersistence.csproj" />
+    <ProjectReference Include="..\RoleConfiguration.Dto\RoleConfiguration.Dto.csproj" />
+    <ProjectReference Include="..\RoleConfiguration.Repositories\RoleConfiguration.Repositories.csproj" />
     <ProjectReference Include="..\RoleConfiguration.Yaml.Serialization\RoleConfiguration.Yaml.Serialization.csproj" />
   </ItemGroup>
 
