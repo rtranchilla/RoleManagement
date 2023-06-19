@@ -16,8 +16,6 @@ public sealed class QueryExceptionHandler<TResult> : AsyncRequestExceptionHandle
         QueryRequest<TResult> request,
         Exception exception,
         RequestExceptionHandlerState<TResult> state,
-        CancellationToken cancellationToken)
-    {
+        CancellationToken cancellationToken) => 
         await Task.Run(() => logger.LogError(exception, exception.Message), cancellationToken);
-    }
 }
