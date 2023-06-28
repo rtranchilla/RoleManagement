@@ -3,8 +3,8 @@
 ## Setup
 
 ### Prereqs
-`winget install Docker.DockerDesktop`
-`winget install Microsoft.DotNet.SDK.6`
+- `winget install Docker.DockerDesktop`
+- `winget install Microsoft.DotNet.SDK.6`
 
 ### Download nuget dependencies 
 `dotnet restore D:\Repos\RoleManagement\src\RoleManager.sln`
