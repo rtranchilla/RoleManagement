@@ -8,3 +8,4 @@
 - [Ocelot](https://github.com/ThreeMammals/Ocelot) - Api Gateway, MIT License
 - [RabbitMQ](https://github.com/rabbitmq) - Pub/Sub Message Broker (Targeting this for non-cloud platform deployments), MPL 2.0
 - [Newtonsoft Json](https://github.com/JamesNK/Newtonsoft.Json) - Json Serialization (Only if needed), MIT License
+- [Pode](https://github.com/Badgerati/Pode) - PowerShell web framework for creating REST APIs, MIT License
