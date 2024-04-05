@@ -4,6 +4,9 @@ namespace RoleConfiguration.Commands;
 
 public sealed record FileDelete(string Source, string Path) : CommandRequest;
 
+/// <summary>
+/// 
+/// </summary>
 public sealed class FileDeleteHandler : IRequestHandler<FileDelete>
 {
     private readonly ConfigDbContext dbContext;

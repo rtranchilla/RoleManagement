@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using RoleManager.DataPersistence;
 using RoleManager.Events;
 using System.Data;
@@ -25,6 +26,7 @@ public sealed class RoleDeleteHandler : AggregateRootDeleteHandler<RoleDelete, R
         {
             command.CommandText = "Select [Id] from [dbo].[Nodes] where Id not in (Select NodeId from [dbo].[RoleNodes])";
             command.CommandType = CommandType.Text;
+            command.Transaction = dbContext.Database.CurrentTransaction?.GetDbTransaction();
 
             dbContext.Database.OpenConnection();
 

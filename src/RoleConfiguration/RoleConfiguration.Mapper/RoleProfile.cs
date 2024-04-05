@@ -17,6 +17,7 @@ public sealed class RoleProfile : Profile
         CreateMap<RoleContent, Role>();
         CreateMap<RoleManager.Dto.Role, MemberRoleContent>();
 
+        CreateMap<Role, RoleManager.Dto.RoleUpdate>();
         CreateMap<RoleManager.Dto.Role, RoleManager.Dto.RoleUpdate>();
         CreateMap<RoleContent, RoleManager.Dto.RoleUpdate>()
             .ForMember(dest => dest.RequiredNodes, cfg => cfg.Ignore());

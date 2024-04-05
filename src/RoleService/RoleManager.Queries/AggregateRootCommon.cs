@@ -6,11 +6,9 @@ namespace RoleManager.Queries;
 
 public abstract record AggregateRootCommon<TResult> : IRequest<TResult>;
 
-public sealed class AggregateRootCommonExceptionHandler<TResult> : AsyncRequestExceptionHandler<AggregateRootCommon<TResult>, TResult>
+public sealed class AggregateRootCommonExceptionHandler<TResult>(ILogger logger) : AsyncRequestExceptionHandler<AggregateRootCommon<TResult>, TResult>
 {
-    private readonly ILogger logger;
-
-    public AggregateRootCommonExceptionHandler(ILogger logger) => this.logger = logger;
+    private readonly ILogger logger = logger;
 
     protected override async Task Handle(
         AggregateRootCommon<TResult> request,
