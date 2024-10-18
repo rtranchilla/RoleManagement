@@ -26,7 +26,7 @@ public abstract class AggregateRootUpdateHandler<TRequest, TAggregateRoot, TDto>
     protected virtual Task PostMap(TRequest request, TAggregateRoot aggregateRoot, RoleDbContext dbContext, CancellationToken cancellationToken) => Task.CompletedTask;
     protected virtual Task PostSave(TAggregateRoot aggregateRoot, RoleDbContext dbContext, CancellationToken cancellationToken) => Task.CompletedTask;
 
-    public async Task<Unit> Handle(TRequest request, CancellationToken cancellationToken)
+    public async Task Handle(TRequest request, CancellationToken cancellationToken)
     {
         var dto = await Task.Run(() => GetDto(request), cancellationToken);
         if (dto == null)
@@ -50,6 +50,5 @@ public abstract class AggregateRootUpdateHandler<TRequest, TAggregateRoot, TDto>
                 transaction.Rollback();
                 throw;
             }
-        return Unit.Value;
     }
 }

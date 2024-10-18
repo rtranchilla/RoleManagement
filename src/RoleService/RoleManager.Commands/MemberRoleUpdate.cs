@@ -24,7 +24,7 @@ namespace RoleManager.Commands
             this.publisher = publisher;
         }
 
-        public async Task<Unit> Handle(MemberRoleUpdate request, CancellationToken cancellationToken)
+        public async Task Handle(MemberRoleUpdate request, CancellationToken cancellationToken)
         {
             using (IDbContextTransaction transaction = await dbContext.Database.BeginTransactionAsync(cancellationToken))
                 try
@@ -65,8 +65,7 @@ namespace RoleManager.Commands
                 {
                     transaction.Rollback();
                     throw;
-                }            
-            return Unit.Value;
+                }
         }
     }
 }

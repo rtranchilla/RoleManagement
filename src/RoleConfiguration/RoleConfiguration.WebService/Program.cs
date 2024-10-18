@@ -1,7 +1,9 @@
 using Castle.Windsor;
 using Microsoft.EntityFrameworkCore;
+using RoleConfiguration.Commands;
 using RoleConfiguration.DataPersistence;
 using RoleConfiguration.Mapper;
+using RoleConfiguration.Queries;
 using RoleConfiguration.WebService.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,16 +24,23 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.EnableAnnotations();
 });
+builder.Services.ConfigureJsonSettings();
 builder.Services.AddAutoMapper(typeof(MemberProfile).Assembly);
+builder.Services.AddMediatR(cfg =>
+{
+    cfg.RegisterServicesFromAssemblyContaining<MemberFileUpdate>();
+    cfg.RegisterServicesFromAssemblyContaining<MemberFileQuery>();
+});
 
 var app = builder.Build();
 
-container.UpdateDatabase();
+app.Services.UpdateDatabase();
+//container.UpdateDatabase();
 container.ConfigureRoleManagerRepositories();
-container.ConfigureMediatR();
+//container.ConfigureMediatR();
 container.ConfigureYamlSerialization();
 container.ConfigureRoleManagerHttpClient();
-container.ConfigureJsonSettings();
+//container.ConfigureJsonSettings();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

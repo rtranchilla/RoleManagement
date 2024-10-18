@@ -17,7 +17,7 @@ public abstract class AggregateRootDeleteHandler<TRequest, TAggregateRoot> : IRe
     protected abstract TAggregateRoot? GetEntity(TRequest request, RoleDbContext dbContext);
     protected virtual Task PostSave(TRequest request, RoleDbContext dbContext, CancellationToken cancellationToken) => Task.CompletedTask;
 
-    public async Task<Unit> Handle(TRequest request, CancellationToken cancellationToken)
+    public async Task Handle(TRequest request, CancellationToken cancellationToken)
     {
         using (IDbContextTransaction transaction = await dbContext.Database.BeginTransactionAsync(cancellationToken))
             try
@@ -37,6 +37,5 @@ public abstract class AggregateRootDeleteHandler<TRequest, TAggregateRoot> : IRe
                 transaction.Rollback();
                 throw;
             }
-        return Unit.Value;
     }
 }

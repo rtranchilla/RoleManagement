@@ -54,5 +54,5 @@ public class SenderControllerBase : ControllerBase
     }
 
     protected Task<TResponse> Send<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken = default) => sender.Send(request, cancellationToken);
-    protected Task<Unit> Send(IRequest request, CancellationToken cancellationToken = default) => sender.Send(request, cancellationToken);
+    protected Task Send(IRequest request, CancellationToken cancellationToken = default) => sender.Send(request, cancellationToken);
 }

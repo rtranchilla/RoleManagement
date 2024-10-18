@@ -27,27 +27,25 @@ public abstract class AggregateRootCreateHandler<TRequest, TAggregateRoot, TDto>
     protected virtual Task PostMap(TRequest request, TAggregateRoot aggregateRoot, RoleDbContext dbContext, CancellationToken cancellationToken) => Task.CompletedTask;
     protected virtual Task PostSave(TAggregateRoot aggregateRoot, RoleDbContext dbContext, CancellationToken cancellationToken) => Task.CompletedTask;
 
-    public async Task<Unit> Handle(TRequest request, CancellationToken cancellationToken)
+    public async Task Handle(TRequest request, CancellationToken cancellationToken)
     {
-        using (IDbContextTransaction transaction = await dbContext.Database.BeginTransactionAsync(cancellationToken))
-            try
-            {
-                await PreCreate(request, dbContext, cancellationToken);
-                var newEntity = await Task.Run(() => Map(GetDto(request), mapper), cancellationToken);
-                if (newEntity == null)
-                    throw new NullReferenceException($"Failed to generate new object for supplied dto of type: {GetDto(request)?.GetType().Name ?? "Unknown"}.");
-                await PostMap(request, newEntity, dbContext, cancellationToken);
-                await dbContext.AddAsync(newEntity, cancellationToken);
-                await dbContext.SaveChangesAsync(cancellationToken);
-                await PostSave(newEntity, dbContext, cancellationToken);
-                await transaction.CommitAsync(cancellationToken);
-            }
-            catch
-            {
-                transaction.Rollback();
-                throw;
-            }
-        return Unit.Value;
+        using IDbContextTransaction transaction = await dbContext.Database.BeginTransactionAsync(cancellationToken);
+        try
+        {
+            await PreCreate(request, dbContext, cancellationToken);
+            var newEntity = await Task.Run(() => Map(GetDto(request), mapper), cancellationToken);
+            if (newEntity == null)
+                throw new NullReferenceException($"Failed to generate new object for supplied dto of type: {GetDto(request)?.GetType().Name ?? "Unknown"}.");
+            await PostMap(request, newEntity, dbContext, cancellationToken);
+            await dbContext.AddAsync(newEntity, cancellationToken);
+            await dbContext.SaveChangesAsync(cancellationToken);
+            await PostSave(newEntity, dbContext, cancellationToken);
+            await transaction.CommitAsync(cancellationToken);
+        }
+        catch
+        {
+            transaction.Rollback();
+            throw;
+        }
     }
-
 }

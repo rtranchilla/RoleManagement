@@ -7,9 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Castle.Windsor" Version="5.1.2" />
-    <PackageReference Include="MediatR" Version="11.1.0" />
-    <PackageReference Include="System.Management.Automation" Version="7.2.9" />
+    <PackageReference Include="Castle.Windsor" Version="6.0.0" />
+    <PackageReference Include="MediatR" Version="12.4.1" />
+    <PackageReference Include="System.Management.Automation" Version="7.4.5" />
   </ItemGroup>
 
   <ItemGroup>

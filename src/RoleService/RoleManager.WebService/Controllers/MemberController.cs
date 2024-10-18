@@ -5,10 +5,8 @@ using RoleManager.Queries;
 
 namespace RoleManager.WebService.Controllers;
 
-public sealed class MemberController : SenderControllerBase
+public sealed class MemberController(ISender sender) : SenderControllerBase(sender)
 {
-    public MemberController(ISender sender) : base(sender) { }
-
     [HttpPost]
     public Task<IActionResult> Create(Dto.Member dto) => SendCommand(new MemberCreate(dto));
 

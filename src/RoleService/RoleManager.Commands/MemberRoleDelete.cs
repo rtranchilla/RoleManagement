@@ -19,31 +19,29 @@ namespace RoleManager.Commands
             this.publisher = publisher;
         }
 
-        public async Task<Unit> Handle(MemberRoleDelete request, CancellationToken cancellationToken)
+        public async Task Handle(MemberRoleDelete request, CancellationToken cancellationToken)
         {
-            using (IDbContextTransaction transaction = await dbContext.Database.BeginTransactionAsync(cancellationToken))
-                try
+            using IDbContextTransaction transaction = await dbContext.Database.BeginTransactionAsync(cancellationToken);
+            try
+            {
+                var member = dbContext.Members!.Include(e => e.Roles).ThenInclude(e => e.Role!.Nodes).FirstOrDefault(e => e.Id == request.MemberId);
+                var entity = member?.Roles.FirstOrDefault(e => e.TreeId == request.TreeId);
+                if (entity != null)
                 {
-                    var member = dbContext.Members!.Include(e => e.Roles).ThenInclude(e => e.Role!.Nodes).FirstOrDefault(e => e.Id == request.MemberId);
-                    var entity = member?.Roles.FirstOrDefault(e => e.TreeId == request.TreeId);
-                    if (entity != null)
-                    {
-                        dbContext.Remove(entity);
+                    dbContext.Remove(entity);
 
-                        await dbContext.SaveChangesAsync(cancellationToken);
-                        member!.Roles.Remove(entity);
+                    await dbContext.SaveChangesAsync(cancellationToken);
+                    member!.Roles.Remove(entity);
 
-                        await publisher.Publish(new MemberUpdated(member, MemberFunctions.GetNodeIds(dbContext, member.Id)), cancellationToken);
-                        await transaction.CommitAsync(cancellationToken);
-                    }
+                    await publisher.Publish(new MemberUpdated(member, MemberFunctions.GetNodeIds(dbContext, member.Id)), cancellationToken);
+                    await transaction.CommitAsync(cancellationToken);
                 }
-                catch
-                {
-                    transaction.Rollback();
-                    throw;
-                }
-
-            return Unit.Value;
+            }
+            catch
+            {
+                transaction.Rollback();
+                throw;
+            }
         }
     }
 }
