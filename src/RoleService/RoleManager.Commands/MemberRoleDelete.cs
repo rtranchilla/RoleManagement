@@ -1,24 +1,18 @@
 ﻿using AutoMapper;
+using Dapr.Client;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.Extensions.Configuration;
+using RoleManager.Configuration;
 using RoleManager.DataPersistence;
 using RoleManager.Events;
 
 namespace RoleManager.Commands
 {
     public sealed record MemberRoleDelete(Guid MemberId, Guid TreeId) : AggregateRootCommon;
-    public sealed class MemberRoleDeleteHandler : IRequestHandler<MemberRoleDelete>
+    public sealed class MemberRoleDeleteHandler(RoleDbContext dbContext, DaprClient daprClient, PubSubConfiguration configuration) : IRequestHandler<MemberRoleDelete>
     {
-        private readonly RoleDbContext dbContext;
-        private readonly IPublisher publisher;
-
-        public MemberRoleDeleteHandler(RoleDbContext dbContext, IPublisher publisher)
-        {
-            this.dbContext = dbContext;
-            this.publisher = publisher;
-        }
-
         public async Task Handle(MemberRoleDelete request, CancellationToken cancellationToken)
         {
             using IDbContextTransaction transaction = await dbContext.Database.BeginTransactionAsync(cancellationToken);
@@ -33,7 +27,14 @@ namespace RoleManager.Commands
                     await dbContext.SaveChangesAsync(cancellationToken);
                     member!.Roles.Remove(entity);
 
-                    await publisher.Publish(new MemberUpdated(member, MemberFunctions.GetNodeIds(dbContext, member.Id)), cancellationToken);
+                    await daprClient.PublishEventAsync(
+                    configuration.Name,
+                        configuration.Topic.Members.Updated,
+                        new MemberUpdated
+                        {
+                            Id = member.Id,
+                            NodeIds = MemberFunctions.GetNodeIds(dbContext, member.Id)
+                        }, cancellationToken);
                     await transaction.CommitAsync(cancellationToken);
                 }
             }

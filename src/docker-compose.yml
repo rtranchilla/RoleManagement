@@ -1,35 +1,49 @@
 version: '3.8'
 
 services:
-  roleconfig.webservice:
-    container_name: roleconfig.webservice
-    image: ${DOCKER_REGISTRY-}roleconfigwebservice
-    build:
-      context: .
-      dockerfile: RoleConfiguration/RoleConfiguration.WebService/Dockerfile
-    environment:
-      - DAPR_HTTP_PORT=3500
-    networks:
-      - rolemanager
-    depends_on:
-      - mssql
+  # roleconfig.webservice:
+  #   container_name: roleconfig.webservice
+  #   image: ${DOCKER_REGISTRY-}roleconfigwebservice
+  #   build:
+  #     context: .
+  #     dockerfile: RoleConfiguration/RoleConfiguration.WebService/Dockerfile
+  #   environment:
+  #     - DAPR_HTTP_PORT=3500
+  #   networks:
+  #     - rolemanager
+  #   depends_on:
+  #     - mssql
 
-  roleconfig-dapr:
-    image: "daprio/daprd"
-    command: [
-      "./daprd",
-     "-app-id", "roleconfig.webservice",
-     "-app-port", "80",
-     "-components-path", "/components",
-     "-config", "/config/config.yaml",
-     "-log-level", "debug"
-     ]
-    volumes:
-      - "./RoleConfiguration/RoleConfiguration.WebService/Dapr/Components/:/components"
-      - "./RoleConfiguration/RoleConfiguration.WebService/Dapr/Config/:/config"  
-    depends_on:
-      - roleconfig.webservice
-    network_mode: "service:roleconfig.webservice"
+  # roleconfig-dapr:
+  #   image: "daprio/daprd"
+  #   command: [
+  #     "./daprd",
+  #    "-app-id", "roleconfig.webservice",
+  #    "-app-port", "80",
+  #    "-components-path", "/components",
+  #    "-config", "/config/config.yaml",
+  #    "-log-level", "info"
+  #    ]
+  #   volumes:
+  #     - "./RoleConfiguration/RoleConfiguration.WebService/Dapr/Components/:/components"
+  #     - "./RoleConfiguration/RoleConfiguration.WebService/Dapr/Config/:/config"  
+  #   depends_on:
+  #     - roleconfig.webservice
+  #   network_mode: "service:roleconfig.webservice"
+    
+  # apigateway:
+  #   container_name: apigateway
+  #   image: ${DOCKER_REGISTRY-}apigateway
+  #   build:
+  #     context: .
+  #     dockerfile: ApiGateway/Dockerfile
+  #   ports:
+  #     - "5000:5000"
+  #     - "5001:5001"
+  #   networks:
+  #     - rolemanager
+  #   depends_on:
+  #     - rolemanager.webservice
 
   rolemanager.webservice:
     container_name: rolemanager.webservice
@@ -43,17 +57,17 @@ services:
       - rolemanager
     depends_on:
       - mssql
-      - redis
+      - rolemanager-pubsub
 
   rolemanager-dapr:
     image: "daprio/daprd"
     command: [
       "./daprd",
      "-app-id", "rolemanager.webservice",
-     "-app-port", "80",
+     "-app-port", "8080",
      "-components-path", "/components",
      "-config", "/config/config.yaml",
-     "-log-level", "debug"
+     "-log-level", "info"
      ]
     volumes:
       - "./RoleService/RoleManager.WebService/Dapr/Components/:/components"
@@ -62,12 +76,97 @@ services:
       - rolemanager.webservice
     network_mode: "service:rolemanager.webservice"
 
+  PodeTestService:
+    image: ${DOCKER_REGISTRY-}podetestservice
+    build:
+      context: .
+      dockerfile: RoleManagerSubscriberPoshExample/Dockerfile
+    environment:
+      - DAPR_HTTP_PORT=3500
+    networks:
+      - rolemanager
+    depends_on:
+      - rolemanager-pubsub
 
-  redis:
-    container_name: rolemanager-redis
-    image: "redis:6"
+  PodeTestService-dapr:
+    image: "daprio/daprd"
+    command: [
+      "./daprd",
+     "-app-id", "PodeTestService",
+     "-app-port", "8080",
+     "-components-path", "/components",
+     "-config", "/config/config.yaml",
+     "-log-level", "info"
+     ]
+    volumes:
+      - "./RoleService/RoleManager.WebService/Dapr/Components/:/components"
+      - "./RoleService/RoleManager.WebService/Dapr/Config/:/config"  
+    depends_on:
+      - rolemanager-pubsub
+    network_mode: "service:PodeTestService"
+
+  rolemanagersubscriberexample:
+    image: ${DOCKER_REGISTRY-}rolemanagersubscriberexample
+    build:
+      context: .
+      dockerfile: RoleManagerSubscriberExample/Dockerfile
+    environment:
+      - DAPR_HTTP_PORT=3500
+    networks:
+      - rolemanager
+    depends_on:
+      - rolemanager-pubsub
+
+  rolemanagersubscriberexample-dapr:
+    image: "daprio/daprd"
+    command: [
+      "./daprd",
+     "-app-id", "rolemanagersubscriberexample",
+     "-app-port", "8080",
+     "-components-path", "/components",
+     "-config", "/config/config.yaml",
+     "-log-level", "info"
+     ]
+    volumes:
+      - "./RoleService/RoleManager.WebService/Dapr/Components/:/components"
+      - "./RoleService/RoleManager.WebService/Dapr/Config/:/config"  
+    depends_on:
+      - rolemanager-pubsub
+    network_mode: "service:rolemanagersubscriberexample"
+
+  # rolemanagersubscriberexample2:
+  #   image: ${DOCKER_REGISTRY-}rolemanagersubscriberexample2
+  #   build:
+  #     context: .
+  #     dockerfile: RoleManagerSubscriberExample2/Dockerfile
+
+  # rolemanagersubscriberexample2-dapr:
+  #   image: "daprio/daprd"
+  #   command: [
+  #     "./daprd",
+  #    "-app-id", "rolemanagersubscriberexample2",
+  #    "-app-port", "8080",
+  #    "-components-path", "/components",
+  #    "-config", "/config/config.yaml",
+  #    "-log-level", "info"
+  #    ]
+  #   volumes:
+  #     - "./RoleService/RoleManager.WebService/Dapr/Components/:/components"
+  #     - "./RoleService/RoleManager.WebService/Dapr/Config/:/config"  
+  #   depends_on:
+  #     - rolemanager-pubsub
+  #   network_mode: "service:rolemanagersubscriberexample2"
+    
+  rolemanager-pubsub:
+    container_name: rolemanager-pubsub
+    image: rabbitmq:3-management-alpine
     ports:
-      - "6380:6379"
+      - "15672:15672"
+      - "5671:5671"
+      - "5672:5672"
+    environment:
+      RABBITMQ_DEFAULT_PASS: password
+      RABBITMQ_DEFAULT_USER: admin
     networks:
       - rolemanager
 
@@ -83,5 +182,24 @@ services:
     networks:
       - rolemanager
 
+  apigateway:
+    image: ${DOCKER_REGISTRY-}apigateway
+    build:
+      context: .
+      dockerfile: ApiGateway/Dockerfile
+    networks:
+      - rolemanager
+
+  # testproj:
+  #   image: ${DOCKER_REGISTRY-}testproj
+  #   build:
+  #     context: .
+  #     dockerfile: TestProj/Dockerfile
+  #   networks:
+  #     - rolemanager
+
 networks:
   rolemanager:
+
+
+

@@ -1,7 +1,7 @@
-﻿namespace RoleManager.Events.Payloads;
+﻿//namespace RoleManager.Events.Payloads;
 
-public sealed class TreeCreated
-{
-    public Guid Id { get; set; }
-    public string Name { get; set; }
-}
+//public sealed class TreeCreated
+//{
+//    public Guid Id { get; set; }
+//    public string Name { get; set; }
+//}

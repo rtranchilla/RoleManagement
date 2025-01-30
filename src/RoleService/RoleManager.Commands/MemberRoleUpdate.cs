@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
+using Dapr.Client;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.Extensions.Configuration;
+using RoleManager.Configuration;
 using RoleManager.DataPersistence;
 using RoleManager.Events;
 using RoleManager.RoleHierarchy;
@@ -13,17 +16,8 @@ namespace RoleManager.Commands
     {
         public bool Force { get; set; }
     }
-    public sealed class MemberRoleUpdateHandler : IRequestHandler<MemberRoleUpdate>
+    public sealed class MemberRoleUpdateHandler(RoleDbContext dbContext, DaprClient daprClient, PubSubConfiguration configuration) : IRequestHandler<MemberRoleUpdate>
     {
-        private readonly RoleDbContext dbContext;
-        private readonly IPublisher publisher;
-
-        public MemberRoleUpdateHandler(RoleDbContext dbContext, IPublisher publisher)
-        {
-            this.dbContext = dbContext;
-            this.publisher = publisher;
-        }
-
         public async Task Handle(MemberRoleUpdate request, CancellationToken cancellationToken)
         {
             using (IDbContextTransaction transaction = await dbContext.Database.BeginTransactionAsync(cancellationToken))
@@ -58,7 +52,14 @@ namespace RoleManager.Commands
 
                     await dbContext.SaveChangesAsync(cancellationToken);
 
-                    await publisher.Publish(new MemberUpdated(member, MemberFunctions.GetNodeIds(dbContext, member.Id)), cancellationToken);
+                    await daprClient.PublishEventAsync(
+                        configuration.Name,
+                        configuration.Topic.Members.Updated,
+                        new MemberUpdated
+                        {
+                            Id = member.Id,
+                            NodeIds = MemberFunctions.GetNodeIds(dbContext, member.Id)
+                        }, cancellationToken);
                     await transaction.CommitAsync(cancellationToken);
                 }
                 catch

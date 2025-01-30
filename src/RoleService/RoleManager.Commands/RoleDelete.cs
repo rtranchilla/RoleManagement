@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using Dapr.Client;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using RoleManager.Configuration;
 using RoleManager.DataPersistence;
 using RoleManager.Events;
 using System.Data;
@@ -10,12 +12,8 @@ using System.Security.Policy;
 namespace RoleManager.Commands;
 
 public sealed record RoleDelete(Guid Id) : AggregateRootDelete;
-public sealed class RoleDeleteHandler : AggregateRootDeleteHandler<RoleDelete, Role>
+public sealed class RoleDeleteHandler(RoleDbContext dbContext, DaprClient daprClient, PubSubConfiguration configuration) : AggregateRootDeleteHandler<RoleDelete, Role>(dbContext)
 {
-    private readonly IPublisher publisher;
-
-    public RoleDeleteHandler(RoleDbContext dbContext, IPublisher publisher) : base(dbContext) => this.publisher = publisher;
-
     protected override Role? GetEntity(RoleDelete request, RoleDbContext dbContext) => 
         dbContext.Roles!.FirstOrDefault(e => e.Id == request.Id);
 
@@ -42,6 +40,10 @@ public sealed class RoleDeleteHandler : AggregateRootDeleteHandler<RoleDelete, R
         await dbContext.SaveChangesAsync();
 
         foreach (var node in nodesToDeleteIds)
-            await publisher.Publish(new NodeDeleted(node), cancellationToken);
+            await daprClient.PublishEventAsync(
+            configuration.Name,
+            configuration.Topic.Members.Created,
+            new NodeDeleted { Id = node }, 
+            cancellationToken);
     }
 }

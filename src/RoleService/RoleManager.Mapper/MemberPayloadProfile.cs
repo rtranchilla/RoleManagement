@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using RoleManager.Events.Payloads;
+using RoleManager.Events;
 
 namespace RoleManager.Mapper;
 

@@ -1,0 +1,14 @@
+{
+  "scripts": {
+    "install": "yarn install --force --ignore-scripts --modules-folder pode_modules",
+    "test": "invoke-pester ./tests/*.ps1",
+    "build": "psake",
+    "start": "./server.ps1"
+  },
+  "license": "MIT",
+  "name": "PodeTest",
+  "description": "",
+  "main": "./server.ps1",
+  "author": "Ryan",
+  "version": "1.0.0"
+}

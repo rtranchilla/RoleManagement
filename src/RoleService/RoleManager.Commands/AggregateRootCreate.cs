@@ -7,20 +7,11 @@ namespace RoleManager.Commands;
 
 public abstract record AggregateRootCreate : AggregateRootCommon;
 
-public abstract class AggregateRootCreateHandler<TRequest, TAggregateRoot, TDto> : IRequestHandler<TRequest>
+public abstract class AggregateRootCreateHandler<TRequest, TAggregateRoot, TDto>(RoleDbContext dbContext, IMapper mapper) : IRequestHandler<TRequest>
     where TRequest : AggregateRootCreate
     where TAggregateRoot : class, IEntity
     where TDto : class, Dto.IEntity
 {
-    private readonly RoleDbContext dbContext;
-    private readonly IMapper mapper;
-
-    public AggregateRootCreateHandler(RoleDbContext dbContext, IMapper mapper)
-    {
-        this.dbContext = dbContext;
-        this.mapper = mapper;
-    }
-
     protected abstract TDto GetDto(TRequest request);
     protected virtual TAggregateRoot Map(TDto dto, IMapper mapper) => mapper.Map<TDto, TAggregateRoot>(dto);
     protected virtual Task PreCreate(TRequest request, RoleDbContext dbContext, CancellationToken cancellationToken) => Task.CompletedTask;

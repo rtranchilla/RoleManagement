@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Dapr.Client;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RoleManager.DataPersistence;
@@ -9,16 +10,19 @@ namespace RoleManager.WebService.Controllers;
 #if DEBUG
 [Route("[controller]")]
 [ApiController]
-public class TestDataController : ControllerBase
+public class TestDataController(IServiceScopeFactory serviceScopeFactory, DaprClient daprClient) : ControllerBase
 {
-    private readonly IServiceScopeFactory _serviceScopeFactory;
-
-    public TestDataController(IServiceScopeFactory serviceScopeFactory) => _serviceScopeFactory = serviceScopeFactory;
+    [HttpPost("PublishEvent")]
+    public async Task<IActionResult> PostTest()
+    {
+        await daprClient.PublishEventAsync("pubsub", "test", new { Message = "Hello World" });
+        return Ok();
+    }
 
     [HttpPost]
     public IActionResult Post()
     {
-        using (var scope = _serviceScopeFactory.CreateScope())
+        using (var scope = serviceScopeFactory.CreateScope())
         {
             RoleDbContext dbContext = scope.ServiceProvider.GetRequiredService<RoleDbContext>();
             Load(dbContext);
@@ -125,7 +129,7 @@ public class TestDataController : ControllerBase
             var tree3 = dbContext.Trees!.First(e => e.Name == "Tree3");
             var baseNode3 = dbContext.Nodes!.First(e => e.TreeId == tree1.Id && e.Name == "Base3");
             tree3.AddRequiredNode(baseNode3);
-            var roleBaseNode3 = dbContext.Roles!.FromSqlRaw($"SELECT Roles.Id, Roles.Reversible, Roles.TreeId FROM Roles INNER JOIN RoleNodes ON Roles.Id = RoleNodes.RoleId INNER JOIN (Select RoleId, Count(RoleNodes.NodeId) as Count From RoleNodes Group By RoleId) as RoleNodeCount on RoleNodes.RoleId=RoleNodeCount.RoleId Where NodeId = '{baseNode3.Id}' and Count = 1 Group By Roles.Id, Roles.Reversible, Roles.TreeId").First();
+            var roleBaseNode3 = dbContext.Roles!.FromSql($"SELECT Roles.Id, Roles.Reversible, Roles.TreeId FROM Roles INNER JOIN RoleNodes ON Roles.Id = RoleNodes.RoleId INNER JOIN (Select RoleId, Count(RoleNodes.NodeId) as Count From RoleNodes Group By RoleId) as RoleNodeCount on RoleNodes.RoleId=RoleNodeCount.RoleId Where NodeId = '{baseNode3.Id}' and Count = 1 Group By Roles.Id, Roles.Reversible, Roles.TreeId").First();
             var tree2Child2 = dbContext.Nodes!.First(e => e.TreeId == tree2.Id && e.Name == "Child2");
             roleBaseNode3.AddRequiredNode(tree2Child2);
             dbContext.SaveChanges();

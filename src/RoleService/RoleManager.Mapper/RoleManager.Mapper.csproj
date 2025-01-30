@@ -13,7 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\RoleManager.Dto\RoleManager.Dto.csproj" />
-    <ProjectReference Include="..\RoleManager.Events.Dto\RoleManager.Events.Payloads.csproj" />
+    <ProjectReference Include="..\RoleManager.Events\RoleManager.Events.csproj" />
     <ProjectReference Include="..\RoleManager\RoleManager.csproj" />
   </ItemGroup>
 

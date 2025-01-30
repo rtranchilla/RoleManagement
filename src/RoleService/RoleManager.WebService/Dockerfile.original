@@ -1,28 +1,35 @@
-#See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
+#See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
-FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+USER app
 WORKDIR /app
-RUN sed -i -e "s|^MinProtocol = .*|MinProtocol = TLSv1.0|g" "/etc/ssl/openssl.cnf"
-EXPOSE 80
+#EXPOSE 80
+#EXPOSE 443
+EXPOSE 8080
+EXPOSE 8081
 
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["RoleManagement.Web/RoleManagement.Web.csproj", "RoleManagement.Web/"]
-COPY ["RoleManagement.Commands/RoleManagement.Commands.csproj", "RoleManagement.Commands/"]
-COPY ["RoleManagement.DataPersistence/RoleManagement.DataPersistence.csproj", "RoleManagement.DataPersistence/"]
-COPY ["RoleManagement/RoleManagement.csproj", "RoleManagement/"]
-COPY ["RoleManagement.Dto/RoleManagement.Dto.csproj", "RoleManagement.Dto/"]
-COPY ["RoleManagement.MapperConfig/RoleManagement.MapperConfig.csproj", "RoleManagement.MapperConfig/"]
-COPY ["RoleManagement.Queries/RoleManagement.Queries.csproj", "RoleManagement.Queries/"]
-RUN dotnet restore "RoleManagement.Web/RoleManagement.Web.csproj"
+COPY ["RoleService/RoleManager.WebService/RoleManager.WebService.csproj", "RoleService/RoleManager.WebService/"]
+COPY ["RoleService/RoleManager.Commands/RoleManager.Commands.csproj", "RoleService/RoleManager.Commands/"]
+COPY ["RoleService/RoleManager.DataPersistence/RoleManager.DataPersistence.csproj", "RoleService/RoleManager.DataPersistence/"]
+COPY ["RoleService/RoleManager/RoleManager.csproj", "RoleService/RoleManager/"]
+COPY ["RoleService/RoleManager.Dto/RoleManager.Dto.csproj", "RoleService/RoleManager.Dto/"]
+COPY ["RoleService/RoleManager.Events/RoleManager.Events.csproj", "RoleService/RoleManager.Events/"]
+COPY ["RoleService/RoleManager.Events.Dto/RoleManager.Events.Payloads.csproj", "RoleService/RoleManager.Events.Dto/"]
+COPY ["RoleService/RoleManager.Mapper/RoleManager.Mapper.csproj", "RoleService/RoleManager.Mapper/"]
+COPY ["RoleService/RoleManager.Queries/RoleManager.Queries.csproj", "RoleService/RoleManager.Queries/"]
+RUN dotnet restore "./RoleService/RoleManager.WebService/./RoleManager.WebService.csproj"
 COPY . .
-WORKDIR "/src/RoleManagement.Web"
-RUN dotnet build "RoleManagement.Web.csproj" -c Release -o /app/build
+WORKDIR "/src/RoleService/RoleManager.WebService"
+RUN dotnet build "./RoleManager.WebService.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "RoleManagement.Web.csproj" -c Release -o /app/publish /p:UseAppHost=false
+ARG BUILD_CONFIGURATION=Release
+RUN dotnet publish "./RoleManager.WebService.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "RoleManagement.Web.dll"]
+ENTRYPOINT ["dotnet", "RoleManager.WebService.dll"]

@@ -1,18 +1,16 @@
 ﻿using AutoMapper;
+using Dapr.Client;
 using MediatR;
+using RoleManager.Configuration;
 using RoleManager.DataPersistence;
 using RoleManager.Events;
-using System.Security.Policy;
 
 namespace RoleManager.Commands;
 
 public sealed record RoleCreate(Dto.Role Role) : AggregateRootCreate;
-public sealed class RoleCreateHandler : AggregateRootCreateHandler<RoleCreate, Role, Dto.Role>
+public sealed class RoleCreateHandler(RoleDbContext dbContext, IMapper mapper, DaprClient daprClient, PubSubConfiguration configuration) : AggregateRootCreateHandler<RoleCreate, Role, Dto.Role>(dbContext, mapper)
 {
-    public RoleCreateHandler(RoleDbContext dbContext, IMapper mapper, IPublisher publisher) : base(dbContext, mapper) => this.publisher = publisher;
-
     private List<Node>? nodes;
-    private readonly IPublisher publisher;
 
     protected override async Task PreCreate(RoleCreate request, RoleDbContext dbContext, CancellationToken cancellationToken)
     {
@@ -47,6 +45,14 @@ public sealed class RoleCreateHandler : AggregateRootCreateHandler<RoleCreate, R
     protected override async Task PostSave(Role aggregateRoot, RoleDbContext dbContext, CancellationToken cancellationToken)
     {
         foreach (var node in nodes!)
-            await publisher.Publish(new NodeCreated(node), cancellationToken);
+            await daprClient.PublishEventAsync(
+                configuration.Name,
+                configuration.Topic.Members.Created,
+                new NodeCreated
+                {
+                    Id = aggregateRoot.Id,
+                    Name = node.Name,
+                    BaseNode = node.BaseNode
+                }, cancellationToken);
     }
 }
